@@ -907,7 +907,7 @@ function Body() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>ádfadsfdsafsadfsdafsda
                 <div datacount={Amount} ref={cartProduct} onClick={cookies.get('AccessToken') !== undefined ? () => navigate('/card') : () => navigate('/loginuser') } className='cart_product-container'>
                     <FontAwesomeIcon className='cart_product-icon' icon={faBagShopping} />
                     <img ref={imgAddCard} className='Img_AddCard'/>
