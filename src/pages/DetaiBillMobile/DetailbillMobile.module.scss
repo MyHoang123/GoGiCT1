@@ -1,0 +1,461 @@
+@keyframes removeNav {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(330px);
+  }
+}
+.Detailbill_body {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 98vh;
+    overflow: hidden;
+    background-color: #fefefe;
+    .Detailbill_body_map {
+      position: absolute;
+      width: 100%;
+      padding: 10px 40px;
+      height: 98vh;
+        .Detailbill_body_map_button {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            height: 40px;
+            position: relative;
+            z-index: 100;
+            top:  20px;
+            .Detailbill_body_map_button_left {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 40px;
+                height: 40px;
+                background-color: #fefefe;
+                border-radius: 10px;
+                .Detailbill_body_map_button_left-icon {
+                    height: 18px;
+                }
+            }
+            .Detailbill_body_map_button_right {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 40px;
+                height: 40px;
+                background-color: #fefefe;
+                border-radius: 10px;
+                .Detailbill_body_map_button_left-icon {
+                    height: 18px;
+                }
+            }
+        }
+    }
+}
+.Detailbill_body_info {
+  width: 100%;
+  // height: 48%; 
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 40px 10px 40px;
+  align-items: center;
+  position: relative;
+  flex-direction: column;
+  /* bottom: -793px; */
+  // top: 180px;
+  top: 0px;
+  background-color: #fefefe;
+  border-top-left-radius: 40px;
+  border-top-right-radius: 40px;
+  z-index: 10000;
+  transition: top 1s ease-in-out;
+    .Detailbill_body_info_buttonhiden {
+      width: 42px;
+      position: absolute;
+      top: 8px;
+      border-radius: 6px;
+      height: 5px;
+      background-color: #e1e1e1;
+      transition: height 1s ease-in-out;
+    }
+    .Detailbill_body_info_header {
+        width: 100%;
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+    }
+}
+.show_detail_bill_body_status {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    height: 70%;
+    margin-top: 10px;
+}
+.show_detail_bill_body_status-item_title {
+    margin-top: 10px;
+}
+.show_detail_bill_body_status-item {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 20%;
+    height: 100%;
+}
+.show_detail_bill_body_status-item-icon {
+    background-color: #fff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border: 5px solid #c8c8c8;
+    // border: 5px solid #2dc258;
+    transition: border 1s .7s ease-in-out  ;
+}
+.show_detail_bill_body_status-item-icon svg {
+  color: #c8c8c8 !important;
+}
+.show_detail_bill_body_status-item-icon-1 {
+  background-color: #fff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  // border: 5px solid #c8c8c8;
+  border: 5px solid #2dc258;
+}
+.show_detail_bill_body_status-item-cook {
+    border-radius: 50%;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 40px;
+.loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .panWrapper {
+    width: 85px;
+    // height: fit-content;
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .pan {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    height: fit-content;
+    animation: cooking 1.7s infinite;    
+  }
+  @keyframes cooking {
+    0% {
+      transform: rotate(0deg);
+      transform-origin: top right;
+    }
+    10% {
+      transform: rotate(-4deg);
+      transform-origin: top right;
+    }
+    50% {
+      transform: rotate(20deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+  
+  .food {
+    position: absolute;
+    width: 30%;
+    height: 6px;
+    background: linear-gradient(to bottom, rgb(82, 33, 33), rgb(200, 106, 106));
+    left: 10px;
+    border-radius: 50%;
+    animation: flipCook 1.7s infinite;
+    z-index: -1;
+  }
+  @keyframes flipCook {
+    0% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-50px) rotate(180deg);
+    }
+    100% {
+      transform: translateY(0px) rotate(360deg);
+    }
+  }
+  .panBase {
+    z-index: 11;
+    width: 50%;
+    height: 12px;
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+    background: linear-gradient(to top, rgb(3, 156, 156), rgb(10, 191, 191));
+  }
+  .panHandle {
+    width: 39%;
+    background: linear-gradient(to bottom, rgb(18, 18, 18), rgb(74, 74, 74));
+    height: 6px;
+    border-radius: 10px;
+  }
+}
+.show_detail_bill_body_status-item-car{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 40px;
+    background-color: #fff;
+    overflow: hidden;
+.loader {
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .truckWrapper {
+    width: 200px;
+    height: 40px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    align-items: center;
+    justify-content: flex-end;
+    overflow-x: hidden;
+  }
+  /* truck upper body */
+  .truckBody {
+    width: 64px;
+    height: fit-content;
+    margin-bottom: 9px;
+    animation: motion 1s linear infinite;
+  }
+  /* truck suspension animation*/
+  @keyframes motion {
+    0% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(3px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
+  }
+  /* truck's tires */
+  .truckTires {
+    width: 80px;
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 10px 0px 15px;
+    position: absolute;
+    bottom: 0;
+  }
+  .truckTires svg {
+    width: 24px;
+  }
+  
+  .road {
+    width: 65%;
+    height: 1.5px;
+    background-color: #282828;
+    position: relative;
+    bottom: 0;
+    // align-self: flex-end;
+    border-radius: 3px;
+  }
+  .road::before {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 100%;
+    background-color: #282828;
+    right: -50%;
+    border-radius: 3px;
+    animation: roadAnimation 2s linear infinite;
+    border-left: 10px solid white;
+  }
+  .road::after {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 100%;
+    background-color: #282828;
+    right: -65%;
+    border-radius: 3px;
+    animation: roadAnimation 2s linear infinite;
+    border-left: 4px solid white;
+  }
+  
+  @keyframes roadAnimation {
+    0% {
+      transform: translateX(0px);
+    }
+    100% {
+      transform: translateX(-190px);
+    }
+  }
+  
+}
+.show_detail_bill_body_status-item-coin {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 32%;
+    background-color: #fff;
+.body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    margin: 0;
+    background-color: #f0f0f0;
+  }
+  
+  .coin {
+    position: relative;
+    width: 55px;
+    height: 55px;
+    background-color: #d4af37; /* Coin color */
+    border-radius: 50%;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3); /* Coin shadow */
+    background-image: radial-gradient(
+      circle at 50% 120%,
+      rgba(255, 255, 255, 0.5) 0%,
+      rgba(255, 255, 255, 0) 80%
+    ); /* Coin texture */
+    animation: flip 2s infinite;
+  }
+  
+  .engraving {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 50px;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.5); /* Engraving color */
+    text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5); /* Engraving shadow */
+  }
+  
+  @keyframes flip {
+    0% {
+      transform: rotateY(0deg);
+    }
+    50% {
+      transform: rotateY(180deg);
+    }
+    100% {
+      transform: rotateY(360deg);
+    }
+  }
+  
+}
+
+.show_detail_bill_body_line {
+    position: absolute;
+    top: 92px;
+    left: 60px;
+    height: 4px;
+    width: 68%;
+    z-index: 1;
+    background-color: #2dc258;
+    transition: width 3s ease-in-out;
+}
+.show_detail_bill_body_line_1 {
+  position: absolute;
+  top: 92px;
+  left: 60px;
+  height: 4px;
+  width: 68%;
+  z-index: 0;
+  background-color: #c8c8c8;
+}
+.show_detail_bill_body_line_2 {
+    background-image: repeating-linear-gradient(45deg, #6fa6d6, #6fa6d6 33px, transparent 0, transparent 41px, #f18d9b 0, #f18d9b 74px, transparent 0, transparent 82px);
+    background-position-x: -1.875rem;
+    height: .1875rem;
+    width: 100%;
+    margin-top: 20px;
+}
+.detail_allprice {
+  width: 100%;
+  margin-top: 10px;
+  border-radius: 12px;
+  height: 70px;
+  padding: 6px 10px;
+  border: 1px solid #dbdbdb;
+  h3 {
+    height: 12px;
+  }
+}
+.detailbill_infoshiper {
+  width: 100%;
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  // padding: 0 40px;
+  height: 60px;
+  background-color: #fefefe;
+  // position: fixed;
+  // bottom: 4px;
+  z-index: 1000;
+  .detailbill_infoshiper_container {
+    width: 70%;
+    height: 100%;
+    display: flex;
+    gap: 10px;
+    .detailbill_infoshiper_container-img {
+      width: 60px;
+      height: 100%;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 10px;
+      }
+    }
+    .detailbill_infoshiper_container-info {
+      margin-top: 6px;
+      h3 {
+        color: #808080;
+      }
+    }
+  }
+  .detailbill_infoshiper_phone {
+    width: 65px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    border-radius: 10px;
+    border: 1px solid #e1e1e1;
+  }
+}

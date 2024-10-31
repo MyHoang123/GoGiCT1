@@ -1,0 +1,207 @@
+
+
+
+.sidebar {
+  min-width: 232px;
+  max-width: 232px;
+  transition: $sidebar-transition;
+  direction: ltr;
+  background: $sidebar-bg;
+  height: 100vh;
+  overflow-y: scroll;
+}
+.sidebar::-webkit-scrollbar {
+  width: 8px; /* Chiều rộng của thanh cuộn */
+}
+.sidebar::-webkit-scrollbar-track {
+  background: #222E3C; /* Màu nền của thanh cuộn */
+}
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgb(121, 121, 121); /* Màu nền của cần cuộn */
+  width: 50px;
+}
+// .sidebar::-webkit-scrollbar-thumb:hover {
+//   background: #555; /* Màu nền của cần cuộn khi hover */
+// }
+.sidebar-content {
+  transition: $sidebar-transition;
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  background: $sidebar-bg;
+}
+
+.sidebar-nav {
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+  flex-grow: 1;
+}
+.align-middle {
+  width: 100%;
+  margin: 0 !important;
+  width: 16px;
+  padding-right: 4px;
+}
+.align-middle:hover {
+  text-decoration: none;
+  color: rgba(233, 236, 239, 0.75);
+
+}
+
+// Sidebar links
+.sidebar-link_header {
+  background-color: none;
+}
+.sidebar-link_header:hover a{
+  text-decoration: none;
+}
+h2.sidebar-link_header button {
+  width: 100% !important;
+  text-align: left;
+  background-color: transparent;
+  border: none;
+}
+.sidebar-link,
+a.sidebar-link {
+  display: flex;
+  padding: $sidebar-link-padding;
+  font-weight: $sidebar-link-font-weight;
+  transition: background .1s ease-in-out;
+  position: relative;
+  text-decoration: none;
+  cursor: pointer;
+  border-left-style: solid;
+  border-left-width: 3px;
+  color: $sidebar-link-color;
+  background: $sidebar-link-bg;
+  border-left-color: $sidebar-link-border-left-color;
+  align-items: center;
+  i,
+  svg {
+    margin-right: .75rem;
+    color: $sidebar-link-icon-color;
+    width: 22px;
+  }
+}
+
+.sidebar-link:focus {
+  outline: 0;
+}
+
+.sidebar-link:hover {
+  color: $sidebar-link-hover-color;
+  background: $sidebar-link-hover-bg;
+  border-left-color: $sidebar-link-hover-border-left-color;
+
+  i,
+  svg {
+    color: $sidebar-link-icon-hover-color;
+  }
+}
+
+.sidebar-item.active > .sidebar-link,
+.sidebar-item.active .sidebar-link:hover {
+  color: $sidebar-link-active-color;
+  background: $sidebar-link-active-bg;
+  border-left-color: $sidebar-link-active-border-left-color;
+
+  i,
+  svg {
+    color: $sidebar-link-icon-active-color;
+  }
+}
+
+// Sidebar brand
+.sidebar-brand {
+  font-weight: $sidebar-brand-font-weight;
+  font-size: $sidebar-brand-font-size;
+  padding: $sidebar-brand-padding-y $sidebar-brand-padding-x;
+  display: block;
+  color: $sidebar-brand-color;
+
+  &:hover {
+    text-decoration: none;
+    color: $sidebar-brand-color;
+  }
+
+  &:focus {
+    outline: 0;
+  }
+}
+.align-middle {
+  width: 100%;
+  font-size: 13px;
+  color: rgba(233, 236, 239, 0.5);
+}
+
+// Toggle states
+.sidebar-toggle {
+  cursor: pointer;
+  width: 26px;
+  height: 26px;
+  display: flex;
+}
+
+.sidebar {
+  &.collapsed {
+    margin-left: -$sidebar-width;
+  }
+
+  // Workaround for IE bug, more info:
+  // https://stackoverflow.com/a/25850649
+  @media (min-width: 1px) and (max-width: #{map-get($grid-breakpoints, 'lg') - .02px}) {
+
+    // Sidebar default state (on mobile)
+    margin-left: -$sidebar-width;
+
+    // Sidebar collapsed state (on mobile)
+    &.collapsed {
+      margin-left: 0;
+    }
+  }
+}
+
+.sidebar-toggle {
+  margin-right: $spacer;
+}
+
+// Sidebar header
+.sidebar-header {
+  background: transparent;
+  padding: $sidebar-header-padding;
+  font-size: 1rem;
+  color: $sidebar-header-color;
+}
+
+// Badge
+.sidebar-badge {
+  position: absolute;
+  right: 15px;
+  top: 14px;
+  z-index: 1;
+}
+
+// Sidebar bottom
+.sidebar-cta-content {
+  padding: $sidebar-cta-padding;
+  margin: $sidebar-cta-margin;
+  border-radius: $sidebar-cta-border-radius;
+
+  background: $sidebar-cta-bg;
+  color: $sidebar-cta-color;
+}
+.sidebart-item_list li {
+  padding: 0 4px 4px 4px; 
+}
+.sidebart-item_list li a {
+  font-size: 12px;
+  padding: 0 4px 4px 4px; 
+  color: #7d8d8e;
+}
+.sidebart-item_list li a:hover {
+  font-size: 12px;
+  padding: 0 4px 4px 4px; 
+  color:rgba(233, 236, 239, 0.75);
+  text-decoration: none;
+}

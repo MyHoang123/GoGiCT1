@@ -1,0 +1,166 @@
+.Table_Container {
+    margin: auto;
+    width: 60%;
+    height: 600px;
+    border: 5px solid rgb(191, 191, 191);
+    border-radius: 10px;
+}
+.Table_Container h1 {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    font-style: 700;
+}
+.Table_content {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 3.7px;
+    padding: 26px;
+}
+.Table_item {
+    position: relative;
+    margin: 20px 20px;
+    width: 10%;
+    height: 10%;
+}
+.Table_item h2 {
+    padding-top: 6px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    font-weight: 500;
+    font-size: 12px;
+}
+
+.Table-icon {
+    padding: 0;
+    margin: 0;
+    flex: 0 0 25%;
+    width: 100%;
+    height: 100%;
+}
+
+.modal_detailbillorder {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background-color: rgba(1,1,1,0.3);
+    z-index: 100;
+}
+.modal_detailbillorder.open {
+    display: flex;
+}
+.detailbill_content {
+    position: relative;
+    animation: headerNotifyAni linear 0.2s;
+    overflow-y: scroll;
+    width: 70%;
+    height: 90%;
+    background-color: #fff;
+    scrollbar-width: none;
+}
+.bill {
+    text-align: center;
+}
+.showdetail {
+    margin-right: 10px;
+}
+.detailbill_content-footer {
+    position: absolute;
+    width: 100%;
+    height: 70px;
+}
+.button_checkout_billorder {
+    position: absolute;
+    right: 45px;
+    .comic-button {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+        text-decoration: none;
+        color: #fff;
+        background-color: #ff5252;
+        border: 2px solid #000;
+        border-radius: 10px;
+        box-shadow: 5px 5px 0px #000;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      
+      .comic-button:hover {
+        background-color: #fff;
+        color: #ff5252;
+        border: 2px solid #ff5252;
+        box-shadow: 5px 5px 0px #ff5252;
+      }
+      
+      .comic-button:active {
+        background-color: #fcf414;
+        box-shadow: none;
+        transform: translateY(4px);
+      }
+      
+}
+.notificeBill {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #424242;
+    width: 100px;
+    height: 26px;
+    font-size: 11px;
+    position: absolute;
+    top: -35px;
+    background-color: #a2a2a2;
+    right: -57px;
+    background: linear-gradient(
+    to bottom left,
+    #FED9B7,
+    #F07167
+  );
+    border-radius: 5px;
+    animation: bounceIn 3s ease-in infinite, headerNotifyAni ease-in .3s;
+    // animation-fill-mode: both;
+}
+.notificeContent {
+    display: none;
+}
+.notificeContent.open {
+    display: flex;
+}
+.notificeBill::after {
+    content: " ";
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: -23px;
+    left: 10px;
+    width: 10px;
+    height: 10px;
+    border-style: solid;
+    border-width: 12px 8px;
+    border-color: #f28072 transparent transparent transparent;
+    color: #fff;
+    font-size: 12px;
+}
+.Table_Container {
+    position: relative;
+}
+.Table_Container-qualitytable {
+    font-size: 20px;
+    position: absolute;
+    right: 20px;
+    color: #000;
+    font-weight: 600;
+}

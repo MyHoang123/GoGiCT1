@@ -1,0 +1,38 @@
+
+  // .swiper-slide img {
+  //   display: block;
+  //   width: 100%;
+  //   height: 100%;
+  //   object-fit: cover;
+  // }
+  .mySwiper {
+    z-index: 0;
+    height: 100%;
+    width: 100%;
+
+}
+.slide_swiper-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+}
+.slider_detail {
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: absolute;
+    width: 100%;
+    height: 126px;
+    background-color: #878787;
+    z-index: 10;
+    border-radius: 10px;
+}
+/* Thay đổi màu sắc của tất cả các bullet */
+.swiper-pagination-bullet {
+    background-color: rgb(74, 0, 0);
+ /* Thay #000000 bằng màu bạn muốn */
+}
+
+/* Thay đổi màu sắc của bullet đang được chọn (active) */
+// .swiper-pagination-bullet-active {
+//     background: #ffffff; /* Thay #ffffff bằng màu bạn muốn */
+// }

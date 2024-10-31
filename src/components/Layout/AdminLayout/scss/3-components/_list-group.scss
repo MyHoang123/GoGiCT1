@@ -1,0 +1,10 @@
+a.list-group-item {
+  text-decoration: none;
+}
+.list-group {
+  overflow-y: auto;
+  height: 300px;
+}
+.list-group::-webkit-scrollbar {
+  width: 0; /* Ẩn thanh cuộn */
+}

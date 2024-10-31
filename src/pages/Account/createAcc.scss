@@ -1,0 +1,209 @@
+.form-container {
+  margin: auto;
+  width: 460px;
+  height: 609px;
+  background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  border-radius: 10px;
+  box-sizing: border-box;
+  padding: 20px 30px;
+  font-size: 12px;
+}
+
+.title {
+  text-align: center;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+        "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  margin: 10px 0 30px 0;
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.sub-title {
+  margin: 0;
+  margin-bottom: 14px;
+  font-size: 9px;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+        "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 15px;
+}
+
+.input {
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  border: 1px solid #c0c0c0;
+  outline: 0 !important;
+  box-sizing: border-box;
+  padding: 12px 16px;
+}
+
+.form-btn {
+  padding: 10px 15px;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+        "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  border-radius: 20px;
+  border: 0 !important;
+  outline: 0 !important;
+  background: teal;
+  color: white;
+  cursor: pointer;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.form-btn:active {
+  box-shadow: none;
+}
+
+.sign-up-label {
+  margin: 0;
+  font-size: 10px;
+  color: #747474;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+        "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+
+.sign-up-link {
+  margin-left: 1px;
+  font-size: 11px;
+  text-decoration: underline;
+  text-decoration-color: teal;
+  color: teal;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.buttons-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-top: 20px;
+  gap: 15px;
+}
+
+.apple-login-button,
+    .google-login-button {
+  border-radius: 20px;
+  box-sizing: border-box;
+  padding: 10px 15px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
+        rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+        "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  font-size: 11px;
+  gap: 5px;
+}
+
+.apple-login-button {
+  background-color: #000;
+  color: #fff;
+  border: 2px solid #000;
+}
+
+.google-login-button {
+  border: 2px solid #747474;
+}
+
+.apple-icon,
+    .google-icon {
+  font-size: 18px;
+  margin-bottom: 1px;
+}
+.formField {
+  margin: 6px 1px;
+  position: relative;
+  border: none;
+}
+
+// .formField input {
+//   padding: 10px 15px;
+//   outline: none;
+//   border: none;
+//   border-radius: 5px;
+//   background-color: #f1f1f1;
+//   color: #333;
+//   font-size: 16px;
+//   font-weight: 550;
+//   transition: 0.3s ease-in-out;
+//   box-shadow: 0 0 0 5px transparent;
+// }
+
+.formField input:hover,
+.formField input:focus {
+  box-shadow: 0 0 0 2px #333;
+}
+
+.formField span {
+  position: absolute;
+  left: 0;
+  top: 3px;
+  padding: 8px 15px;
+  color: #757575;
+  font-size: 12px;
+  font-weight: 500;
+  text-shadow: -1px -1px 0 #f1f1f1, 1px -1px 0 #f1f1f1, -1px 1px 0 #f1f1f1,
+    1px 1px 0 #f1f1f1;
+  transition: 0.3s ease-in-out;
+  pointer-events: none;
+}
+
+.formField input:focus + span {
+  transform: translateY(-32px) translateX(-5px) scale(0.95);
+  transition: 0.3s ease-in-out;
+}
+// Data Table
+#events {
+  background-color: rgba(191, 191, 191, 0.15);
+  padding: 20px;
+  margin-top: 20px;
+}
+
+#events > div {
+  padding-bottom: 5px;
+}
+
+#events > div::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+#events #clear {
+  float: right;
+}
+
+#events .caption {
+  float: left;
+  font-weight: bold;
+  font-size: 115%;
+  line-height: 115%;
+  padding-top: 7px;
+}
+
+#events ul {
+  list-style: none;
+  max-height: 100px;
+  overflow: auto;
+  margin: 0;
+}
+
+#events ul li {
+  padding: 7px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+#events ul li:last-child {
+  border-bottom: none;
+}
