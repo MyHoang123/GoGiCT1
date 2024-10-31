@@ -6,7 +6,7 @@ import GlobalStyles from '../src/components/GlobalStyles';
 import { GlobalcontextProvider } from "./GlobalContext"
 
 import { GoogleOAuthProvider } from '@react-oauth/google';
-
+asdsadsadsa
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 <GlobalcontextProvider>
