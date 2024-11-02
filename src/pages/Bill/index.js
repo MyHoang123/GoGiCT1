@@ -73,31 +73,56 @@ const modelBill = useRef()
     },[])
     // Các hàm xử lý
     const handleClickShowDetail = useCallback((e) => {
+      console.log(JSON.parse(e.data.Data))
       if(e) {
         setBillApi({IdBill:e.data.Id,Note:e.data.Note,IdAcc:e.data.IdAcc})
-        getProduct(JSON.parse(e.data.Data))
+        setProducts(JSON.parse(e.data.Data))
+        modelBill.current.classList.add('open')
       }
     },[])
     const handleClickRemoveDetailBill = useCallback(() => {
         modelBill.current.classList.remove('open')
     },[])
-    const handleUpdateBill = (Id,IdAcc,Status) => {
-      if(socket !== null && Id >= 0) {
-        socket.emit('updatebill',Id,IdAcc,Status,(IdBill) => {
-          if(IdBill !== null) {
-                const newArr = [...bill]
-                for(let i in newArr) {
-                  if(newArr[i].Id === IdBill) {
-                    newArr[i].Status = Status
+    const handleUpdateBill = (Id,IdAcc,data,Status) => {
+      if(Status === 3) {
+        const newArr = JSON.parse(data).reduce((arr,cur) => {
+                return [...arr,{Id:cur.Id,Sl:cur.sl}]
+        },[])
+        if(socket !== null && Id >= 0) {
+          socket.emit('updatebill',Id,IdAcc,Status,newArr,(IdBill) => {
+            if(IdBill !== null) {
+                  const newArr = [...bill]
+                  for(let i in newArr) {
+                    if(newArr[i].Id === IdBill) {
+                      newArr[i].Status = Status
+                    }
                   }
+                  setBill(newArr)
                 }
-                setBill(newArr)
-              }
-              else {
-                alert('Đã xảy ra lõi vui lòng thử lại')
-              }
-            })
-          }
+                else {
+                  alert('Đã xảy ra lõi vui lòng thử lại')
+                }
+              })
+            }
+      }
+      else {
+        if(socket !== null && Id >= 0) {
+          socket.emit('updatebill',Id,IdAcc,Status,null,(IdBill) => {
+            if(IdBill !== null) {
+                  const newArr = [...bill]
+                  for(let i in newArr) {
+                    if(newArr[i].Id === IdBill) {
+                      newArr[i].Status = Status
+                    }
+                  }
+                  setBill(newArr)
+                }
+                else {
+                  alert('Đã xảy ra lõi vui lòng thử lại')
+                }
+              })
+            }
+      }
     }
   // API
   const handleLickOpenLocation = (data) => {
@@ -167,7 +192,7 @@ const modelBill = useRef()
                                   ) : null}
                                     </div>
                                     <div className='button_check'>
-                                        <button  onClick={() => handleUpdateBill(billApi.IdBill,billApi.IdAcc,1)} className="button">
+                                        <button  onClick={() => handleUpdateBill(billApi.IdBill,billApi.IdAcc,null,1)} className="button">
                                           Xác nhận đơn hàng
                                         </button>
                                     </div>
@@ -230,8 +255,8 @@ const modelBill = useRef()
             <div className='button_container'>
                 <div className='showdetail'><button onClick={() => handleClickShowDetail(data)} className="button">Xem chi tiết</button></div>
                 {(data.data.Status === 0 ? (<div className='delete'><button className="button">Từ chối</button></div>) : (
-                  data.data.Status === 1 ? (<div onClick={() => handleUpdateBill(data.data.Id,data.data.IdAcc,2)} className='ship'><button className="button">Giao Hàng</button></div>) : 
-                  (data.data.Status === 2 ? (<div onClick={() => handleUpdateBill(data.data.Id,data.data.IdAcc,3)} className='ship'><button className="button">Đã Xong</button></div>) : null)
+                  data.data.Status === 1 ? (<div onClick={() => handleUpdateBill(data.data.Id,data.data.IdAcc,null,2)} className='ship'><button className="button">Giao Hàng</button></div>) : 
+                  (data.data.Status === 2 ? (<div onClick={() => handleUpdateBill(data.data.Id,data.data.IdAcc,data.data.Data,3)} className='ship'><button className="button">Đã Xong</button></div>) : null)
                 ))}
             </div>
             </>

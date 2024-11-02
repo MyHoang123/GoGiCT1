@@ -341,12 +341,11 @@ function Header() {
                 axios.post('http://localhost:8080/api/v12/shownotifi',{token: cookies.get('AccessToken')}),
               ])
                 .then(axios.spread((Product,lengthCard, Noti) => {
-                        console.log("🚀 ~ .then ~ lengthCard:", lengthCard)
                         if(Noti.data.data !== null) {
                             setNotifis(Noti.data.data)
                         }
                         setProducts(Product.data.data)
-                        setAmount(lengthCard.data.data.AmountCard)
+                        setAmount(lengthCard.data.data)
                         setAmountNoti(Noti.data.lenght)
                 }))
                 .catch (err => {

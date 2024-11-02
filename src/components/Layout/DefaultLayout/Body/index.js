@@ -129,7 +129,7 @@ function Body() {
                     animationRef.current = requestAnimationFrame(animateAddcard)
 
            }
-           else if (response.data.massege === 'Tồn tại') {
+           else {
                 Swal.fire({
                     icon: "error",
                     title: "Lỗi",
@@ -138,13 +138,10 @@ function Body() {
                 });
                 cardButton.current[button].style.pointerEvents = 'auto'
            }
-           else {
-            cardButton.current[button].style.pointerEvents = 'auto'
-            alert('Thêm sản phẩm thất bại')
-           }
+         
         } catch (error) {
             cardButton.current[button].style.pointerEvents = 'auto'
-            console.error('Lỗi khi thêm sản phẩm:', error);
+            alert('Thêm sản phẩm thất bại')
             // Xử lý lỗi tại đây.
         }
     }
@@ -638,12 +635,12 @@ function Body() {
                                 {productPage[0].map((product, index) => (
                                 (product.Status === 'visible' ? (
                                 <div key={index} className='product_content'>    
-                                          <div style={{height: '320px',zIndex: '1'}} className={`card ${darkMode ? 'darkmode' : ''}`}>
+                                          <div style={{height: '290px',zIndex: '1', width:'220px', padding:'5px'}} className={`card ${darkMode ? 'darkmode' : ''}`}>
                                                     {/* <div className='Lidoverlay_modal'>
                                                         <img ref={(e) => openLid.current[index] = e} className='Lidoverlay_modal-img' src={Lid} style={{width: '75%',height:'150px'}}/>
                                                     </div> */}
                                                     <div style={{zIndex:'1'}} className="image-container">
-                                                        <img src={`http://localhost:8080/api/v12/showimgproduct/${product.Img}`} style={{width: '100%', height: '100%',objectFit: 'cover', zIndex: '100'}} />
+                                                        <img src={`http://localhost:8080/api/v12/showimgproduct/${product.Img}`} style={{width: '90%', height: '90%',objectFit: 'cover', zIndex: '100'}} />
                                                     </div>
                                                     <label className="favorite">
                                                         <input type="checkbox"/>

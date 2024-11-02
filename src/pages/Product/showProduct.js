@@ -171,6 +171,20 @@ const App = () => {
       setProducts(typeArray(productBackup,e.value))
     }
   }
+  const deleteProduct = (e) => {
+    const product = {
+      IdProduct: e.data.Id
+    }
+    deleteproduct(product)
+  }
+    // Gửi dữ liệu lên API Create
+    async function deleteproduct(product) {
+      try {
+         await axios.post('http://localhost:8080/api/v12/deleteproduct',product)
+      } catch (error) {
+        alert('Đã xảy ra lõi')
+      }
+    }
   // Gửi dữ liệu lên API Create
   async function addProduct(product) {
     try {
@@ -381,6 +395,7 @@ const App = () => {
         showRowLines={true}
         showBorders={true}
         rowAlternationEnabled={true}
+        onRowRemoved={deleteProduct}
         onRowUpdated={handleUpdateProduct}
         onEditingStart={handleClickOpenModelUpdate}
         customizeColumns={customizeColumns}

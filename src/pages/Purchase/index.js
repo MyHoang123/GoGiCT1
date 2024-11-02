@@ -24,36 +24,6 @@ function Purchase() {
         {danggiao: 0},
         {dagiao: 0},
     ])
-    //Call Api
-    // async function createComment(comment) {
-    //     try {
-    //        const response = await axios.post('http://localhost:8080/api/v12/createcomment', comment)
-    //        if(response.data.massege === 'Thanh cong') {
-    //         const newArr = [...bills]
-    //         for(let i in newArr) {
-    //             if(newArr[i].Id === comment.IdBill) {
-    //                 newArr[i].Status = 4
-    //                 setBills(newArr)
-    //             }
-    //         }
-    //         // Swal.fire({
-    //         //     title: "Cảm ơn bạn đã đánh giá!",
-    //         //     text: "Đánh giá của bạn đã được ghi lại",
-    //         //     icon: "success"
-    //         //   }).then((result) => {
-    //         //     if(result.isConfirmed) {
-    //         //         handleClickRemoveCmt()
-    //         //     }
-    //         //     else {
-    //         //         handleClickRemoveCmt()
-    //         //     }
-    //         //   })
-    //        }
-    //     } catch (error) {
-    //         console.error('Lỗi khi thêm sản phẩm:', error);
-    //         // Xử lý lỗi tại đây.
-    //     }
-    // }
     async function showComment(User) {
         try {
            const response = await axios.post('http://localhost:8080/api/v12/showcommentuser', User)
@@ -66,41 +36,14 @@ function Purchase() {
             // Xử lý lỗi tại đây.
         }
     }
-    // Funtion
-    // const handleClickComment = (IdProduct,i) => {
-    //     const Comment = {
-    //         Containt: containtCmt.current[i].value ? containtCmt.current[i].value : " ",
-    //         Star: starCmt.current[i],
-    //         IdProduct: IdProduct,
-    //         IdBill: IdBill,
-    //         token: cookie.get('AccessToken')
-    //     }
-    //     console.log("🚀 ~ handleClickComment ~ Comment:", Comment)
-    //     // createComment(Comment)
-    // }
     const handleClickOpenCmt = (IdBill,data) => {
+        console.log("🚀 ~ handleClickOpenCmt ~ data:", JSON.parse(data))
         if(IdBill !== null && data !== null) {
             setIdBill(IdBill)
             setProduct(JSON.parse(data))
             setModalCmt(true)
         }
     }
-    // const handleClickRemoveCmt = () => {
-    //     if(containtCmt.current.length > 0) {
-    //         for(let i = 0 ; i < product.length; i++){
-    //             starCmt.current = []
-    //             containtCmt.current[i].value = ''
-    //         }
-    //         containtCmt.current = []
-    //     }
-    //         for(let i = 1; i <= product.length * 5; i++) {
-    //             if(checked.current[i] !== null) {
-    //                 checked.current[i].checked = false
-    //             }
-    //         }
-    //     setModalCmt(false)
-    //     setComment([])
-    // }
     const handleClickShowComment = (IdBill,data) => {
         if(IdBill !== null) {
             const product = JSON.parse(data).reduce((acc,curr) => {
@@ -351,7 +294,7 @@ function Purchase() {
                                             )}
                                         </div>
                                     </div>
-                                    { JSON.parse(bill.Data).map((product,i) => (
+                                    {JSON.parse(bill.Data).map((product,i) => (
                                         <div key={i} className={cx('Purchase_content_body_container_body')}>
                                             <div className={cx('Purchase_content_body_container_body-left')}>
                                                 <div className={cx('Purchase_content_body_container_body-left-img')}>
@@ -359,8 +302,8 @@ function Purchase() {
                                                 </div>
                                                 <div className={cx('Purchase_content_body_container_body-left-content')}>
                                                     <h3>{product.Name}</h3>
-                                                    <h3 style={{color: 'rgba(0, 0, 0, .54)'}}>Phân loại: Thịt bò</h3>
-                                                    <h3 style={{fontSize:'14px'}}>x{product.sl}</h3>
+                                                    <h3 style={{color: 'rgba(0, 0, 0, .54)',fontSize:'12px'}}>Phân loại: Thịt bò</h3>
+                                                    <h3 style={{fontSize:'14px', marginBottom:'0'}}>x{product.sl}</h3>
                                                 </div>
                                             </div>
                                             <div className={cx('Purchase_content_body_container_body-right')}>

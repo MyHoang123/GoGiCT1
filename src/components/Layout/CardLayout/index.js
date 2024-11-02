@@ -279,7 +279,7 @@ function Card() {
                         },[])
                         const bill = {
                             TotalPrice: totalPay[1],
-                            Data: JSON.stringify(result),
+                            Data: result,
                             Address: `${sessionStorage.getItem('Address')}`,
                             Name: userName,
                             Sdt: phone,
@@ -379,8 +379,9 @@ function Card() {
                 }),
               ])
                 .then(axios.spread((Card, ) => {
-                    console.log("🚀 ~ .then ~ Card:", Card)
-                    setCards(Card.data.data)
+                    if(Card.data.massege === 'Thanh Cong') {
+                        setCards(Card.data.data)
+                    }
                 }))
                 .catch (err => {
                     console.error()
