@@ -10,12 +10,18 @@ const App = () => {
 // Ref
 const notificeRef = useRef()
   // Dev Express
+      // Gửi dữ liệu lên API Create
+      async function deleteMenu(e) {
+        try {
+            await axios.delete(`http://localhost:8080/api/v12/deletemenu/${e.data.Id}`)
+        } catch (error) {
+          alert('Đã xảy ra lõi')
+        }
+      }
   // Gửi dữ liệu lên API
-  async function addMenu(menu) {
+  async function addMenu(e) {
     try {
-      await axios.post('http://localhost:8080/api/v12/createcategori', menu);
-      setMenuApi(menu)
-        notificeRef.current.classList.add('open')
+      await axios.post('http://localhost:8080/api/v12/createmenu', {Name:e.data.Name});
     } catch (error) {
       console.error('Lỗi khi thêm sản phẩm:', error);
       // Xử lý lỗi tại đây.
@@ -47,12 +53,6 @@ const notificeRef = useRef()
     const productFilter = Array.filter((product) => product.IdType === i )
     return productFilter
       }
-  const handleCreate = (e) => {
-    const data = e.data
-    delete data.Id
-    // setMenuApi(data)
-    // addMenu(data)
-  }
   const handleUpdateCategori = (e) => {
     // const data = e.data
     // updateMenu(data)
@@ -93,9 +93,10 @@ const notificeRef = useRef()
       <DataGrid
         id="gridContainer"
         dataSource={menu}
-        onRowInserted={handleCreate}
+        onRowInserted={addMenu}
         onRowUpdated={handleUpdateCategori}
         customizeColumns={customizeColumns}
+        onRowRemoved={deleteMenu}
         showRowLines={true}
         showBorders={true}
         rowAlternationEnabled={true}

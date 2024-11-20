@@ -1,12 +1,14 @@
 import './Table.scss'
 import axios from 'axios'
-import io from 'socket.io-client';
 import imgTable from '../../Asset/images/table.jpg';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import ImgProduct from '../CardMobile/imgCard';
+import { ElementContextAdmin } from '../../components/Layout/AdminLayout'
+import { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { tab } from '@testing-library/user-event/dist/tab';
+import { Details } from 'devextreme-react/cjs/file-manager';
 function App() {
     const [socket, setSocket] = useState(null);
     const [tables, setTables] = useState([])
+    const [productsTable, setProductTable] = useState([])
     const [tableId, setTablesId] = useState()
     const [checkTable, setCheckTable] = useState()
     const [detailProductTable, setDetailProductTable] = useState([])
@@ -17,16 +19,14 @@ function App() {
     const headerDetalTable = useRef()
     const notificeRefTable = useRef([])
     const notiContentRef = useRef([])
-
+    const { socketOrder, cookies } = useContext(ElementContextAdmin)
     // Gửi dữ liệu lên API
-async function showProductTable(table) {
+async function showProductTable() {
     try {
-      const response =  await axios.post('http://localhost:8080/api/v12/showbillorderuser', table);
+      const response =  await axios.get(`http://localhost:8080/api/v12/getproductbillorder?token=${cookies.get('AccessTokenAdmin')}`);
+      console.log("🚀 ~ showProductTable ~ response:", response)
       if(response.data.massege === "Không tìm thấy đơn hàng") {
-        setDetailProductTable([])
-      }
-      else {
-          setDetailProductTable(JSON.parse(response.data.data.Data))
+        setProductTable(response.data.data)
       }
     } catch (error) {
         console.error('Lỗi khi thêm sản phẩm:', error);
@@ -75,90 +75,53 @@ async function updateBillOrder(Table) {
     }
     }
     // Các hàm xử lý
-    const handleClickOpenTable = (Id,Name) => {
-        notificeRefTable.current[Id].classList.remove('open')
-        setTablesId(Id)
-        const table = {
-            IdTable: Id
-        }
-        RefTable.current.classList.add('open')
-        showProductTable(table)
-        headerDetalTable.current.innerText = `${Name}`
+    const handleClickOpenTable = async (Id,Name) => {
+        try {
+            const response =  await axios.get(`http://localhost:8000/api/v12/getproductbillordertable/${Id}?token=${cookies.get('AccessTokenAdmin')}`);
+            if(response.data.massege === "Thanh cong") {
+                setProductTable(response.data.data)    
+                setTablesId(Id)
+                notificeRefTable.current[Id].classList.remove('open')
+                RefTable.current.classList.add('open')
+                headerDetalTable.current.innerText = `${Name}`
+            }
+          } catch (error) {
+              console.error('Lỗi khi thêm sản phẩm:', error);
+              // Xử lý lỗi tại đây.
+          }
     }
     const handleClickRemoveShowBill = () => {
         RefTable.current.classList.remove('open')
     }
-    const handleClickCheckBill = (Id) => {
-        const newArr = [...detailProductTable]
-        for(let i = 0 ; i < newArr.length; i++) {
-            if(newArr[i].Id === Id) {
-                newArr[i].Status ='Đã Giao'
-                setDetailProductTable(newArr)
+    const handleClickCheckBill = (Id,IdDetail,Status) => {
+        if(tableId !== null) {
+            socketOrder.emit('updateProduct',Id,IdDetail,tableId,Status)
+            if(productsTable.length > 0) {
+                const newArr = [...productsTable]
+                newArr.forEach((product)=> {
+                    if(product.IdDetail === IdDetail) {
+                        product.Status = Status
+                    }
+                })
+                setProductTable(newArr)
             }
         }
-        const productbill = {
-            Id: Id,
-            IdTable: tableId
-        }
-       updateproduct(productbill)
-    }
-    const handleClickDeleteProduct = (Id) => {
-        const newArr = [...detailProductTable]
-        for(let i = 0 ; i < newArr.length; i++) {
-            if(newArr[i].Id === Id) {
-                newArr[i].Status ='Đã Hủy'
-                setDetailProductTable(newArr)
-            }
-        }
-        const productbill = {
-            Id: Id,
-            IdTable: tableId
-        }
-        deleteTableProduct(productbill)
     }
     const handleClickCheckout = () => {
-        const Table = {
-            Status: 'Bàn Trống',
-            Id: tableId
-        }
-        updateTable(Table)
-            const TableId = {
-                Id: tableId
+        socketOrder.emit('checkoutsuccess', tableId,(data) => {
+            if(data === 'Thanh cong') {
+                handleClickRemoveShowBill()
+                const newTable = [...tables]
+                newTable.forEach((table) => {
+                    if(table.Id === tableId) {
+                        table.Status = 'Bàn Trống'
+                    }
+                })
+                 setTables(newTable)
             }
-        updateBillOrder(TableId)
-        setnotiContent(null)
-        RefTable.current.classList.remove('open')
-        socket.emit('checkoutsuccess', TableId.Id)
+        })
     }
     useEffect(() => {
-        const newSocket = io(`${process.env.REACT_APP_IP_SEVER}`,{
-            auth: {
-                token: 1
-            }
-        });
-        setSocket(newSocket);
-        // Lắng nghe các sự kiện từ sever
-        newSocket.emit('connection', 'Admin');
-        newSocket.on('notiBillTable', (data,mess) => {
-            setnotiContent(mess)
-            setNotiTable(prev => [...prev,data])
-        });
-        newSocket.on('repcheckout', (data,mess) => {
-            setnotiContent(mess)
-            setNotiTable(prev => [...prev,data])
-        });
-        newSocket.on('repconnectclient', (data) => {
-            setCheckTable(data)
-        });
-        newSocket.on('repcheckoutsuccessadmin', (data) => {
-            const datan = [...tables]
-            for(let i in datan) {
-                if(datan[i].Id === data) {
-                    datan[i].Status = 'Bàn Trống'
-                }
-            }
-            setTables(datan)
-        });
         axios.all([
           axios.get('http://localhost:8080/api/v12/showtable'),
         ])
@@ -168,11 +131,6 @@ async function updateBillOrder(Table) {
           .catch (err => {
               console.error()
             })
-            return () => {
-                // Xử lý sự kiện khi kết nối bị đóng
-                newSocket.emit('disconnection', 'Admin');
-                newSocket.disconnect();
-            }
         },[notiContent,checkTable])
     useEffect(() => {
         for(let i = 0 ; i < tables.length; i++) {
@@ -189,6 +147,43 @@ async function updateBillOrder(Table) {
             }
         }
     },[tables,notiTable])
+    useEffect(() => {
+        if(socketOrder !== null) {
+            socketOrder.on('connectuser',(IdTable) => {
+            const newArr = [...tables]
+            newArr.forEach((table) => {
+                if(table.Id === parseInt(IdTable)) {
+                    table.Status = 'Đang Dùng'
+                }
+            })
+            setTables(newArr)
+            })
+            socketOrder.on('repNewbill',(IdTable) => {
+                const newId = parseInt(IdTable)
+                if(notiContentRef.current[newId] !== null) {
+                    notiContentRef.current[newId].innerText = `Có đơn hàng mới !`
+                    notificeRefTable.current[newId].classList.add('open')
+                }
+            })
+            return () => {
+                socketOrder.off('connectuser')
+            }
+        }
+    },[tables])
+    useEffect(() => {
+        if(socketOrder !== null) {
+            socketOrder.on('checkoutuser',(IdTable) => {
+                const newId = parseInt(IdTable)
+                if(notiContentRef.current[newId] !== null) {
+                    notiContentRef.current[newId].innerText = `Gọi thanh toán !`
+                    notificeRefTable.current[newId].classList.add('open')
+                }
+            })
+            return () => {
+                socketOrder.off('checkoutuser')
+            }
+        }
+    },[tables])
     const tableUser = useMemo(() => {
         let Count = 0
         for(let i = 0 ; i < tables.length; i++) {
@@ -221,28 +216,31 @@ async function updateBillOrder(Table) {
                     <div className='bill'>                          
                     <h1 ref={headerDetalTable}>Bàn Số 1</h1>  
                     <h2>(Gọi Món)</h2>
-                    {detailProductTable.length !== 0 ? (
-                        (detailProductTable.map((product,index) => (
+                    <div className='detailbill_container_products'>
+                    {productsTable.length !== 0 ? (
+                        (productsTable.map((product,index) => (
                                     <div key={index} className='bill_content-item'>
                                         <div className='bill_content-item-img'>
-                                            <ImgProduct children={product.Img} />
+                                             <img src={`${process.env.REACT_APP_IP_SEVER}/api/v12/showimgproduct/${product.Img}`}/>
                                         </div>
                                         <div className='bill_content-item-product'>  
                                             <div className='Information'>
                                                 <h2>{product.Name}</h2>
                                                 <h3>Phân Loại Size: M</h3>
-                                                <span style={{fontSize: '10px'}}>x{product.sl}</span>
+                                                <span style={{fontSize: '10px'}}>x{product.Quantity}</span>
                                             </div>
                                             <div className='price'>
                                                 <div className='price_item'>
-                                                    <h2 style={{color: product.Status === 'Đã Giao' ? '#3fb800' : product.Status === 'Chờ Lên Món !' ? '#afaf00' : '#ba3939'}}>{product.Status}</h2>
+                                                    {/* <h2 style={{color: product.Status === 0 ? '#3fb800' : product.Status === 0 ? '#afaf00' : '#ba3939'}}>{product.Status}</h2> */}
                                                     <span style={{fontSize: '14px'}}>{product.Price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '₫'}</span>
                                                 </div>
                                             </div>                    
                                                 <div className='button_detailproductOrder'>
-                                                <div className='button_container'>    
-                                                {(product.Status === 'Chờ Lên Món !' ? <div className='showdetail'><button onClick={() => handleClickCheckBill(product.Id)} className="button">Lên Món</button></div> : null)}
-                                                        {(product.Status === 'Chờ Lên Món !' ? (<div className='delete'><button onClick={() => handleClickDeleteProduct(product.Id)}  className="button">Từ chối</button></div>) : null)}
+                                                <div className='button_container'> 
+                                                    {(product.Status === 1 ? <div className='showdetail'><h2>Đã giao </h2></div> : null)}
+                                                    {(product.Status === 2 ? <div className='showdetail'><h3>Đã hủy</h3></div> : null)}
+                                                    {(product.Status === 0 ? <div className='showdetail'><button onClick={() => handleClickCheckBill(product.Id,product.IdDetail,1)} className="button">Lên Món</button></div> : null)}
+                                                    {(product.Status === 0 ? (<div className='delete'><button onClick={() => handleClickCheckBill(product.Id,product.IdDetail,2)}  className="button">Từ chối</button></div>) : null)}
                                                     </div>
                                                 </div>
                                         </div>             
@@ -251,6 +249,7 @@ async function updateBillOrder(Table) {
                     ) : (
                         <h1>Khong tìm thấy sản phẩm</h1>
                     )}
+                    </div>
                         </div>
                     <div className='detailbill_content-footer'>
                                 <div onClick={handleClickCheckout} className='button_checkout_billorder'>

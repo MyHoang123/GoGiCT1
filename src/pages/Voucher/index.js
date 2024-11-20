@@ -13,6 +13,14 @@ const App = () => {
 // Ref
 const { socket } = useContext(ElementContextAdmin)
   // Dev Express
+        // Gửi dữ liệu lên API Create
+        async function deleteVoucher(e) {
+          try {
+              await axios.delete(`http://localhost:8080/api/v12/deletevoucher/${e.data.Id}`)
+          } catch (error) {
+            alert('Đã xảy ra lõi')
+          }
+        }
   // Gửi dữ liệu lên API
   async function createVoucher(voucher) {
     Swal.fire({
@@ -69,6 +77,7 @@ const { socket } = useContext(ElementContextAdmin)
         dataSource={voucher}
         onRowInserted={handleCreate}
         customizeColumns={customizeColumns}
+        onRowRemoved={deleteVoucher}
         showRowLines={true}
         showBorders={true}
         rowAlternationEnabled={true}

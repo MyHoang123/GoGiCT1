@@ -13,7 +13,7 @@ const App = () => {
 // State
   const [billApi, setBillApi] = useState({})
   const [bill, setBill] = useState([])
-	const [idNoti,setIdnoti] = useState(null)
+	const [idNoti,setIdnoti] = useState(1)
   const [products, setProducts] = useState([])
   const { socket } = useContext(ElementContextAdmin)
 // Ref
@@ -134,8 +134,8 @@ const modelBill = useRef()
   useEffect(() => {
     if(cookies.get('AccessTokenAdmin') !== undefined) {
       if(socket !== null) {
-        socket.on('repNewbill', (data) => {
-          setIdnoti(data)
+        socket.on('repNewbill', () => {
+          setIdnoti(prev => prev + 1)
         })
       }
       const Account = {
@@ -161,6 +161,9 @@ const modelBill = useRef()
     <div className='container_categori'>
         <div onClick={handleClickRemoveDetailBill} ref={modelBill} className='modal_shodetail-bill'>
             <div onClick={e => e.stopPropagation()} className='detailbill'>
+              <h2 className='detailbill_header'>Thông tin đơn hàng</h2>
+                <div className='IdBill_content'>Mã đơn hàng: <b>KTPM0120</b></div>
+                <div className='IdBill_content'><b>Thanh toán khi nhận hàng</b></div>
                 <div className='bill_content'>           
                                         {products.map((pd,index) => (
                                                 <div key={index} className='bill'>                                      
@@ -180,7 +183,7 @@ const modelBill = useRef()
                                                         </div>             
                                                     </div>
                                                     {pd.Note !== null ? (
-                                                       <div className='note_bill'><FontAwesomeIcon icon={faPen} />{pd.Note}</div>
+                                                       <div className='note_bill'><FontAwesomeIcon style={{marginRight:'4px',width:'12px'}} icon={faPen} />{pd.Note}</div>
                                                     ) : null }
                                                 </div>
                                         ))}

@@ -264,7 +264,7 @@
     bottom: 0;
   }
   .truckTires svg {
-    width: 24px;
+    width: 18px;
   }
   
   .road {
@@ -388,6 +388,11 @@
     width: 40%;
     padding-right: 10px;
     height: 100%;
+    h4 {
+      color: #000;
+      font-size: 13px;
+      font-weight: 700x;
+    }
 }
 .show_detail_bill_footer_container-left h2 {
     font-size: 16px;

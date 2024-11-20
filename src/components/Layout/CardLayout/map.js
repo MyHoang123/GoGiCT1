@@ -153,7 +153,7 @@ async function addAddress() {
         mapRef.current.remove();
     }
   }, [])
-  return <div id="map" ref={mapContainerRef} style={{ width: '500px', height: '500px' }} />;  
+  return <div id="map" ref={mapContainerRef} style={{ width: '500px', height: '430px' }} />;  
 };  
   
 export default MapboxExample;

@@ -149,6 +149,8 @@
 }
 .Purchase_content_body_footer-totalpay {
     display: flex;
+    flex-direction: column;
+    align-items: flex-end;
     justify-content: flex-end;
     height: 50%;
 }
@@ -195,6 +197,10 @@
 .Purchase_content_body_footer-button-right .active {
     background-color: #990009;
     color: #fff;
+}
+.Purchase_content_body_footer-totalpay_status {
+    font-size: 13px;
+    font-weight: 600;
 }
 // .modal_comment {
 //     display: none;

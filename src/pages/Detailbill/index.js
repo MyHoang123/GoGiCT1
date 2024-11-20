@@ -21,6 +21,24 @@ function App() {
     // 
     const { billUpdate, handleClickOpenCmtDetai } = useContext(ContextPurchase)
 // API
+    // Gửi dữ liệu lên API
+    async function CheckPayStatus(IdPay) {
+        try {
+        const response =  await axios.post('http://localhost:8080/api/v12/CheckPayOrder', {app_trans_id:IdPay});
+        if(response.data.result.return_code === 1) {
+            const newArr = [...bill]
+            newArr.StatusPay = 1
+            setBill(newArr)
+        }else {
+            const newArr = [...bill]
+            newArr.StatusPay = 2
+            setBill(newArr)
+        }
+        } catch (error) {
+          console.error('Lỗi khi thêm sản phẩm:', error);
+          // Xử lý lỗi tại đây.
+        }
+      }
 useEffect(() => {
     if(cookie.get('AccessToken') !== undefined) {	
         if(billUpdate !== null && bill.length !== 0) {
@@ -33,27 +51,9 @@ useEffect(() => {
             }
             else if(billUpdate.Status === 4) {
                 LastItemRef.current.style.cursor = 'auto'
-                 LastItemRef.current.classList.add(cx('open'))
+                LastItemRef.current.classList.add(cx('open'))
             }
         }
-        // if(socket !== null) {
-        //     socket.on('repship', () => {
-        //         if(bill.length !== 0) {
-        //             const newArr = [...bill]
-        //             newArr[0].Status = 'Đang Giao'
-        //             setBill(newArr)
-        //             Line.current.style.width = '40%'
-        //         }
-        //     })
-        //     socket.on('repConfirm', () => {
-        //         if(bill.length !== 0) {
-        //             const newArr = [...bill]
-        //             newArr[0].Status = 'Đã Nhận'
-        //             setBill(newArr)
-        //             Line.current.style.width = '20%'
-        //         }
-        //     })
-        // }
     }
   },[billUpdate])
 useEffect(() => {
@@ -65,7 +65,9 @@ useEffect(() => {
           }),
         ])
           .then(axios.spread((Bill) => {
-            console.log("🚀 ~ .then ~ Bill:", Bill)
+            if(Bill.data.data[0].PayMent.length > 0 && Bill.data.data[0].StatusPay !== 1 ) {
+                CheckPayStatus(Bill.data.data[0].PayMent)
+            }
             setBill(Bill.data.data)
             if(Bill.data.data[0].Status === 0 ) {
                 Line.current.style.width = '0'
@@ -305,6 +307,11 @@ useEffect(() => {
                             <h2>{bill[0].Name}</h2>
                             <h3 style={{color:'#555',margin:'10px 0'}}>(+84) {bill[0].Sdt}</h3>
                             <h3 style={{color:'#555'}}>{bill[0].Address}</h3>
+                            {bill[0].StatusPay === 0 ? (
+                                               <h4 style={{marginTop:'20px'}}>Thanh toán khi nhận hàng</h4>
+                                            ) : (
+                                                bill[0].StatusPay === 1 ? ( <h4 style={{marginTop:'20px'}}>Đã thanh toán</h4>) : ( <h4 style={{marginTop:'20px'}}>Chờ thanh toán</h4>)
+                                            )}
                         </div>
                         <div className={cx('show_detail_bill_footer_container-right')}>
                             {bill.length > 0 ? (

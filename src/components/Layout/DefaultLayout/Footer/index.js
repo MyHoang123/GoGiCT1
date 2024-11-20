@@ -8,9 +8,9 @@ import AppStore from '../../../../Asset/images/appstore.png'
 function Footer() {
     return (  
         <>
-                    <div className='grid wide'>
-                        <div className='row'>
-                            <div className='footer_content col l-2-4 m-4 c-6'>
+                    <div className='footer_container'>
+                        <div className='footer_container_item'>
+                            <div className='footer_content'>
                                 <h3 className='footer_heading'>Chăm sóc khách hàng</h3>
                                 <ul className='footer_list'>
                                     <li className='footer_item'>
@@ -27,7 +27,7 @@ function Footer() {
                                     </li> 
                                 </ul>
                             </div>
-                            <div className='footer_content col l-2-4 m-4 c-6'>
+                            <div className='footer_content'>
                                 <h3 className='footer_heading'>Giới thiệu</h3>
                                 <ul className='footer_list'>
                                     <li className='footer_item'>
@@ -42,7 +42,7 @@ function Footer() {
                                 </ul>
         
                             </div>
-                            <div className='footer_content col l-2-4 m-4 c-6'>
+                            <div className='footer_content'>
                                 <h3 className='footer_heading'>Danh mục</h3>
                                 <ul className='footer_list'>
                                     <li className='footer_item'>
@@ -56,7 +56,7 @@ function Footer() {
                                     </li>
                                 </ul>
                             </div>
-                            <div className='footer_content col l-2-4 m-4 c-6'>
+                            <div className='footer_content'>
                                 <h3 className='footer_heading'>Theo dỗi chúng tôi trên</h3>
                                 <ul className='footer_list'>
                                     <li className='footer_item'>
@@ -79,7 +79,7 @@ function Footer() {
                                     </li>
                                 </ul>
                             </div>
-                            <div className="footer_content col l-2-4 m-4 c-6">
+                            <div className="footer_content">
                                 <h3 className='footer_heading'>Vào cửa hàng trên ứng dụng</h3>
                                 <div className="footer_download">
                                     <img src={Qrdowload} alt="DownloadQR" className="footer_dowload-qr" />

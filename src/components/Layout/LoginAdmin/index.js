@@ -8,8 +8,6 @@ import { useNavigate } from 'react-router-dom'
 
 const cx = classNames.bind(styles)
 
-
-
 function App() {
     const navigate = useNavigate()
     const [acc,setAcc] = useState('')

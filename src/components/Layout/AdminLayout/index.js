@@ -21,9 +21,11 @@ function AdminLayout( {Children} ) {
     const navigate = useNavigate()
     const [checklogin, setCheckLogin] = useState(false)
     const [acc,setAcc] = useState('')
+    const [loading,setLoading] = useState(false)
     const [pass,setPass] = useState('')
     const [chat,setChat] = useState(false)
     const [socket, setSocket] = useState(null)
+    const [socketOrder, setSocketOrder] = useState(null)
     const [chatHiden,setChatHiden] = useState(false)
     const [filterChat,setFilterChat] = useState(false)
     const [notiuser,setNotiuser] = useState(false)
@@ -127,7 +129,6 @@ function AdminLayout( {Children} ) {
     const handleClickUser = useCallback((Name,Iduser,socket,listMessage) => {
         if(Name !== null) {
             socket.emit('sendMessage',{IdSend:Iduser},(response)=> {
-                console.log("🚀 ~ socket.emit ~ response:", response)
                 if(response.message === 'Thanh Cong') {
                     const result = listMessage.reduce((acc,curr) => {
                         if(curr.IdSend === Iduser) {
@@ -170,9 +171,16 @@ function AdminLayout( {Children} ) {
                 token: cookies.get('AccessTokenAdmin')
             }
            })
+           const newSocketOrder = io(`${process.env.REACT_APP_IP_SEVER}`,{
+            auth: {
+                token: cookies.get('AccessTokenAdmin')
+            }
+           })
            setSocket(newSocket)
+           setSocketOrder(newSocketOrder)
             return () => {
                 newSocket.disconnect()
+                newSocketOrder.disconnect()
             }
         }
         else {
@@ -256,60 +264,19 @@ function AdminLayout( {Children} ) {
              }
             }
     },[socket,activeUser,listMessage,message,chat])
+    // useEffect(() => {
+    //     const handleLoad = () => {
+    //       };
+    //       window.addEventListener('load', handleLoad);
+    //       return () => {
+    //         window.removeEventListener('load', handleLoad);
+    //       };
+    // },[location])
     if(cookies.get('AccessTokenAdmin') !== undefined) {
         return ( 
             <div className='body_admin'>
-                {/* <div className={loading ? 'loader_admin unactive':'loader_admin'}>
-                    <div className='loader_container'>
-                        <div className="box-of-star1">
-                            <div className="star star-position1"></div>
-                            <div className="star star-position2"></div>
-                            <div className="star star-position3"></div>
-                            <div className="star star-position4"></div>
-                            <div className="star star-position5"></div>
-                            <div className="star star-position6"></div>
-                            <div className="star star-position7"></div>
-                        </div>
-                        <div className="box-of-star2">
-                            <div className="star star-position1"></div>
-                            <div className="star star-position2"></div>
-                            <div className="star star-position3"></div>
-                            <div className="star star-position4"></div>
-                            <div className="star star-position5"></div>
-                            <div className="star star-position6"></div>
-                            <div className="star star-position7"></div>
-                        </div>
-                        <div className="box-of-star3">
-                            <div className="star star-position1"></div>
-                            <div className="star star-position2"></div>
-                            <div className="star star-position3"></div>
-                            <div className="star star-position4"></div>
-                            <div className="star star-position5"></div>
-                            <div className="star star-position6"></div>
-                            <div className="star star-position7"></div>
-                        </div>
-                        <div className="box-of-star4">
-                            <div className="star star-position1"></div>
-                            <div className="star star-position2"></div>
-                            <div className="star star-position3"></div>
-                            <div className="star star-position4"></div>
-                            <div className="star star-position5"></div>
-                            <div className="star star-position6"></div>
-                            <div className="star star-position7"></div>
-                        </div>
-                        <div data-js="astro" className="astronaut">
-                            <div className="head"></div>
-                            <div className="arm arm-left"></div>
-                            <div className="arm arm-right"></div>
-                            <div className="body">
-                                <div className="panel"></div>
-                            </div>
-                            <div className="leg leg-left"></div>
-                            <div className="leg leg-right"></div>
-                            <div className="schoolbag"></div>
-                            
-                        </div>
-                    </div>
+                {/* <div className='load_admin'>
+
                 </div> */}
                 <div className='Sidebar_container'>
             <Sidebar />
@@ -318,7 +285,7 @@ function AdminLayout( {Children} ) {
                 <Navbar socket={socket !== null ? socket : null} handleOnclick={handleAddClass} />
                 <main className='content'>
                     <div className='container-fluid p-0'>
-                        <ElementContextAdmin.Provider value={{socket}}>
+                        <ElementContextAdmin.Provider value={{socket,socketOrder,cookies}}>
                                {Children}
                         </ElementContextAdmin.Provider>
                     </div>

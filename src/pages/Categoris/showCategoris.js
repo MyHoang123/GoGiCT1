@@ -10,6 +10,14 @@ const App = () => {
 // Ref
 const notificeRef = useRef()
   // Dev Express
+          // Gửi dữ liệu lên API Create
+          async function deleteCategoris(e) {
+            try {
+               await axios.post('http://localhost:8080/api/v12/deletecategoris',{IdCategoris:e.data.Id})
+            } catch (error) {
+              alert('Đã xảy ra lõi')
+            }
+          }
   // Gửi dữ liệu lên API
   async function addCategori(categori) {
     try {
@@ -95,6 +103,7 @@ const notificeRef = useRef()
         onRowInserted={handleCreate}
         onRowUpdated={handleUpdateCategori}
         customizeColumns={customizeColumns}
+        onRowRemoved={deleteCategoris}
         showRowLines={true}
         showBorders={true}
         rowAlternationEnabled={true}

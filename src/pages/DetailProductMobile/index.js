@@ -6,13 +6,12 @@ import Swal from 'sweetalert2/dist/sweetalert2.js'
 import 'sweetalert2/src/sweetalert2.scss'
 import { faAngleLeft,faHeart,faStar,faMedal,faCalendarMinus } from '@fortawesome/free-solid-svg-icons';
 // FakeImg
-import ImgProduct from "./ImgDetailProduct"
+import { RenderStar } from '~/hooks'
 
 // Scss
 import "./DetailProductMobile.scss"
 import { useEffect, useState, useContext } from 'react';
 import { Link, useParams, useNavigate} from 'react-router-dom';
-import LocalStore from 'devextreme/data/local_store';
 
 function App() {
     const navigate = useNavigate();
@@ -29,134 +28,134 @@ function App() {
 
 
 // Hàm
-const handleClickOrder = () => {
-    if(localStorage.getItem('Table')) {
-        const newArr = JSON.parse(localStorage.getItem('card')) || []
-        if(newArr.length === 0) {
-            const swalWithBootstrapButtons = Swal.mixin({
-                customClass: {
-                  confirmButton: "btn btn-success",
-                  cancelButton: "btn btn-danger"
-                },
-                buttonsStyling: false
-              });
-              swalWithBootstrapButtons.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Đồng Ý!",
-                cancelButtonText: "Tư Chối!",
-                reverseButtons: true
-              }).then((result) => {
-                if (result.isConfirmed) {
-                    newArr.push(productsMobile[0])
-                    localStorage.setItem('card', JSON.stringify(newArr))   
+// const handleClickOrder = () => {
+//     if(localStorage.getItem('Table')) {
+//         const newArr = JSON.parse(localStorage.getItem('card')) || []
+//         if(newArr.length === 0) {
+//             const swalWithBootstrapButtons = Swal.mixin({
+//                 customClass: {
+//                   confirmButton: "btn btn-success",
+//                   cancelButton: "btn btn-danger"
+//                 },
+//                 buttonsStyling: false
+//               });
+//               swalWithBootstrapButtons.fire({
+//                 title: "Are you sure?",
+//                 text: "You won't be able to revert this!",
+//                 icon: "warning",
+//                 showCancelButton: true,
+//                 confirmButtonText: "Đồng Ý!",
+//                 cancelButtonText: "Tư Chối!",
+//                 reverseButtons: true
+//               }).then((result) => {
+//                 if (result.isConfirmed) {
+//                     newArr.push(productsMobile[0])
+//                     localStorage.setItem('card', JSON.stringify(newArr))   
                     
-                  swalWithBootstrapButtons.fire({
-                    title: "Thành Công!",
-                    text: "Bạn Đã Đặt Món Thành Công !",
-                    icon: "success"
-                  }).then((result) => {
-                    if(result.isConfirmed) {
-                        navigate(`/mobile/buffe/${JSON.parse(localStorage.getItem('Table')).Table}/mobile/card`)
-                        }
-                        else {
-                        navigate(`/mobile/buffe/${JSON.parse(localStorage.getItem('Table')).Table}/mobile/card`)
-                        }
-                  });
-                }
-                else if (
-                  /* Read more about handling dismissals below */
-                  result.dismiss === Swal.DismissReason.cancel
-                ) {
-                  swalWithBootstrapButtons.fire({
-                    title: "Cancelled",
-                    text: "Your imaginary file is safe :)",
-                    icon: "error"
-                  });
-                }
-              });
+//                   swalWithBootstrapButtons.fire({
+//                     title: "Thành Công!",
+//                     text: "Bạn Đã Đặt Món Thành Công !",
+//                     icon: "success"
+//                   }).then((result) => {
+//                     if(result.isConfirmed) {
+//                         navigate(`/mobile/buffe/${JSON.parse(localStorage.getItem('Table')).Table}/mobile/card`)
+//                         }
+//                         else {
+//                         navigate(`/mobile/buffe/${JSON.parse(localStorage.getItem('Table')).Table}/mobile/card`)
+//                         }
+//                   });
+//                 }
+//                 else if (
+//                   /* Read more about handling dismissals below */
+//                   result.dismiss === Swal.DismissReason.cancel
+//                 ) {
+//                   swalWithBootstrapButtons.fire({
+//                     title: "Cancelled",
+//                     text: "Your imaginary file is safe :)",
+//                     icon: "error"
+//                   });
+//                 }
+//               });
 
            
-        }
-        else {
-            for(let i in newArr) {
-                if(parseInt(IdProduct) === newArr[i].Id) {
-                    console.log('hihi')
-                    Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        text: "Sản phẩm đã tồn tại trong giỏ hàng !",
-                        footer: '<a href="#">Why do I have this issue?</a>'
-                      });
-                      break
-                }
-                else {
-                    const swalWithBootstrapButtons = Swal.mixin({
-                        customClass: {
-                          confirmButton: "btn btn-success",
-                          cancelButton: "btn btn-danger"
-                        },
-                        buttonsStyling: false
-                      });
-                      swalWithBootstrapButtons.fire({
-                        title: "Are you sure?",
-                        text: "You won't be able to revert this!",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonText: "Đồng Ý!",
-                        cancelButtonText: "Tư Chối!",
-                        reverseButtons: true
-                      }).then((result) => {
-                        if (result.isConfirmed) {
-                            newArr.push(productsMobile[0])
-                            localStorage.setItem('card', JSON.stringify(newArr))                        
-                          swalWithBootstrapButtons.fire({
-                            title: "Thành Công!",
-                            text: "Bạn Đã Đặt Món Thành Công !",
-                            icon: "success"
-                          }).then((result) => {
-                            if(result.isConfirmed) {
-                                navigate(`/mobile/buffe/${JSON.parse(localStorage.getItem('Table')).Table}/mobile/card`)
-                                }
-                                else {
-                                navigate(`/mobile/buffe/${JSON.parse(localStorage.getItem('Table')).Table}/mobile/card`)
-                                }
-                          });
-                        }
-                        else if (
-                          /* Read more about handling dismissals below */
-                          result.dismiss === Swal.DismissReason.cancel
-                        ) {
-                          swalWithBootstrapButtons.fire({
-                            title: "Cancelled",
-                            text: "Your imaginary file is safe :)",
-                            icon: "error"
-                          });
-                        }
-                      });
-                }
-            }
-         }
-    }
-    else {
-        Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Không tìm thấy thông tin !",
-            footer: '<a href="#">Why do I have this issue?</a>'
-          });
-    }
+//         }
+//         else {
+//             for(let i in newArr) {
+//                 if(parseInt(IdProduct) === newArr[i].Id) {
+//                     console.log('hihi')
+//                     Swal.fire({
+//                         icon: "error",
+//                         title: "Oops...",
+//                         text: "Sản phẩm đã tồn tại trong giỏ hàng !",
+//                         footer: '<a href="#">Why do I have this issue?</a>'
+//                       });
+//                       break
+//                 }
+//                 else {
+//                     const swalWithBootstrapButtons = Swal.mixin({
+//                         customClass: {
+//                           confirmButton: "btn btn-success",
+//                           cancelButton: "btn btn-danger"
+//                         },
+//                         buttonsStyling: false
+//                       });
+//                       swalWithBootstrapButtons.fire({
+//                         title: "Are you sure?",
+//                         text: "You won't be able to revert this!",
+//                         icon: "warning",
+//                         showCancelButton: true,
+//                         confirmButtonText: "Đồng Ý!",
+//                         cancelButtonText: "Tư Chối!",
+//                         reverseButtons: true
+//                       }).then((result) => {
+//                         if (result.isConfirmed) {
+//                             newArr.push(productsMobile[0])
+//                             localStorage.setItem('card', JSON.stringify(newArr))                        
+//                           swalWithBootstrapButtons.fire({
+//                             title: "Thành Công!",
+//                             text: "Bạn Đã Đặt Món Thành Công !",
+//                             icon: "success"
+//                           }).then((result) => {
+//                             if(result.isConfirmed) {
+//                                 navigate(`/mobile/buffe/${JSON.parse(localStorage.getItem('Table')).Table}/mobile/card`)
+//                                 }
+//                                 else {
+//                                 navigate(`/mobile/buffe/${JSON.parse(localStorage.getItem('Table')).Table}/mobile/card`)
+//                                 }
+//                           });
+//                         }
+//                         else if (
+//                           /* Read more about handling dismissals below */
+//                           result.dismiss === Swal.DismissReason.cancel
+//                         ) {
+//                           swalWithBootstrapButtons.fire({
+//                             title: "Cancelled",
+//                             text: "Your imaginary file is safe :)",
+//                             icon: "error"
+//                           });
+//                         }
+//                       });
+//                 }
+//             }
+//          }
+//     }
+//     else {
+//         Swal.fire({
+//             icon: "error",
+//             title: "Oops...",
+//             text: "Không tìm thấy thông tin !",
+//             footer: '<a href="#">Why do I have this issue?</a>'
+//           });
+//     }
     
-}
+// }
     useEffect(() => {
         const Id = {
             IdProduct: IdProduct
         }
         axios.all([
-            axios.post(`${process.env.REACT_APP_IP_SEVER}/api/v12/showproductid`, Id),
-            axios.post(`${process.env.REACT_APP_IP_SEVER}/api/v12/showcommentorder`, Id),
+            axios.post('http://localhost:8080/api/v12/showproductid', Id),
+            axios.post('http://localhost:8080/api/v12/showcommentorder', Id),
         ])
         .then(axios.spread((Product,Comment) => {
             setProductsMobile(Product.data.data)
@@ -167,6 +166,19 @@ const handleClickOrder = () => {
         .catch (err => {
             console.error()
         })
+        // axios.all([
+        //     axios.post(`${process.env.REACT_APP_IP_SEVER}/api/v12/showproductid`, Id),
+        //     axios.post(`${process.env.REACT_APP_IP_SEVER}/api/v12/showcommentorder`, Id),
+        // ])
+        // .then(axios.spread((Product,Comment) => {
+        //     setProductsMobile(Product.data.data)
+        //     if(Comment.data.data !== undefined) {
+        //         setComment(Comment.data.data)
+        //     }
+        // }))
+        // .catch (err => {
+        //     console.error()
+        // })
     },[])
     return ( 
         <>
@@ -185,7 +197,7 @@ const handleClickOrder = () => {
                             (product.Id === parseInt(IdProduct) ? (
                                 <div key={i}>
                                     <div className='Detail_mobile-img'>
-                                        <ImgProduct children={product.Img} />
+                                            <img src={`http://localhost:8080/api/v12/showimgproduct/${product.Img}`} style={{width: '100%', height: '100%',objectFit: 'cover',borderRadius:'50%'}} />
                                     </div>
                                     <div className='Detail_mobile-noti'>
                                         <h2>{product.Name}</h2>
@@ -217,90 +229,41 @@ const handleClickOrder = () => {
                                     </div>
                                     <div className='Detail_mobile-showcomment'>
                                     <div className='content_showcomment'>
-                                                {(comment !== null ? (
-                                                    (comment.map((cmt,index) => (
-                                                    <div key={index} className='content_showcomment-item'>
-                                                        <div className='content_showcomment-info'>
-                                                            <div className='content_showcomment-item-img'>
-                                                                {(cmt.Avt.length > 90 ? (
-                                                                    <img style={{width: '100%',height: '100%',borderRadius: '50%',objectFit: 'cover', zIndex: '100'}} src={cmt.Avt} />
-                                                                ) : (
-                                                                    <div style={{borderRadius:'50%'}}>
-                                                                        <ImgProduct children={cmt.Avt} />
-                                                                    </div>
-                                                                ))}
-                                                            </div>
-                                                            <div className='content_showcomment-user'>
-                                                                <div className='content_showcomment-item-name'>
-                                                                    <h2 style={{margin: '0'}}>{cmt.NameUser}</h2>
-                                                                </div>
-                                                                <div className='content_showcomment-item-start'>
-                                                                    {(cmt.Star === 5 ? (
-                                                                    <svg viewBox="0 0 99.498 16.286" xmlns="http://www.w3.org/2000/svg" className="svg four-star-svg">
-                                                                        <path fill="#fc0" transform="translate(-0.001 -1.047)" d="M9.357,1.558,11.282,5.45a.919.919,0,0,0,.692.5l4.3.624a.916.916,0,0,1,.509,1.564l-3.115,3.029a.916.916,0,0,0-.264.812l.735,4.278a.919.919,0,0,1-1.334.967l-3.85-2.02a.922.922,0,0,0-.855,0l-3.85,2.02a.919.919,0,0,1-1.334-.967l.735-4.278a.916.916,0,0,0-.264-.812L.279,8.14A.916.916,0,0,1,.789,6.576l4.3-.624a.919.919,0,0,0,.692-.5L7.71,1.558A.92.92,0,0,1,9.357,1.558Z" id="star-svgrepo-com"></path>
-                                                                        <path fill="#fc0" transform="translate(20.607 -1.047)" d="M9.357,1.558,11.282,5.45a.919.919,0,0,0,.692.5l4.3.624a.916.916,0,0,1,.509,1.564l-3.115,3.029a.916.916,0,0,0-.264.812l.735,4.278a.919.919,0,0,1-1.334.967l-3.85-2.02a.922.922,0,0,0-.855,0l-3.85,2.02a.919.919,0,0,1-1.334-.967l.735-4.278a.916.916,0,0,0-.264-.812L.279,8.14A.916.916,0,0,1,.789,6.576l4.3-.624a.919.919,0,0,0,.692-.5L7.71,1.558A.92.92,0,0,1,9.357,1.558Z" data-name="star-svgrepo-com" id="star-svgrepo-com-2"></path>
-                                                                        <path fill="#fc0" transform="translate(41.215 -1.047)" d="M9.357,1.558,11.282,5.45a.919.919,0,0,0,.692.5l4.3.624a.916.916,0,0,1,.509,1.564l-3.115,3.029a.916.916,0,0,0-.264.812l.735,4.278a.919.919,0,0,1-1.334.967l-3.85-2.02a.922.922,0,0,0-.855,0l-3.85,2.02a.919.919,0,0,1-1.334-.967l.735-4.278a.916.916,0,0,0-.264-.812L.279,8.14A.916.916,0,0,1,.789,6.576l4.3-.624a.919.919,0,0,0,.692-.5L7.71,1.558A.92.92,0,0,1,9.357,1.558Z" data-name="star-svgrepo-com" id="star-svgrepo-com-3"></path>
-                                                                        <path fill="#fc0" transform="translate(61.823 -1.047)" d="M9.357,1.558,11.282,5.45a.919.919,0,0,0,.692.5l4.3.624a.916.916,0,0,1,.509,1.564l-3.115,3.029a.916.916,0,0,0-.264.812l.735,4.278a.919.919,0,0,1-1.334.967l-3.85-2.02a.922.922,0,0,0-.855,0l-3.85,2.02a.919.919,0,0,1-1.334-.967l.735-4.278a.916.916,0,0,0-.264-.812L.279,8.14A.916.916,0,0,1,.789,6.576l4.3-.624a.919.919,0,0,0,.692-.5L7.71,1.558A.92.92,0,0,1,9.357,1.558Z" data-name="star-svgrepo-com" id="star-svgrepo-com-4"></path>
-                                                                        <path fill="#fc0" transform="translate(82.431 -1.047)" d="M9.357,1.558,11.282,5.45a.919.919,0,0,0,.692.5l4.3.624a.916.916,0,0,1,.509,1.564l-3.115,3.029a.916.916,0,0,0-.264.812l.735,4.278a.919.919,0,0,1-1.334.967l-3.85-2.02a.922.922,0,0,0-.855,0l-3.85,2.02a.919.919,0,0,1-1.334-.967l.735-4.278a.916.916,0,0,0-.264-.812L.279,8.14A.916.916,0,0,1,.789,6.576l4.3-.624a.919.919,0,0,0,.692-.5L7.71,1.558A.92.92,0,0,1,9.357,1.558Z" data-name="star-svgrepo-com" id="star-svgrepo-com-5"></path>
-                                                                    </svg>
-                                                                    ) : 
-                                                                    (cmt.Star === 4 ? (
-                                                                    <svg viewBox="0 0 99.498 16.286" xmlns="http://www.w3.org/2000/svg" className="svg four-star-svg">
-                                                                        <path fill="#fc0" transform="translate(-0.001 -1.047)" d="M9.357,1.558,11.282,5.45a.919.919,0,0,0,.692.5l4.3.624a.916.916,0,0,1,.509,1.564l-3.115,3.029a.916.916,0,0,0-.264.812l.735,4.278a.919.919,0,0,1-1.334.967l-3.85-2.02a.922.922,0,0,0-.855,0l-3.85,2.02a.919.919,0,0,1-1.334-.967l.735-4.278a.916.916,0,0,0-.264-.812L.279,8.14A.916.916,0,0,1,.789,6.576l4.3-.624a.919.919,0,0,0,.692-.5L7.71,1.558A.92.92,0,0,1,9.357,1.558Z" id="star-svgrepo-com"></path>
-                                                                        <path fill="#fc0" transform="translate(20.607 -1.047)" d="M9.357,1.558,11.282,5.45a.919.919,0,0,0,.692.5l4.3.624a.916.916,0,0,1,.509,1.564l-3.115,3.029a.916.916,0,0,0-.264.812l.735,4.278a.919.919,0,0,1-1.334.967l-3.85-2.02a.922.922,0,0,0-.855,0l-3.85,2.02a.919.919,0,0,1-1.334-.967l.735-4.278a.916.916,0,0,0-.264-.812L.279,8.14A.916.916,0,0,1,.789,6.576l4.3-.624a.919.919,0,0,0,.692-.5L7.71,1.558A.92.92,0,0,1,9.357,1.558Z" data-name="star-svgrepo-com" id="star-svgrepo-com-2"></path>
-                                                                        <path fill="#fc0" transform="translate(41.215 -1.047)" d="M9.357,1.558,11.282,5.45a.919.919,0,0,0,.692.5l4.3.624a.916.916,0,0,1,.509,1.564l-3.115,3.029a.916.916,0,0,0-.264.812l.735,4.278a.919.919,0,0,1-1.334.967l-3.85-2.02a.922.922,0,0,0-.855,0l-3.85,2.02a.919.919,0,0,1-1.334-.967l.735-4.278a.916.916,0,0,0-.264-.812L.279,8.14A.916.916,0,0,1,.789,6.576l4.3-.624a.919.919,0,0,0,.692-.5L7.71,1.558A.92.92,0,0,1,9.357,1.558Z" data-name="star-svgrepo-com" id="star-svgrepo-com-3"></path>
-                                                                        <path fill="#fc0" transform="translate(61.823 -1.047)" d="M9.357,1.558,11.282,5.45a.919.919,0,0,0,.692.5l4.3.624a.916.916,0,0,1,.509,1.564l-3.115,3.029a.916.916,0,0,0-.264.812l.735,4.278a.919.919,0,0,1-1.334.967l-3.85-2.02a.922.922,0,0,0-.855,0l-3.85,2.02a.919.919,0,0,1-1.334-.967l.735-4.278a.916.916,0,0,0-.264-.812L.279,8.14A.916.916,0,0,1,.789,6.576l4.3-.624a.919.919,0,0,0,.692-.5L7.71,1.558A.92.92,0,0,1,9.357,1.558Z" data-name="star-svgrepo-com" id="star-svgrepo-com-4"></path>
-                                                                        <path fill="#e9e9e9" transform="translate(82.431 -1.047)" d="M9.357,1.558,11.282,5.45a.919.919,0,0,0,.692.5l4.3.624a.916.916,0,0,1,.509,1.564l-3.115,3.029a.916.916,0,0,0-.264.812l.735,4.278a.919.919,0,0,1-1.334.967l-3.85-2.02a.922.922,0,0,0-.855,0l-3.85,2.02a.919.919,0,0,1-1.334-.967l.735-4.278a.916.916,0,0,0-.264-.812L.279,8.14A.916.916,0,0,1,.789,6.576l4.3-.624a.919.919,0,0,0,.692-.5L7.71,1.558A.92.92,0,0,1,9.357,1.558Z" data-name="star-svgrepo-com" id="star-svgrepo-com-5"></path>
-                                                                    </svg>
-                                                                    ) : (
-                                                                        (cmt.Star === 3 ? ( 
-                                                                        <svg viewBox="0 0 99.498 16.286" xmlns="http://www.w3.org/2000/svg" className="svg four-star-svg">
-                                                                            <path fill="#fc0" transform="translate(-0.001 -1.047)" d="M9.357,1.558,11.282,5.45a.919.919,0,0,0,.692.5l4.3.624a.916.916,0,0,1,.509,1.564l-3.115,3.029a.916.916,0,0,0-.264.812l.735,4.278a.919.919,0,0,1-1.334.967l-3.85-2.02a.922.922,0,0,0-.855,0l-3.85,2.02a.919.919,0,0,1-1.334-.967l.735-4.278a.916.916,0,0,0-.264-.812L.279,8.14A.916.916,0,0,1,.789,6.576l4.3-.624a.919.919,0,0,0,.692-.5L7.71,1.558A.92.92,0,0,1,9.357,1.558Z" id="star-svgrepo-com"></path>
-                                                                            <path fill="#fc0" transform="translate(20.607 -1.047)" d="M9.357,1.558,11.282,5.45a.919.919,0,0,0,.692.5l4.3.624a.916.916,0,0,1,.509,1.564l-3.115,3.029a.916.916,0,0,0-.264.812l.735,4.278a.919.919,0,0,1-1.334.967l-3.85-2.02a.922.922,0,0,0-.855,0l-3.85,2.02a.919.919,0,0,1-1.334-.967l.735-4.278a.916.916,0,0,0-.264-.812L.279,8.14A.916.916,0,0,1,.789,6.576l4.3-.624a.919.919,0,0,0,.692-.5L7.71,1.558A.92.92,0,0,1,9.357,1.558Z" data-name="star-svgrepo-com" id="star-svgrepo-com-2"></path>
-                                                                            <path fill="#fc0" transform="translate(41.215 -1.047)" d="M9.357,1.558,11.282,5.45a.919.919,0,0,0,.692.5l4.3.624a.916.916,0,0,1,.509,1.564l-3.115,3.029a.916.916,0,0,0-.264.812l.735,4.278a.919.919,0,0,1-1.334.967l-3.85-2.02a.922.922,0,0,0-.855,0l-3.85,2.02a.919.919,0,0,1-1.334-.967l.735-4.278a.916.916,0,0,0-.264-.812L.279,8.14A.916.916,0,0,1,.789,6.576l4.3-.624a.919.919,0,0,0,.692-.5L7.71,1.558A.92.92,0,0,1,9.357,1.558Z" data-name="star-svgrepo-com" id="star-svgrepo-com-3"></path>
-                                                                            <path fill="#e9e9e9" transform="translate(61.823 -1.047)" d="M9.357,1.558,11.282,5.45a.919.919,0,0,0,.692.5l4.3.624a.916.916,0,0,1,.509,1.564l-3.115,3.029a.916.916,0,0,0-.264.812l.735,4.278a.919.919,0,0,1-1.334.967l-3.85-2.02a.922.922,0,0,0-.855,0l-3.85,2.02a.919.919,0,0,1-1.334-.967l.735-4.278a.916.916,0,0,0-.264-.812L.279,8.14A.916.916,0,0,1,.789,6.576l4.3-.624a.919.919,0,0,0,.692-.5L7.71,1.558A.92.92,0,0,1,9.357,1.558Z" data-name="star-svgrepo-com" id="star-svgrepo-com-4"></path>
-                                                                            <path fill="#e9e9e9" transform="translate(82.431 -1.047)" d="M9.357,1.558,11.282,5.45a.919.919,0,0,0,.692.5l4.3.624a.916.916,0,0,1,.509,1.564l-3.115,3.029a.916.916,0,0,0-.264.812l.735,4.278a.919.919,0,0,1-1.334.967l-3.85-2.02a.922.922,0,0,0-.855,0l-3.85,2.02a.919.919,0,0,1-1.334-.967l.735-4.278a.916.916,0,0,0-.264-.812L.279,8.14A.916.916,0,0,1,.789,6.576l4.3-.624a.919.919,0,0,0,.692-.5L7.71,1.558A.92.92,0,0,1,9.357,1.558Z" data-name="star-svgrepo-com" id="star-svgrepo-com-5"></path>
-                                                                        </svg>
-                                                                        ) : 
-                                                                         (cmt.Star === 2 ? (
-                                                                        <svg viewBox="0 0 99.498 16.286" xmlns="http://www.w3.org/2000/svg" className="svg four-star-svg">
-                                                                            <path fill="#fc0" transform="translate(-0.001 -1.047)" d="M9.357,1.558,11.282,5.45a.919.919,0,0,0,.692.5l4.3.624a.916.916,0,0,1,.509,1.564l-3.115,3.029a.916.916,0,0,0-.264.812l.735,4.278a.919.919,0,0,1-1.334.967l-3.85-2.02a.922.922,0,0,0-.855,0l-3.85,2.02a.919.919,0,0,1-1.334-.967l.735-4.278a.916.916,0,0,0-.264-.812L.279,8.14A.916.916,0,0,1,.789,6.576l4.3-.624a.919.919,0,0,0,.692-.5L7.71,1.558A.92.92,0,0,1,9.357,1.558Z" id="star-svgrepo-com"></path>
-                                                                            <path fill="#fc0" transform="translate(20.607 -1.047)" d="M9.357,1.558,11.282,5.45a.919.919,0,0,0,.692.5l4.3.624a.916.916,0,0,1,.509,1.564l-3.115,3.029a.916.916,0,0,0-.264.812l.735,4.278a.919.919,0,0,1-1.334.967l-3.85-2.02a.922.922,0,0,0-.855,0l-3.85,2.02a.919.919,0,0,1-1.334-.967l.735-4.278a.916.916,0,0,0-.264-.812L.279,8.14A.916.916,0,0,1,.789,6.576l4.3-.624a.919.919,0,0,0,.692-.5L7.71,1.558A.92.92,0,0,1,9.357,1.558Z" data-name="star-svgrepo-com" id="star-svgrepo-com-2"></path>
-                                                                            <path fill="#e9e9e9" transform="translate(41.215 -1.047)" d="M9.357,1.558,11.282,5.45a.919.919,0,0,0,.692.5l4.3.624a.916.916,0,0,1,.509,1.564l-3.115,3.029a.916.916,0,0,0-.264.812l.735,4.278a.919.919,0,0,1-1.334.967l-3.85-2.02a.922.922,0,0,0-.855,0l-3.85,2.02a.919.919,0,0,1-1.334-.967l.735-4.278a.916.916,0,0,0-.264-.812L.279,8.14A.916.916,0,0,1,.789,6.576l4.3-.624a.919.919,0,0,0,.692-.5L7.71,1.558A.92.92,0,0,1,9.357,1.558Z" data-name="star-svgrepo-com" id="star-svgrepo-com-3"></path>
-                                                                            <path fill="#e9e9e9" transform="translate(61.823 -1.047)" d="M9.357,1.558,11.282,5.45a.919.919,0,0,0,.692.5l4.3.624a.916.916,0,0,1,.509,1.564l-3.115,3.029a.916.916,0,0,0-.264.812l.735,4.278a.919.919,0,0,1-1.334.967l-3.85-2.02a.922.922,0,0,0-.855,0l-3.85,2.02a.919.919,0,0,1-1.334-.967l.735-4.278a.916.916,0,0,0-.264-.812L.279,8.14A.916.916,0,0,1,.789,6.576l4.3-.624a.919.919,0,0,0,.692-.5L7.71,1.558A.92.92,0,0,1,9.357,1.558Z" data-name="star-svgrepo-com" id="star-svgrepo-com-4"></path>
-                                                                            <path fill="#e9e9e9" transform="translate(82.431 -1.047)" d="M9.357,1.558,11.282,5.45a.919.919,0,0,0,.692.5l4.3.624a.916.916,0,0,1,.509,1.564l-3.115,3.029a.916.916,0,0,0-.264.812l.735,4.278a.919.919,0,0,1-1.334.967l-3.85-2.02a.922.922,0,0,0-.855,0l-3.85,2.02a.919.919,0,0,1-1.334-.967l.735-4.278a.916.916,0,0,0-.264-.812L.279,8.14A.916.916,0,0,1,.789,6.576l4.3-.624a.919.919,0,0,0,.692-.5L7.71,1.558A.92.92,0,0,1,9.357,1.558Z" data-name="star-svgrepo-com" id="star-svgrepo-com-5"></path>
-                                                                        </svg>
-                                                                         ) : 
-                                                                         (cmt.Star === 1 ? (
-                                                                        <svg viewBox="0 0 99.498 16.286" xmlns="http://www.w3.org/2000/svg" className="svg four-star-svg">
-                                                                            <path fill="#fc0" transform="translate(-0.001 -1.047)" d="M9.357,1.558,11.282,5.45a.919.919,0,0,0,.692.5l4.3.624a.916.916,0,0,1,.509,1.564l-3.115,3.029a.916.916,0,0,0-.264.812l.735,4.278a.919.919,0,0,1-1.334.967l-3.85-2.02a.922.922,0,0,0-.855,0l-3.85,2.02a.919.919,0,0,1-1.334-.967l.735-4.278a.916.916,0,0,0-.264-.812L.279,8.14A.916.916,0,0,1,.789,6.576l4.3-.624a.919.919,0,0,0,.692-.5L7.71,1.558A.92.92,0,0,1,9.357,1.558Z" id="star-svgrepo-com"></path>
-                                                                            <path fill="#e9e9e9" transform="translate(20.607 -1.047)" d="M9.357,1.558,11.282,5.45a.919.919,0,0,0,.692.5l4.3.624a.916.916,0,0,1,.509,1.564l-3.115,3.029a.916.916,0,0,0-.264.812l.735,4.278a.919.919,0,0,1-1.334.967l-3.85-2.02a.922.922,0,0,0-.855,0l-3.85,2.02a.919.919,0,0,1-1.334-.967l.735-4.278a.916.916,0,0,0-.264-.812L.279,8.14A.916.916,0,0,1,.789,6.576l4.3-.624a.919.919,0,0,0,.692-.5L7.71,1.558A.92.92,0,0,1,9.357,1.558Z" data-name="star-svgrepo-com" id="star-svgrepo-com-2"></path>
-                                                                            <path fill="#e9e9e9" transform="translate(41.215 -1.047)" d="M9.357,1.558,11.282,5.45a.919.919,0,0,0,.692.5l4.3.624a.916.916,0,0,1,.509,1.564l-3.115,3.029a.916.916,0,0,0-.264.812l.735,4.278a.919.919,0,0,1-1.334.967l-3.85-2.02a.922.922,0,0,0-.855,0l-3.85,2.02a.919.919,0,0,1-1.334-.967l.735-4.278a.916.916,0,0,0-.264-.812L.279,8.14A.916.916,0,0,1,.789,6.576l4.3-.624a.919.919,0,0,0,.692-.5L7.71,1.558A.92.92,0,0,1,9.357,1.558Z" data-name="star-svgrepo-com" id="star-svgrepo-com-3"></path>
-                                                                            <path fill="#e9e9e9" transform="translate(61.823 -1.047)" d="M9.357,1.558,11.282,5.45a.919.919,0,0,0,.692.5l4.3.624a.916.916,0,0,1,.509,1.564l-3.115,3.029a.916.916,0,0,0-.264.812l.735,4.278a.919.919,0,0,1-1.334.967l-3.85-2.02a.922.922,0,0,0-.855,0l-3.85,2.02a.919.919,0,0,1-1.334-.967l.735-4.278a.916.916,0,0,0-.264-.812L.279,8.14A.916.916,0,0,1,.789,6.576l4.3-.624a.919.919,0,0,0,.692-.5L7.71,1.558A.92.92,0,0,1,9.357,1.558Z" data-name="star-svgrepo-com" id="star-svgrepo-com-4"></path>
-                                                                            <path fill="#e9e9e9" transform="translate(82.431 -1.047)" d="M9.357,1.558,11.282,5.45a.919.919,0,0,0,.692.5l4.3.624a.916.916,0,0,1,.509,1.564l-3.115,3.029a.916.916,0,0,0-.264.812l.735,4.278a.919.919,0,0,1-1.334.967l-3.85-2.02a.922.922,0,0,0-.855,0l-3.85,2.02a.919.919,0,0,1-1.334-.967l.735-4.278a.916.916,0,0,0-.264-.812L.279,8.14A.916.916,0,0,1,.789,6.576l4.3-.624a.919.919,0,0,0,.692-.5L7.71,1.558A.92.92,0,0,1,9.357,1.558Z" data-name="star-svgrepo-com" id="star-svgrepo-com-5"></path>
-                                                                        </svg>
-                                                                         ) : null)
-                                                                        )
-                                                                        )
-                                                                    ))
-                                                                    )}
-                                                                </div>
-                                                                <div className='content_showcomment-item-date'>
-                                                                        <span>2024-04-01 10:59 </span>
-                                                                </div>
-                                                            </div>
+                                        {(comment !== null ? (
+                                            (comment.map((cmt,index) => (
+                                            <div key={index} className='content_showcomment-item'>
+                                                <div className='content_showcomment-info'>
+                                                    <div className='content_showcomment-item-img'>
+                                                        <img style={{width: '100%',height: '100%',borderRadius: '50%',objectFit: 'cover', zIndex: '100'}} src={cmt.Classify === 'user' ? `http://localhost:8080/api/v12/avtuser/${cmt.Avt}`: `${cmt.Avt}` } />
+                                                    </div>
+                                                    <div className='content_showcomment-user'>
+                                                        <div className='content_showcomment-item-name'>
+                                                            <h2 style={{margin: '0'}}>{cmt.NameUser}</h2>
                                                         </div>
-                                                        <div className='content_showcomment-item_comment'>
-                                                            <p style={{opacity: '1'}}>{cmt.Containt}</p>
+                                                        <div className='content_showcomment-item-start'>
+                                                                <RenderStar Star = {cmt.Star}/>
+                                                        </div>
+                                                        <div className='content_showcomment-item-date'>
+                                                                <span>2024-04-01 10:59 </span>
                                                         </div>
                                                     </div>
-                                                    )))
-                                                ) : (
-                                                    <div className='no_comment'>
-                                                        <h1>Chưa có đánh giá</h1>
-                                                    </div>
-                                                ))}
                                                 </div>
+                                                <div className='content_showcomment-item_comment'>
+                                                    <p>{cmt.Containt}</p>
+                                                </div>
+                                                {cmt.RepComment.length === 0 ? (null) : (
+                                                    <div className='content_showcomment-item_rep-comment'>
+                                                    <p><strong>Từ người bán: </strong>{cmt.RepComment}</p>
+                                                </div>
+                                                )}
+                                            </div>
+                                            )))
+                                        ) : (
+                                            <div className='no_comment'>
+                                                <h1>Chưa có đánh giá</h1>
+                                            </div>
+                                        ))}
+                                        </div>
                                     </div>
                                     <div className='Detail_mobile-pay-container'>
                                             <div className='Detail_mobile-pay-price'>
@@ -308,7 +271,7 @@ const handleClickOrder = () => {
                                                 <span style={{color: 'rgba(199, 125, 77, 1)'}}>Rp:{product.Price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '₫'}</span>
                                             </div>
                                             <div className='Detail_mobile-pay'>
-                                            <button onClick={handleClickOrder}>Buy Now</button>
+                                            <button>Buy Now</button>
                                             </div>
                                     </div>
                                     </div>                             

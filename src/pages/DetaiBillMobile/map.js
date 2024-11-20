@@ -175,7 +175,7 @@ async function getRoute(end) {
        markerElement.style.zIndex = '10000'
        // Tạo phần tử img
         imgRef.current = document.createElement('img')
-        imgRef.current.src = 'http://192.168.1.15:8080/api/v12/bodyimg/reparto-removebg-preview.png'
+        imgRef.current.src = 'http://localhost:8080/api/v12/bodyimg/reparto-removebg-preview.png'
         imgRef.current.style.width = '100%'
         imgRef.current.style.height = '100%'
         imgRef.current.style.transform = ''

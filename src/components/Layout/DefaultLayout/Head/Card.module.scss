@@ -1,9 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 .header_content{
+  min-width: 1300px; /* Kích thước tối thiểu */
     font-family: monospace;
 }
 .navbar_container{
     position: absolute;
+    min-width: 1300px; /* Kích thước tối thiểu */
     width: 100%;
     z-index: 1000;
 }
@@ -15,7 +17,7 @@
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  width: 46%;
+  width: 727px;
 }
 .navbar_content_right {
   width: 50%;
@@ -132,6 +134,7 @@
 .slider{
     position: relative;
     width: 100%;
+    min-width: 1250px;
     height: 100vh;
     background-image: linear-gradient(to right, #2B2F3A, #0D0E12);
     overflow-x: clip;
@@ -147,12 +150,11 @@
 }
 .title{
     position: absolute;
-    top: 14%;
-    right: 68%;
+    top: 93px;
+    left: -80px;
     text-align: right;
     color: #fff;
     font-size: 150px;
-    width: 40%;
     font-family: 'Pacifico', cursive;
     text-shadow: 3px 5px 0px #478860;
     line-height: .9em;
@@ -173,8 +175,8 @@
 .images{
     position: absolute;
     z-index: 100;
-    bottom: 0%;
-    left: 50%;
+    bottom: 0px;
+    left: 750px;
     --rotate: 0deg;
     transform: translate(-50%, 50%) rotate(var(--rotate));
     width: 1200px;
@@ -196,11 +198,12 @@
 .image_animate_best {
   opacity: 0;
   transform: translateY(180px) rotate(0deg);
-  transition: transform 1s ease-in-out, opacity 1s ease-in-out ;
+  transition: transform 1s ease-out, opacity 1s ease-out ;
+  will-change: transform;
 }
 .images .item img{
     opacity: 0;
-    transition: opacity .8s ease-in-out;
+    transition: opacity .8s ease-out;
     height: 370px;
     object-fit: cover;
     position: relative;
@@ -213,8 +216,8 @@
     font-size: 12px;
     color: #fff;
     position: absolute;
-    top: 20%;
-    left: 66%;
+    top: 130px;
+    right: 130px;
     text-align: justify;
     width: 350px;
     z-index: 102;
@@ -1093,6 +1096,7 @@
   }
 .desproduct_container {
   position: relative;
+  // margin-bottom: 50px;
   padding: 0 60px;
   width: 100%;
   height: 530px;
@@ -1100,6 +1104,7 @@
 }
 .desproduct_container-content {
   display: flex;
+  min-width: 1300px;
   width: 100%;
   height: 100%;
 }
@@ -1187,6 +1192,7 @@
 .bestseller_container {
   width: 50%;
   height: 100%;
+  min-width: 695px;
   padding: 34px;
   display: flex;
   align-items: center;
@@ -1280,8 +1286,12 @@
   overflow-wrap: break-word;
 }
 .size {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   font-size: 1.25rem;
   color: #d9d9d9;
+  padding-right: 2px;
 }
 
 .list-size {
@@ -1481,4 +1491,19 @@
 .btn2_OTP:active {
   box-shadow: inset 3px 3px 6px #b5b5b5,
             inset -3px -3px 6px #ffffff;
+}
+.Modal_bestseller_header {
+  text-align: center;
+  margin: 0;
+  color: #fff;
+  font-size: 60px;
+  letter-spacing: 0px;
+  font-family: "Pacifico", cursive;
+  // font-size: xxx-large;
+  position: relative;
+  top: -140px;
+  padding-top: 30px;
+}
+.Img_slide {
+  will-change: transform,top,right,height ;
 }

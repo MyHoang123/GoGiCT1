@@ -9,7 +9,14 @@
     const [menu, setMenu] = useState([]);
   // Ref
   const notificeRef = useRef()
-    // Dev Express
+      // Gửi dữ liệu lên API Create
+      async function deleteType(e) {
+        try {
+           await axios.post('http://localhost:8080/api/v12/deletetype',{IdType: e.data.Id})
+        } catch (error) {
+          alert('Đã xảy ra lõi')
+        }
+      }
     // Gửi dữ liệu lên API
     async function addType(type) {
       try {
@@ -83,6 +90,7 @@
           dataSource={types}
           onRowInserted={handleCreate}
           onRowUpdated={handleUpdateCategori}
+          onRowRemoved={deleteType}
           showRowLines={true}
           showBorders={true}
           rowAlternationEnabled={true}

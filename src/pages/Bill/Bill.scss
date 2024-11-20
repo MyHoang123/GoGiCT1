@@ -2,7 +2,18 @@
     display: flex;
     justify-content: space-between;
 }
-
+.detailbill {
+  .detailbill_header {
+    margin-top: 10px;
+    font-size: 20px;
+    text-align: center;
+  }
+}
+.IdBill_content {
+  font-size: 12px;
+  padding: 0 20px;
+  margin-bottom: 4px;
+}
 .showdetail {
     .button {
         padding: 6px 18px 6px 18px;

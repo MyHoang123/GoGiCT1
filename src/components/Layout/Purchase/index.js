@@ -13,7 +13,6 @@ import classNames from "classnames/bind"
 import styles from './Purchase.module.scss'
 export const ContextPurchase = createContext()
 const cx = classNames.bind(styles)
-
 function Purchase( {Children} ) {
     const cookie = new Cookies()
     const [Avt, setAvt] = useState(cookie.get('AccessToken') !== undefined  ? JSON.parse(localStorage.getItem('Account')).Avt : "")
@@ -24,11 +23,9 @@ function Purchase( {Children} ) {
     const [product,setProduct] = useState([])
     const [modalCmt,setModalCmt] = useState(false)
     const [comment,setComment] = useState([])
-
     const [billUpdate, setBillUpdate] = useState(null)
     const navigate = useNavigate()
     const location = useLocation()
-    // Ref
     const containtCmt = useRef([])
     const starCmt = useRef([])
     const checked = useRef([])
@@ -122,7 +119,7 @@ function Purchase( {Children} ) {
     useEffect(() =>{
         if(socket) {
             socket.on('repUpdateBill',(data) => {
-                if(data.IdBill !== null) {
+                if(data.IdBill !== null && bills !==  undefined) {
                     const newArr = [...bills]
                     for(let i in newArr) {
                         if(newArr[i].Id === data.IdBill) {
@@ -132,9 +129,6 @@ function Purchase( {Children} ) {
                         setBills(newArr)
                         setBillUpdate(data)
                     }
-                else {
-                    alert('Đã xảy ra lõi vui lòng thử lại')
-                }
                 })
         }
     },[socket,bills])
@@ -231,7 +225,6 @@ function Purchase( {Children} ) {
                                             {Children}
                                         </ContextPurchase.Provider>
                                     </div>
-                                    {/* <div onClick={() => handleClickRemoveCmt()} style={{display: 'flex'}} className={cx('modal_comment')}> */}
                                     <div onClick={() => handleClickRemoveCmt()} style={modalCmt ? {display:'flex'} : {display:'none'}} className={cx('modal_comment')}>
                                     <div onClick={(e) => e.stopPropagation()} className={cx('comment_container')}>
                                         <div className={cx('comment_container_header')}>
@@ -317,13 +310,12 @@ function Purchase( {Children} ) {
                                                             <button className={cx('comic-button')}>Đánh Giá</button>
                                                          </div>
                                                     </div>
-                                                )}
-                                            
+                                                )}                                          
                                             </div>
-                                ))}
-                        </div>
-                    </div>
-                </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                     </div>

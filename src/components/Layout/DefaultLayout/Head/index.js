@@ -19,6 +19,8 @@ import WoodBase from "~/Asset/images/0622-angle-2-removebg-preview.png"
 import Tomato1 from "~/Asset/images/lovepik-little-tomato-png-image_400974636_wh860-removebg-preview.png"
 import Salad from "~/Asset/images/Romaine-removebg-preview.png"
 import Slogan from "~/Asset/images/shipper-co-giao-hang-khi-gian-cach_2707111247.jpg"
+import { RenderStar } from '~/hooks'
+
 // import Slogan from "../../../../Asset/images/1.png"
 import { GoogleLogin } from '@react-oauth/google'
 import { jwtDecode } from 'jwt-decode'
@@ -521,22 +523,22 @@ function Header() {
         </div>
         <div ref={image} className={cx('images')}>
             <div className={cx('item')} style={{'--i': 1}}>
-                <img ref={(e) => imgProductSlide.current[5] = e} src={(products.length !== 0 ? (`http://localhost:8080/api/v12/bodyimg/${products[5].Img}`) : (null)) } />
+                <img className={cx('Img_slide')} ref={(e) => imgProductSlide.current[5] = e} src={(products.length !== 0 ? (`http://localhost:8080/api/v12/bodyimg/${products[5].Img}`) : (null)) } />
             </div>
             <div className={cx('item')} style={{'--i': 2}}>
-                <img ref={(e) => imgProductSlide.current[4] = e} src={(products.length !== 0 ? (`http://localhost:8080/api/v12/bodyimg/${products[4].Img}`) : (null)) } />
+                <img className={cx('Img_slide')} ref={(e) => imgProductSlide.current[4] = e} src={(products.length !== 0 ? (`http://localhost:8080/api/v12/bodyimg/${products[4].Img}`) : (null)) } />
             </div>
             <div className={cx('item')} style={{'--i': 3}}>
-                <img ref={(e) => imgProductSlide.current[3] = e} src={(products.length !== 0 ? (`http://localhost:8080/api/v12/bodyimg/${products[3].Img}`) : (null)) } />
+                <img className={cx('Img_slide')} ref={(e) => imgProductSlide.current[3] = e} src={(products.length !== 0 ? (`http://localhost:8080/api/v12/bodyimg/${products[3].Img}`) : (null)) } />
             </div>
             <div className={cx('item')} style={{'--i': 4}}>
-                <img ref={(e) => imgProductSlide.current[2] = e} src={(products.length !== 0 ? (`http://localhost:8080/api/v12/bodyimg/${products[2].Img}`) : (null)) } />
+                <img className={cx('Img_slide')} ref={(e) => imgProductSlide.current[2] = e} src={(products.length !== 0 ? (`http://localhost:8080/api/v12/bodyimg/${products[2].Img}`) : (null)) } />
             </div>
             <div className={cx('item')} style={{'--i': 5}}>
-                <img ref={(e) => imgProductSlide.current[1] = e} src={(products.length !== 0 ? (`http://localhost:8080/api/v12/bodyimg/${products[1].Img}`) : (null)) } />
+                <img className={cx('Img_slide')} ref={(e) => imgProductSlide.current[1] = e} src={(products.length !== 0 ? (`http://localhost:8080/api/v12/bodyimg/${products[1].Img}`) : (null)) } />
             </div>
             <div className={cx('item')} style={{'--i': 6}}>
-                <img ref={(e) => imgProductSlide.current[0] = e} src={(products.length !== 0 ? (`http://localhost:8080/api/v12/bodyimg/${products[0].Img}`) : (null)) } />
+                <img className={cx('Img_slide')} ref={(e) => imgProductSlide.current[0] = e} src={(products.length !== 0 ? (`http://localhost:8080/api/v12/bodyimg/${products[0].Img}`) : (null)) } />
             </div>
         </div>
         <div className={cx('content')}>
@@ -629,6 +631,7 @@ function Header() {
                 </div>
             </div>
         </div>
+    <h1 className={cx('Modal_bestseller_header')}>Best Seller</h1>
     </div>
     <div className={cx('Modal_bestseller')}>
         <div className={cx('bestseller_container')}>
@@ -647,16 +650,13 @@ function Header() {
                 </div>
                 <ul style={{paddingLeft: '0',color:'#D9D9D9',marginBottom:'0'}} className="colors-container">
                     <span style={{marginTop: '2px',fontSize: '14px',marginRight:'10px'}}>Giá:</span>
-                    <span className='price_product' style={{fontSize: '6px'}}>20.000đ</span>
+                    <span className='price_product' style={{fontSize: '6px'}}>{(products.length !== 0 ? (products[indexSlide[5]].Price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '₫') : (null)) }</span>
                 </ul>
                 <div className={cx('size')}>
                     <div className='svg four-star-svg'>
-                        <FontAwesomeIcon style={{color: '#fc0'}} icon={faStar} />
-                        <FontAwesomeIcon style={{color: '#fc0'}} icon={faStar} />
-                        <FontAwesomeIcon style={{color: '#fc0'}} icon={faStar} />
-                        <FontAwesomeIcon style={{color: '#fc0'}} icon={faStarHalfStroke} />
-                        <FontAwesomeIcon icon={faStar} />
+                        <RenderStar Star = {(products.length !== 0 ? (products[indexSlide[5]].Star) : (null)) }/>
                     </div>
+                    <div style={{color:'#a8a8a8'}} className={cx('Sales_product')}> Đã bán:  {products.length !== 0 ? (products[indexSlide[5]].Sales) : null}</div>
                 </div>
                 <div className={cx('action')}>
                     <button className={cx('cart-button')}>
@@ -683,12 +683,9 @@ function Header() {
                 </ul>
                 <div className={cx('size')}>
                     <div className='svg four-star-svg'>
-                        <FontAwesomeIcon style={{color: '#fc0'}} icon={faStar} />
-                        <FontAwesomeIcon style={{color: '#fc0'}} icon={faStar} />
-                        <FontAwesomeIcon style={{color: '#fc0'}} icon={faStar} />
-                        <FontAwesomeIcon style={{color: '#fc0'}} icon={faStarHalfStroke} />
-                        <FontAwesomeIcon icon={faStar} />
+                        <RenderStar Star = {(products.length !== 0 ? (products[indexSlide[0]].Star) : (null)) }/>
                     </div>
+                    <div style={{color:'#a8a8a8'}} className={cx('Sales_product')}> Đã bán: {products.length !== 0 ? (products[indexSlide[0]].Sales) : null}</div>
                 </div>
                 <div className={cx('action')}>
                     <button className={cx('cart-button')}>
@@ -711,16 +708,13 @@ function Header() {
                 </div>
                 <ul style={{paddingLeft: '0',color:'#D9D9D9',marginBottom:'0'}} className="colors-container">
                     <span style={{marginTop: '2px',fontSize: '14px',marginRight:'10px'}}>Giá:</span>
-                    <span className='price_product' style={{fontSize: '6px'}}>20.000đ</span>
+                    <span className='price_product' style={{fontSize: '6px'}}>{(products.length !== 0 ? (products[indexSlide[1]].Price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '₫') : (null)) }</span>
                 </ul>
                 <div className={cx('size')}>
                     <div className='svg four-star-svg'>
-                        <FontAwesomeIcon style={{color: '#fc0'}} icon={faStar} />
-                        <FontAwesomeIcon style={{color: '#fc0'}} icon={faStar} />
-                        <FontAwesomeIcon style={{color: '#fc0'}} icon={faStar} />
-                        <FontAwesomeIcon style={{color: '#fc0'}} icon={faStarHalfStroke} />
-                        <FontAwesomeIcon icon={faStar} />
+                    <RenderStar Star = {(products.length !== 0 ? (products[indexSlide[1]].Star) : (null)) }/>
                     </div>
+                    <div style={{color:'#a8a8a8'}} className={cx('Sales_product')}> Đã bán:  {products.length !== 0 ? (products[indexSlide[1]].Sales) : null}</div>
                 </div>
                 <div className={cx('action')}>
                     <button className={cx('cart-button')}>
@@ -743,16 +737,13 @@ function Header() {
                 </div>
                 <ul style={{paddingLeft: '0',color:'#D9D9D9',marginBottom:'0'}} className="colors-container">
                     <span style={{marginTop: '2px',fontSize: '14px',marginRight:'10px'}}>Giá:</span>
-                    <span className='price_product' style={{fontSize: '6px'}}>20.000đ</span>
+                    <span className='price_product' style={{fontSize: '6px'}}>{(products.length !== 0 ? (products[indexSlide[2]].Price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '₫') : (null)) }</span>
                 </ul>
                 <div className={cx('size')}>
                     <div className='svg four-star-svg'>
-                        <FontAwesomeIcon style={{color: '#fc0'}} icon={faStar} />
-                        <FontAwesomeIcon style={{color: '#fc0'}} icon={faStar} />
-                        <FontAwesomeIcon style={{color: '#fc0'}} icon={faStar} />
-                        <FontAwesomeIcon style={{color: '#fc0'}} icon={faStarHalfStroke} />
-                        <FontAwesomeIcon icon={faStar} />
+                        <RenderStar Star = {(products.length !== 0 ? (products[indexSlide[2]].Star) : (null)) }/>
                     </div>
+                    <div style={{color:'#a8a8a8'}} className={cx('Sales_product')}> Đã bán:  {products.length !== 0 ? (products[indexSlide[2]].Sales) : null}</div>
                 </div>
                 <div className={cx('action')}>
                     <button className={cx('cart-button')}>
@@ -763,35 +754,32 @@ function Header() {
                 </div>
             </div>
             <div className={cx('bestseller_item')}>
-            <div className={cx('card')}>
-                <label className={cx('favorite')}>
-                    <FontAwesomeIcon className={cx('heart_product')} icon={faHeart} style={{fontSize: '15px'}} />
-                </label>
-                <div className={cx('image_container')}>
-                    <img  className={cx('image_animate_best')} ref={e => listProductBest.current[1] = e} src={`http://localhost:8080/api/v12/showimgproduct/${(products.length !== 0 ? (products[indexSlide[3]].Img) : (null))}`} style={{width: '100%', height: '100%',objectFit: 'cover'}} />
-                </div>
-                <div className={cx('title_card')}>
-                    <span>{(products.length !== 0 ? (products[indexSlide[3]].Name) : (null)) }</span>
-                </div>
-                <ul style={{paddingLeft: '0',color:'#D9D9D9',marginBottom:'0'}} className="colors-container">
-                    <span style={{marginTop: '2px',fontSize: '14px',marginRight:'10px'}}>Giá:</span>
-                    <span className='price_product' style={{fontSize: '6px'}}>20.000đ</span>
-                </ul>
-                <div className={cx('size')}>
-                    <div className='svg four-star-svg'>
-                        <FontAwesomeIcon style={{color: '#fc0'}} icon={faStar} />
-                        <FontAwesomeIcon style={{color: '#fc0'}} icon={faStar} />
-                        <FontAwesomeIcon style={{color: '#fc0'}} icon={faStar} />
-                        <FontAwesomeIcon style={{color: '#fc0'}} icon={faStarHalfStroke} />
-                        <FontAwesomeIcon icon={faStar} />
+                <div className={cx('card')}>
+                    <label className={cx('favorite')}>
+                        <FontAwesomeIcon className={cx('heart_product')} icon={faHeart} style={{fontSize: '15px'}} />
+                    </label>
+                    <div className={cx('image_container')}>
+                        <img  className={cx('image_animate_best')} ref={e => listProductBest.current[1] = e} src={`http://localhost:8080/api/v12/showimgproduct/${(products.length !== 0 ? (products[indexSlide[3]].Img) : (null))}`} style={{width: '100%', height: '100%',objectFit: 'cover'}} />
                     </div>
-                </div>
-                <div className={cx('action')}>
-                    <button className={cx('cart-button')}>
-                                    <FontAwesomeIcon icon={faCartShopping} />
-                    <span>Add to cart</span>
-                    </button>
-                </div>
+                    <div className={cx('title_card')}>
+                        <span>{(products.length !== 0 ? (products[indexSlide[3]].Name) : (null)) }</span>
+                    </div>
+                    <ul style={{paddingLeft: '0',color:'#D9D9D9',marginBottom:'0'}} className="colors-container">
+                        <span style={{marginTop: '2px',fontSize: '14px',marginRight:'10px'}}>Giá:</span>
+                        <span className='price_product' style={{fontSize: '6px'}}>{(products.length !== 0 ? (products[indexSlide[3]].Price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '₫') : (null)) }</span>
+                    </ul>
+                    <div className={cx('size')}>
+                        <div className='svg four-star-svg'>
+                            <RenderStar Star = {(products.length !== 0 ? (products[indexSlide[3]].Star) : (null)) }/>
+                        </div>
+                        <div style={{color:'#a8a8a8'}} className={cx('Sales_product')}> Đã bán:  {products.length !== 0 ? (products[indexSlide[3]].Sales) : null}</div>
+                    </div>
+                    <div className={cx('action')}>
+                        <button className={cx('cart-button')}>
+                                        <FontAwesomeIcon icon={faCartShopping} />
+                        <span>Add to cart</span>
+                        </button>
+                    </div>
                 </div>
             </div>
             <div className={cx('bestseller_item')}>
@@ -807,16 +795,13 @@ function Header() {
                 </div>
                 <ul style={{paddingLeft: '0',color:'#D9D9D9',marginBottom:'0'}} className="colors-container">
                     <span style={{marginTop: '2px',fontSize: '14px',marginRight:'10px'}}>Giá:</span>
-                    <span className='price_product' style={{fontSize: '6px'}}>20.000đ</span>
+                    <span className='price_product' style={{fontSize: '6px'}}>{(products.length !== 0 ? (products[indexSlide[4]].Price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '₫') : (null)) }</span>
                 </ul>
                 <div className={cx('size')}>
                     <div className='svg four-star-svg'>
-                        <FontAwesomeIcon style={{color: '#fc0'}} icon={faStar} />
-                        <FontAwesomeIcon style={{color: '#fc0'}} icon={faStar} />
-                        <FontAwesomeIcon style={{color: '#fc0'}} icon={faStar} />
-                        <FontAwesomeIcon style={{color: '#fc0'}} icon={faStarHalfStroke} />
-                        <FontAwesomeIcon icon={faStar} />
+                        <RenderStar Star = {(products.length !== 0 ? (products[indexSlide[4]].Star) : (null)) }/>
                     </div>
+                    <div style={{color:'#a8a8a8'}} className={cx('Sales_product')}> Đã bán:  {products.length !== 0 ? (products[indexSlide[4]].Sales) : null}</div>
                 </div>
                 <div className={cx('action')}>
                     <button className={cx('cart-button')}>

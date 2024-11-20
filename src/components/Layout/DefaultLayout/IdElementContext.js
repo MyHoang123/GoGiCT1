@@ -112,11 +112,11 @@ function IdElementProvider( {children} ) {
                 sloganProduct.current.src = imgLogan 
                 sloganProduct.current.style.transform = 'scale(1)'
                 sloganProduct.current.style.opacity = '1'
-                imgProductSlide.current[indexSlide[0]].style.top = '690px'
-                imgProductSlide.current[indexSlide[0]].style.right = '220px'
-                imgProductSlide.current[indexSlide[0]].style.height = '220px'
+                imgProductSlide.current[indexSlide[0]].style.top = '710px'
+                imgProductSlide.current[indexSlide[0]].style.right = '190px'
+                imgProductSlide.current[indexSlide[0]].style.height = '200px'
                 imgProductSlide.current[indexSlide[0]].style.transform = 'rotate(-360deg)'
-                imgProductSlide.current[indexSlide[0]].style.transition = `top 1s ease-in-out,right 1s ease-in-out,height 1s ease-in-out, transform 1s ease-in-out `
+                imgProductSlide.current[indexSlide[0]].style.transition = `top 1s ease-out,right 1s ease-out,height 1s ease-out, transform 1s ease-out `
                 desProduct.current[0].style.transform = 'translateX(20px)'
                 desProduct.current[1].style.bottom = '162px'
             }
@@ -125,7 +125,7 @@ function IdElementProvider( {children} ) {
                 imgProductSlide.current[indexSlide[0]].style.right = '154px'
                 imgProductSlide.current[indexSlide[0]].style.height = '118px'
                 imgProductSlide.current[indexSlide[0]].style.transform = 'rotate(0deg)'
-                imgProductSlide.current[indexSlide[0]].style.transition = `top 1s ease-in-out,right 1s ease-in-out,height 1s ease-in-out, transform 1s ease-in-out `
+                imgProductSlide.current[indexSlide[0]].style.transition = `top 1s ease-out,right 1s ease-out,height 1s ease-out, transform 1s ease-out `
                 imgBestSeller.current[0].style.transform = 'translateY(0) rotate(360deg)'
                 imgBestSeller.current[1].style.transform = 'translateY(0) rotate(360deg)'
                 imgBestSeller.current[0].style.opacity = '1'
@@ -142,7 +142,7 @@ function IdElementProvider( {children} ) {
                 listProductBest.current[2].style.opacity = '1'
             }
             else if(top > 1300 && top < 1600) {
-                gogiBackround.current.style.width = '100%'
+                // gogiBackround.current.style.width = '100%'
             }
             else if(top > 1600 && top < 1700) {
                 headerBodyContent.current.style.transform = 'translateX(0)'
@@ -164,7 +164,7 @@ function IdElementProvider( {children} ) {
                 youtubeRef.current[2].style.transform = 'translateY(0)'
             }
              else if(top > 3700 ) {  
-                bodyNhansu.current.style.width = '100%'
+                // bodyNhansu.current.style.width = '100%'
               }
             else if (top < 10) {
                 headerBodyContent.current.style.transform = ''
@@ -173,9 +173,9 @@ function IdElementProvider( {children} ) {
                 youtubeRef.current[0].style.opacity = '0'
                 youtubeRef.current[1].style.opacity = '0'
                 youtubeRef.current[2].style.transform = 'translateY(150px)'
-                bodyNhansu.current.style.width = '0%'
-                gogiBackround.current.style.width = '20%'
-
+                // bodyNhansu.current.style.width = '0%'
+                // gogiBackround.current.style.width = '20%'
+                videoBest.current.style.width = '500px'
                  for(let i in itemHeaderBody.current) {
                     itemHeaderBody.current[i].style.transform = ''
                     itemHeaderBody.current[i].style.opacity = ''
@@ -185,7 +185,7 @@ function IdElementProvider( {children} ) {
                 imgProductSlide.current[indexSlide[0]].style.right = '0'
                 imgProductSlide.current[indexSlide[0]].style.height = '370px'
                 imgProductSlide.current[indexSlide[0]].style.transform = 'rotate(0)'
-                imgProductSlide.current[indexSlide[0]].style.transition = `top 1s ease-in-out,right 1s ease-in-out,height 1s ease-in-out, transform 1s ease-in-out `
+                imgProductSlide.current[indexSlide[0]].style.transition = `top 1s ease-out,right 1s ease-out,height 1s ease-out, transform 1s ease-out `
                 desProduct.current[0].style.transform = 'translateX(300px)'
                 desProduct.current[1].style.bottom = '0px'
                 sloganProduct.current.style.transform = 'scale(0)'

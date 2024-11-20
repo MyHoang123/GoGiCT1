@@ -4,33 +4,39 @@ import io from 'socket.io-client';
 import Footer from '../DefaultLayout/Footer';
 import { useEffect, useRef, useState,useMemo, memo, useCallback } from 'react'
 import { Cookies } from 'react-cookie'
-import {Link, useNavigate } from 'react-router-dom'
+import {Link, useNavigate, useLocation  } from 'react-router-dom'
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 import 'sweetalert2/src/sweetalert2.scss'
 import Map from './map'
 import logo from '../../../Asset/images/logo-gogi-house-X5 (1).png'
+import VNPAY from '../../../Asset/images/R.png'
+import MOMO from '../../../Asset/images/MOMO.png'
+import HERE from '../../../Asset/images/HEREPAY.jpg'
 import styles from './Card.module.scss'
 import classNames from "classnames/bind"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnifyingGlass, faMinus, faPlus, faSpinner, faLocationDot, faPhone } from '@fortawesome/free-solid-svg-icons'
+import { faMagnifyingGlass, faMinus, faPlus, faSpinner, faLocationDot, faPhone, faHeart } from '@fortawesome/free-solid-svg-icons'
 import {faUser as faUserRegular } from '@fortawesome/free-regular-svg-icons'; 
-import { useDebounce } from '~/hooks'
+import { useDebounce,RenderStar } from '~/hooks'
 import card from "../../../Asset/images/cart.png"
 const cx = classNames.bind(styles)
 function Card() {
     const cookie = new Cookies()
     const navigate = useNavigate()
+    const location = useLocation();
     // State
     const [cards, setCards] = useState([])
+    const [Suggest, setSuggest] = useState([])
     const [ll, setLl] = useState(null)
     const [address, setAddress] = useState(null)
-    const [location, setLocation] = useState('');
+    const [payMethod, setPaymethod] = useState(null)
+    // const [location, setLocation] = useState('');
     const [distance, setDistance] = useState(0);
     const [modalCheckout, setModalCheckout] = useState(false)
     const [socket, setSocket] = useState(null)
     const [CheckCard, setCheckCard] = useState([])
     const [voucher, setVoucher] = useState(0)
-    const [vouchertext,setVouchertext] = useState('')
+    // const [vouchertext,setVouchertext] = useState('')
     const [searchValue, setSearchValue] = useState('')
     const [loadSearch, setLoadSearch] = useState(false);
     const [editInfo, setEditInfo] = useState(false);
@@ -42,9 +48,11 @@ function Card() {
     // Ref
     const quantityProductPay = useRef([])
     const cardAllCheck = useRef()
-    const notiCoupon = useRef()
+    const vouchertext = useRef()
     const modalCheckoutRef = useRef()
     const noteBill = useRef()
+    const btnBuyCheckbox = useRef([])
+    const btnBuy = useRef([])
     const noteRef = useRef([])
        // Gửi dữ liệu lên API
    async function checkvoucher(voucher) {
@@ -60,10 +68,13 @@ function Card() {
         setVoucher(0)
       }
       else {
+          Swal.fire({
+              icon: "success",
+              title: "Thành công",
+              text: `- ${response.data.data[0].PriceVoucher.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '₫'}`,
+              footer: '<a href="#">Why do I have this issue?</a>'
+            });
         setVoucher(response.data.data[0].PriceVoucher)
-        notiCoupon.current.innerText = 'Thành Công'
-        notiCoupon.current.style.color = '#3a5d2e'
-        notiCoupon.current.style.display = 'block'
       }
     } catch (error) {
         console.error('Lỗi khi thêm sản phẩm:', error);
@@ -72,7 +83,7 @@ function Card() {
     }
     async function deleteCard(id) {
         try {
-            const response = await axios.post('http://localhost:8080/api/v12/deletecard', id)
+            const response = await axios.post('http://localhost:8080/api/v12/deletecard', id)   
             if(response.data.massege === 'Thanh cong') {
                 setCards(prev => prev.filter(product => product.Id !== id.IdProduct))
                 setCheckCard(prev => prev.filter(product => product.Id !== id.IdProduct))
@@ -99,14 +110,17 @@ function Card() {
                         icon: "success"
                       }).then((result) => {
                         if(result.isConfirmed) {
-                            socket.emit('newBill',response.data.data)
+                            socket.emit('newBill')
                             navigate('/purchase')
                         }
                         else {
-                            socket.emit('newBill',response.data.data)
+                            socket.emit('newBill')
                             navigate('/purchase')
                         }
                       })
+                } else if (response.data.massege === 'Thanh Toan') {
+                    socket.emit('newBill')
+                    window.location.href = response.data.url
                 }
             } catch (error) {
                 alert('Có lõi xảy ra vui lòng thử lại')
@@ -115,20 +129,20 @@ function Card() {
             }
         }
     // }
-    const handleClickChangCard = useCallback((Id,Price,CheckCard) => {
+    const handleClickChangCard = useCallback((Id,Price,Name,Img,CheckCard) => {
             const productCard = CheckCard.filter((card) => card.Id === Id)
             if(productCard.length > 0) {
                 setCheckCard(prev => prev.filter((card) => card.Id !== Id))
             }
             else {
-                setCheckCard((prev) => [...prev,{Id:Id,Price:Price}])
+                setCheckCard((prev) => [...prev,{Id:Id,Price:Price,Name:Name,Img:Img}])
             }
         },[])
         const handleClickAllCard = useCallback((e,cards) => {
             if(e.target.checked === true) {
                 const newArr = cards.reduce((acc,cur) => {
                     if(cur.Status === 'visible') {
-                        return [...acc,{Id:cur.Id,Price:cur.Price}]
+                        return [...acc,{Id:cur.Id,Price:cur.Price,Name:cur.Name,Img:cur.Img}]
                     }else {
                         return [...acc]
                     }
@@ -168,19 +182,28 @@ function Card() {
             }
             setCheckCard(newArr)
         },[])
-        const handleCheckVoucher = useCallback((text) => {
+        const handleChangeCheckSuggest = useCallback((i,Id,Price,Name,Img,CheckCard) => {
+            const productCard = CheckCard.filter((card) => card.Id === Id)
+            if(productCard.length > 0) {
+                btnBuyCheckbox.current[i].style.width = '100%'
+                btnBuyCheckbox.current[i].style.padding = '.5rem'
+                btnBuy.current[i].style.opacity = 1
+                setCheckCard(prev => prev.filter((card) => card.Id !== Id))
+            }
+            else {
+                btnBuyCheckbox.current[i].style.width = '0'
+                btnBuyCheckbox.current[i].style.padding = '0'
+                btnBuy.current[i].style.opacity = 0
+
+                setCheckCard((prev) => [...prev,{Id:Id,Price:Price,Name:Name,Img:Img}])
+            }
+        },[])
+        const handleCheckVoucher = useCallback(() => {
             const voucher = {
-                voucher: text,
+                voucher: vouchertext.current.value,
                 token: cookie.get('AccessToken')
             }
             checkvoucher(voucher)
-        },[])
-        const handleSetTextVoucher = useCallback((e) => {
-            if(notiCoupon.current.innerText === 'Thành Công') {
-                 setVoucher(0)
-                 notiCoupon.current.style.display = 'none'
-            }
-            setVouchertext(e.target.value)
         },[])
         const handleChangeSearch = useCallback((e) => {
             if(cardAllCheck.current.checked === true) {
@@ -200,15 +223,11 @@ function Card() {
             setModalMap(false)
             modalCheckoutRef.current.style.transform = ''
         }
-        const handleClickDeleteCard = useCallback((id,i) => {
+        const handleClickDeleteCard = useCallback((id) => {
             const IdCard = {
                 IdProduct: id,
                 token: cookie.get('AccessToken')
             }
-            // if(checkBoxCard.current[i].checked === true) {
-            //     checkBoxCard.current[i].checked = false
-            //     deleteCard(IdCard)
-            // }
             deleteCard(IdCard)
         },[])
         const handleClickOpenMap = useCallback(() => {
@@ -242,64 +261,8 @@ function Card() {
         const regex = /^\d{9}$/;
         const isvalidSdt = regex.test(phone);
         if(isvalidSdt) {
-            if(sessionStorage.getItem('destination')!== undefined) {
-                const swalWithBootstrapButtons = Swal.mixin({
-                    customClass: {
-                      confirmButton: "btn btn-success",
-                      cancelButton: "btn btn-danger"
-                    },
-                    buttonsStyling: false
-                  });
-                  swalWithBootstrapButtons.fire({
-                    title: "Giao tại",
-                    text: `${sessionStorage.getItem('Address')}`,
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonText: "Đồng ý",
-                    cancelButtonText: "Từ chối",
-                    reverseButtons: true
-                  }).then((result) => {
-                    if (result.isConfirmed) {
-                        const result = CheckCard.reduce((acc,curr, index) => {
-                            if(noteRef.current[index].value.length === 0) {
-                                const temporary = {
-                                    Id: curr.Id,
-                                    Price: curr.Price
-                                }
-                            return [...acc,temporary]
-                            }
-                            else {
-                                const temporary = {
-                                    Id: curr.Id,
-                                    Price: curr.Price,
-                                    Note: noteRef.current[index].value
-                                }
-                            return [...acc,temporary]
-                            }
-                        },[])
-                        const bill = {
-                            TotalPrice: totalPay[1],
-                            Data: result,
-                            Address: `${sessionStorage.getItem('Address')}`,
-                            Name: userName,
-                            Sdt: phone,
-                            Destination: sessionStorage.getItem('destination'),
-                            Note: noteBill.current.value,
-                            token: cookie.get('AccessToken')
-                        }
-                        CreateBill(bill)
-                  }
-                  })
-            }
-            else {
-                if(address === null || address === '') {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        text: "Vui lòng nhập địa chỉ cụ thể",
-                        footer: '<a href="#">Why do I have this issue?</a>'
-                      });
-                }else {
+            if(payMethod !== null) {
+                if(sessionStorage.getItem('destination')!== undefined) {
                     const swalWithBootstrapButtons = Swal.mixin({
                         customClass: {
                           confirmButton: "btn btn-success",
@@ -309,7 +272,7 @@ function Card() {
                       });
                       swalWithBootstrapButtons.fire({
                         title: "Giao tại",
-                        text: `${address}, ${sessionStorage.getItem('Address')}`,
+                        text: `${sessionStorage.getItem('Address')}`,
                         icon: "warning",
                         showCancelButton: true,
                         confirmButtonText: "Đồng ý",
@@ -317,7 +280,7 @@ function Card() {
                         reverseButtons: true
                       }).then((result) => {
                         if (result.isConfirmed) {
-                            const result = CheckCard.reduce((acc,curr,index) => {
+                            const result = CheckCard.reduce((acc,curr, index) => {
                                 if(noteRef.current[index].value.length === 0) {
                                     const temporary = {
                                         Id: curr.Id,
@@ -336,25 +299,92 @@ function Card() {
                             },[])
                             const bill = {
                                 TotalPrice: totalPay[1],
-                                Data: JSON.stringify(result),
+                                Data: result,
                                 Address: `${sessionStorage.getItem('Address')}`,
                                 Name: userName,
+                                Sdt: phone,
                                 Destination: sessionStorage.getItem('destination'),
+                                Note: noteBill.current.value,
+                                PayMethod:payMethod,
                                 token: cookie.get('AccessToken')
                             }
                             CreateBill(bill)
-                        } else if (
-                          /* Read more about handling dismissals below */
-                          result.dismiss === Swal.DismissReason.cancel
-                        ) {
-                          swalWithBootstrapButtons.fire({
-                            title: "Cancelled",
-                            text: "Your imaginary file is safe :)",
-                            icon: "error"
-                          });
-                        }
-                      });
+                      }
+                      })
                 }
+                else {
+                    if(address === null || address === '') {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Vui lòng nhập địa chỉ cụ thể",
+                            footer: '<a href="#">Why do I have this issue?</a>'
+                          });
+                    }else {
+                        const swalWithBootstrapButtons = Swal.mixin({
+                            customClass: {
+                              confirmButton: "btn btn-success",
+                              cancelButton: "btn btn-danger"
+                            },
+                            buttonsStyling: false
+                          });
+                          swalWithBootstrapButtons.fire({
+                            title: "Giao tại",
+                            text: `${address}, ${sessionStorage.getItem('Address')}`,
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonText: "Đồng ý",
+                            cancelButtonText: "Từ chối",
+                            reverseButtons: true
+                          }).then((result) => {
+                            if (result.isConfirmed) {
+                                const result = CheckCard.reduce((acc,curr,index) => {
+                                    if(noteRef.current[index].value.length === 0) {
+                                        const temporary = {
+                                            Id: curr.Id,
+                                            Price: curr.Price
+                                        }
+                                    return [...acc,temporary]
+                                    }
+                                    else {
+                                        const temporary = {
+                                            Id: curr.Id,
+                                            Price: curr.Price,
+                                            Note: noteRef.current[index].value
+                                        }
+                                    return [...acc,temporary]
+                                    }
+                                },[])
+                                const bill = {
+                                    TotalPrice: totalPay[1],
+                                    Data: JSON.stringify(result),
+                                    Address: `${sessionStorage.getItem('Address')}`,
+                                    Name: userName,
+                                    Destination: sessionStorage.getItem('destination'),
+                                    PayMethod:payMethod,
+                                    token: cookie.get('AccessToken')
+                                }
+                                CreateBill(bill)
+                            } else if (
+                              result.dismiss === Swal.DismissReason.cancel
+                            ) {
+                              swalWithBootstrapButtons.fire({
+                                title: "Cancelled",
+                                text: "Your imaginary file is safe :)",
+                                icon: "error"
+                              });
+                            }
+                          });
+                    }
+                }
+            }
+            else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Vui lòng chọn phương thức thanh toán !",
+                    footer: '<a href="#">Why do I have this issue?</a>'
+                  });
             }
         }else {
             Swal.fire({
@@ -377,11 +407,16 @@ function Card() {
                 axios.post('http://localhost:8080/api/v12/showcard',{
                     token: cookie.get('AccessToken')
                 }),
+                axios.post('http://localhost:8080/api/v12/recommendersystem',{
+                    token: cookie.get('AccessToken')
+                }),
               ])
-                .then(axios.spread((Card, ) => {
+                .then(axios.spread((Card,Suggests,) => {
+                    setSuggest(Suggests.data.data)
                     if(Card.data.massege === 'Thanh Cong') {
                         setCards(Card.data.data)
                     }
+                
                 }))
                 .catch (err => {
                     console.error()
@@ -399,7 +434,6 @@ function Card() {
             setLoadSearch(false)
             return
         }
-        // const result = []
         const newArr = [...cards]
         for(let i in newArr){
             if(newArr[i].Name.toLowerCase().includes(debounce.toLowerCase())) {
@@ -410,10 +444,6 @@ function Card() {
             }
         }
         setCards(newArr)
-        // cards.map(product => 
-        //     product.Name.toLowerCase().includes(debounce.toLowerCase()) ? {...product,Status: 'visible'} : result.push({...product,Status: 'hiden'})
-        // )
-        // setCards(result)
         setLoadSearch(false)
      },[debounce])
     const totalPay = useMemo(() => {
@@ -439,9 +469,6 @@ function Card() {
             return false
         }
      },[cards])
-     const handleInputChange = (event) => {
-        setLocation(event.target.value);
-      };
     useEffect(() => {
         if(sessionStorage.getItem('destination')) {
             const start = sessionStorage.getItem('destination') ? sessionStorage.getItem('destination').split(',') : null
@@ -459,17 +486,33 @@ function Card() {
                 })
         }
     },[])
-    // useEffect(() => {
-    //     if(cards.length > 0 && CheckCard.length > 0) {
-    //         for(let i in cards) {
-    //             for(let j in CheckCard) {
-    //                 if(cards[i].Id !== CheckCard[j].Id) {
-    //                     checkBoxCard.current[cards[i].Id].checked = false
-    //                 }
-    //             }
-    //     }
-    //     }
-    // },[CheckCard,cards])
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const status = params.get('status');
+        if (status === '1') {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                  confirmButton: "btn btn-success",
+                  cancelButton: "btn btn-danger"
+                },
+                buttonsStyling: false
+              });
+            swalWithBootstrapButtons.fire({
+                title: "Success!",
+                text: "Cảm ơn bạn đã đặt hàng",
+                icon: "success"
+              }).then((result) => {
+                if(result.isConfirmed) {
+                    navigate('/purchase')
+                }
+                else {
+                    navigate('/purchase')
+                }
+              })
+        } else if (status === '0') {
+            alert('Giao dịch không thành công!');
+        } 
+    }, [location]);
     if(cookie.get('AccessToken') !== undefined) {
         return ( 
             <>
@@ -536,9 +579,6 @@ function Card() {
                             </div>
                         </div>
                             <div className={cx('body_card_content')}>
-                                    <div className={cx('body_card_content_container_address')}>
-                                        <FontAwesomeIcon style={{color:'#99000'}} icon={faLocationDot} />
-                                    </div>
                                 <div className={cx('body_card_content_container')}>
                                     <div className={cx('body_card_content_container-item-product')}>    
                                         <div className={cx('body_card_content_container-item-product_header')}>
@@ -558,7 +598,7 @@ function Card() {
                                                             <label htmlFor={`checkedProduct${i}`} key={i} className={card.Status === 'visible' ? cx('body_card_content_container-item-product_body') : cx('body_card_content_container-item-product_body_unative')}>
                                                                 <div className={cx('body_card_content_container-item-product_body-name')}>
                                                                     <div className={cx('body_card_content_container-item-product_body-name-checkbox')}>
-                                                                        <input checked={CheckCard.some((product) => product.Id === card.Id)} id={`checkedProduct${i}`} name='product' onChange={(e) => handleClickChangCard(card.Id,card.Price,CheckCard)} type="checkbox" className={cx('cyberpunk-checkbox')}/>
+                                                                        <input checked={CheckCard.some((product) => product.Id === card.Id)} id={`checkedProduct${i}`} name='product' onChange={() => handleClickChangCard(card.Id,card.Price,card.Name,card.Img,CheckCard)} type="checkbox" className={cx('cyberpunk-checkbox')}/>
                                                                     </div>
                                                                     <h2>{card.Name}</h2>
                                                                 </div>
@@ -586,16 +626,14 @@ function Card() {
                                                         <div className="card_pay cart_pay">
                                                             <label className="title_cartpay">Your cart</label>
                                                             {CheckCard.map((product,i) =>(
-                                                                (cards.map((productCard) => (
-                                                                    (product.Id === productCard.Id ? (
                                                                     <div key={i} className="products_cartpay">                                                                      
                                                                                     <div className="product_cartpay">
                                                                                         <div className='product_cartpay_img'>
-                                                                                        <img className="product_cartpay_img" src={`http://localhost:8080/api/v12/showimgproduct/${productCard.Img}`} style={{width: '100%', height: '100%',objectFit: 'cover'}} />
+                                                                                        <img className="product_cartpay_img" src={`http://localhost:8080/api/v12/showimgproduct/${product.Img}`} style={{width: '100%', height: '100%',objectFit: 'cover'}} />
                                                                                         </div>
                                                                                     <div>
                                                                                     <div className='name_pay'>
-                                                                                        <span>{productCard.Name}</span>
+                                                                                        <span>{product.Name}</span>
                                                                                         <p>Size M</p>
                                                                                     </div>
                                                                                     </div>
@@ -613,32 +651,12 @@ function Card() {
                                                                                      <textarea ref={(e) => noteRef.current[i] = e} className={cx('note_card')} placeholder='Thêm ghi chú'></textarea>
                                                                                 </div>                                        
                                                                     </div>
-                                                                    ):null)
-                                                                )))
                                                             ))}
                                                         </div>
-    
-                                                        <div className="card_pay coupons_cartpay">
-                                                            <label className="title_cartpay">Apply coupons <span ref={notiCoupon}  className='noti-coupon' style={{paddingLeft: '8px',fontSize:'14px'}}></span></label>                           
-                                                            <div className="form_cartpay">
-                                                                <input value={vouchertext} onChange={(e) => handleSetTextVoucher(e)} type="text" placeholder="Apply your coupons here" className="input_field_cartpay"/>
-                                                                <button onClick={() => handleCheckVoucher(vouchertext)} className="btn_pay"> Check
-                                                                </button>
-                                                            </div>
-                                                        </div>
-    
                                                         <div className="card_pay checkout_cartpay">
-                                                            <label className="title_cartpay">Checkout</label>
-                                                            <div className="details_cartpay">
-                                                            <span>Tổng tiền hàng:</span>
-                                                            <span>{totalPay[0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '₫'}</span>
-                                                            <span>Voucher giảm giá:</span>
-                                                            <span>{voucher.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '₫'}</span>
-                                                            <span>Tổng tiền phí vận chuyển: {Math.round(distance / 1000)}km</span>
-                                                            <span>{totalPay[2].toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '₫'}</span>
-                                                            </div>
+                                                           
                                                             <div className="checkout--footer_cartpay">
-                                                            <label className="price_cartpay">{totalPay[1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '₫'}          
+                                                            <label className="price_cartpay">{totalPay[0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '₫'}          
                                                                 </label>
                                                             <button onClick={() => handleClickPay(CheckCard.length)} style={{fontSize: '16px'}} className="Btn">
                                                                 Pay
@@ -653,18 +671,52 @@ function Card() {
                                 <div className={cx('Suggest_container')}>
                                     <h2>có thể bạn cũng thích</h2>
                                     <div className={cx('Suggest_content')}>
-                                        <div className={cx('Suggest_content-item')}></div>
-                                        <div className={cx('Suggest_content-item')}></div>
-                                        <div className={cx('Suggest_content-item')}></div>
-                                        <div className={cx('Suggest_content-item')}></div>
-                                        <div className={cx('Suggest_content-item')}></div>
-                                        <div className={cx('Suggest_content-item')}></div>
-                                        <div className={cx('Suggest_content-item')}></div>
-                                        <div className={cx('Suggest_content-item')}></div>
-                                        <div className={cx('Suggest_content-item')}></div>
-                                        <div className={cx('Suggest_content-item')}></div>
-                                        <div className={cx('Suggest_content-item')}></div>
-                                        <div className={cx('Suggest_content-item')}></div>
+                                        {Suggest.map((products,i) => (
+                                        <div key={i} className={cx('Suggest_content-item')}>
+                                            <div title={products.Sales < 999 ? 'TRENDING' : 'BEST SELLER'} className={cx('card')}>
+                                            <label className={cx('favorite')}>
+                                                <FontAwesomeIcon className={cx('heart_product')} icon={faHeart} style={{fontSize: '15px'}} />
+                                            </label>
+                                            <div className={cx('image_container')}>
+                                                <img  className={cx('image_animate_best')} src={`http://localhost:8080/api/v12/showimgproduct/${products.Img}`} style={{width: '100%', height: '100%',objectFit: 'cover'}} />
+                                            </div>
+                                            <div className={cx('title_card')}>
+                                                <span>{products.Name}</span>
+                                            </div>
+                                            <ul style={{paddingLeft: '0',color:'#D9D9D9',marginBottom:'0'}} className="colors-container">
+                                                <span style={{marginTop: '2px',fontSize: '14px',marginRight:'10px'}}>Giá:</span>
+                                                <span className='price_product' style={{fontSize: '6px'}}>{products.Price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '₫'}</span>
+                                            </ul>
+                                            <div className={cx('size')}>
+                                                <div className='svg four-star-svg'>
+                                                    <RenderStar Star = {products.Star}/>
+                                                </div>
+                                                <div style={{color:'#a8a8a8'}} className={cx('Sales_product')}> Đã bán:  {products.Sales}</div>
+                                            </div>
+                                            <div className={cx('action')}>
+                                                <label ref={e => btnBuyCheckbox.current[i] = e} htmlFor={`checkProduct${i}`} className={cx('cart-button')}>
+                                                 <span ref={e => btnBuy.current[i] = e}>Mua</span>
+                                                </label>
+                                                    <div className={cx('checkbox-wrapper-33')}>
+                                                    <label className={cx('checkbox')}>
+                                                        <input checked={CheckCard.some((product) => product.Id === products.Id)} onChange={() => handleChangeCheckSuggest(i,products.Id,products.Price,products.Name,products.Img,CheckCard)} id={`checkProduct${i}`}  name='product' className={cx('checkbox__trigger','visuallyhidden')} type="checkbox" />
+                                                        <span className={cx('checkbox__symbol')}>
+                                                        <svg
+                                                            aria-hidden="true"
+                                                            className={cx('icon-checkbox')}
+                                                            viewBox="0 0 28 28"
+                                                            version="1"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                        >
+                                                            <path d="M4 14l8 7L24 7"></path>
+                                                        </svg>
+                                                        </span>
+                                                    </label>
+                                                    </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
@@ -696,8 +748,14 @@ function Card() {
                                                 <h3>{ll}</h3>
                                             ) }
                                             <textarea style={{marginTop:'10px',width:'200px'}} placeholder="Địa chỉ cụ thể, tên đường/số nhà" className={cx('input-style')} type="text"/>
-                                        <span style={{color:'#4080ee'}} className={cx('edit_infouser_container_save')}>Lưu</span>
-                                        <button onClick={handleClickOpenMap} className={cx('edit_infouser_container_edit_address')}>Chọn từ bản đồ</button>
+                                            <div className={cx('btn_open_map')}>
+                                             <button  onClick={handleClickOpenMap} className={cx('learn-more')}>
+                                                    <span className={cx('circle')} aria-hidden="true">
+                                                    <span className={cx('icon','arrow')}></span>
+                                                    </span>
+                                                    <span className={cx('button-open')}>Mở bản đồ</span>
+                                                </button>
+                                            </div>
                                         </div>
                                     ) : (
                                         <>
@@ -718,17 +776,67 @@ function Card() {
                                     )}
                                     </div>
                                     <hr/>
-                                    <div>
+                                    {editInfo ? null : (
+                                        <>
+                                        <span>Voucher</span>
+                                    <div className={cx('check_voucher_container')}>
+                                        <input ref={vouchertext} type="text" placeholder="Nhập mã giảm giá nếu có" className={cx('check_voucher_input')}/>
+                                        <button onClick={() => handleCheckVoucher()} className={cx('btn_check')}> Check
+                                        </button>
+                                    </div>  
+                                <hr/>
+                                <div>
                                     <span>Phương Thức Thanh Toán</span>
-                                    <p>Visa</p>
-                                    <p>**** **** **** 4243</p>
+                                    <div className={cx('pay_method_container')}>
+                                            <input checked = {payMethod === '1'} onChange={(e) => setPaymethod(e.target.value)} className={cx('pay_method_item_check')} type='radio' id="vnpay" name="paymethod" value="1"/>
+                                        <label htmlFor='vnpay' className={cx('pay_method_item')}>
+                                            <img className={cx('pay_method_item_logo')} src={VNPAY}/>
+                                        </label>
+                                            <input checked = {payMethod === '2'} onChange={(e) => setPaymethod(e.target.value)}  className={cx('pay_method_item_check')} type='radio' id="momo" name="paymethod" value="2"/>
+                                        <label htmlFor='momo' className={cx('pay_method_item')}>
+                                            <img  style={{height:'30px'}} className={cx('pay_method_item_logo')} src={MOMO}/>
+                                        </label>
+                                            <input checked = {payMethod === '3'} onChange={(e) => setPaymethod(e.target.value)}  className={cx('pay_method_item_check')} type='radio' id="here" name="paymethod" value="3"/>
+                                        <label htmlFor='here' className={cx('pay_method_item')}>
+                                             <img style={{height:'30px',width:'50px'}} className={cx('pay_method_item_logo')} src={HERE}/>
+                                        </label>
                                     </div>
-                                    <hr/>
-                                    <div className="promo">
-                                        <span>Ghi chú</span>
-                                        <form className="form">
-                                            <textarea spellCheck={false} ref={noteBill} className={cx('input_field_note')} placeholder="Thêm ghi chú" type="text"/>
-                                        </form>
+                                    <div style={{margin:'0'}} className={cx('pay_method_container')}>
+                                        <div className={cx('pay_method_item_noti')}>
+                                            <span>ZALO PAY</span>
+                                        </div>
+                                        <div className={cx('pay_method_item_noti')}>
+                                            <span>MOMO</span>
+                                        </div>
+                                        <div className={cx('pay_method_item_noti')}>
+                                            <span>Nhận Hàng</span>                                      
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr/>
+                                <div className="promo">
+                                    <span>Ghi chú</span>
+                                    <form className="form">
+                                        <textarea spellCheck={false} ref={noteBill} className={cx('input_field_note')} placeholder="Thêm ghi chú" type="text"/>
+                                    </form>
+                                </div>
+                                <hr/>
+                                        
+                                        </>
+                                    )}
+                                    <div className={cx('check_out_info')}>
+                                        <div className={cx('check_out_info_item')}>
+                                            <span>Tổng tiền hàng:</span>
+                                            <p>{totalPay[0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '₫'}</p>
+                                        </div>
+                                        <div className={cx('check_out_info_item')}>
+                                            <span>Voucher giảm giá:</span>
+                                            <p>{voucher.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '₫'}</p>
+                                        </div>
+                                        <div className={cx('check_out_info_item')}>
+                                            <span>Phí vận chuyển:</span>
+                                            <p>{totalPay[2].toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '₫'}</p>
+                                        </div>
                                     </div>
                                 </div>
                                 </div>

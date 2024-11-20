@@ -13,7 +13,6 @@ const cx = classNames.bind(styles)
 function DefaultLayout() {
     const location = useLocation()
     const [Loading, setLoading] = useState(false)
-
     const loading = cx('loading_clien', {
         unactive: Loading
     })

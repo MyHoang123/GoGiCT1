@@ -17,6 +17,14 @@ const App = () => {
 const notificeRef = useRef()
 
   // Dev Express
+          // Gửi dữ liệu lên API Create
+          async function deleteDetailType(e) {
+            try {
+               await axios.post('http://localhost:8080/api/v12/deletedetailtype',{IdType: e.data.IdType,IdCategoris:e.data.IdCategoris})
+            } catch (error) {
+              alert('Đã xảy ra lõi')
+            }
+          }
   // Gửi dữ liệu lên API
   async function addDetailType(detailtype) {
     try {
@@ -123,6 +131,7 @@ const notificeRef = useRef()
         dataSource={detailTypes}
         onRowInserting={handleCreate}
         customizeColumns={customizeColumns}
+        onRowRemoved={deleteDetailType}
         showRowLines={true}
         showBorders={true}
         rowAlternationEnabled={true}

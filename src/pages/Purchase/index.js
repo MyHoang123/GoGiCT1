@@ -37,7 +37,6 @@ function Purchase() {
         }
     }
     const handleClickOpenCmt = (IdBill,data) => {
-        console.log("🚀 ~ handleClickOpenCmt ~ data:", JSON.parse(data))
         if(IdBill !== null && data !== null) {
             setIdBill(IdBill)
             setProduct(JSON.parse(data))
@@ -49,6 +48,7 @@ function Purchase() {
             const product = JSON.parse(data).reduce((acc,curr) => {
                 return [...acc,curr.Id]
             },[])
+            setIdBill(IdBill)
             const user = {
                 IdBill: IdBill,
                 IdProduct: product,
@@ -66,7 +66,6 @@ function Purchase() {
                    axios.post('http://localhost:8080/api/v12/showbill',{token: cookie.get('AccessToken')}),
                   ])
                     .then(axios.spread((Bill, ) => {
-                        console.log("🚀 ~ .then ~ Bill:", Bill)
                         setBills(Bill.data.data)
                         let dadat = 0
                         let chogiao = 0
@@ -192,21 +191,6 @@ function Purchase() {
                 {dagiao: dagiao},
              ]
              setAmountStatus(newAmount)
-            // if(billUpdate.Status === 1) {
-            //     const newArr = [...AmountStatus]
-            //     newArr[1].chogiao += 1
-            //     newArr[0].dadat -= 1
-            //     setAmountStatus(newArr)
-            // }else if (billUpdate.Status === 2) {
-            //     const newArr = [...AmountStatus]
-            //     newArr[2].danggiao += 1
-            //     newArr[1].chogiao -= 1
-            //     setAmountStatus(newArr)
-            // }else if(billUpdate.Status === 3) {
-            //     const newArr = [...AmountStatus]
-            //     newArr[2].danggiao -= 1
-            //     setAmountStatus(newArr)
-            // }
         }
     },[bills])
         return ( 
@@ -322,6 +306,13 @@ function Purchase() {
                                             <div className={cx('Purchase_content_body_footer-totalpay_container-price')}>
                                                 <h2>{bill.TotalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '₫'}</h2>
                                             </div>
+                                        </div>
+                                        <div className={cx('Purchase_content_body_footer-totalpay_status')}>
+                                            {bill.StatusPay === 0 ? (
+                                                <span>Thanh toán khi nhận hàng</span>
+                                            ) : (
+                                                bill.StatusPay === 1 ? (<span>Đã thanh toán</span>) : (<span>Chờ thanh toán</span>)
+                                            )}
                                         </div>
                                     </div>
                                     <div className={cx('Purchase_content_body_footer-button')}>

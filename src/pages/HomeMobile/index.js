@@ -1,19 +1,21 @@
 import ReactPaginate from 'react-paginate';
+import Swal from 'sweetalert2/dist/sweetalert2.js'
+import 'sweetalert2/src/sweetalert2.scss'
 import { useEffect, useState,useMemo, useRef, useContext } from "react";
 import { MobileContext } from '../../components/Layout/MobileLayout'
+import { Cookies } from 'react-cookie';
 import * as Icon from 'react-feather';
 import axios from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSliders,faHouse,faHeart,faBasketShopping,faBell,faStar,faPlus, faClipboard,faAnglesRight, } from '@fortawesome/free-solid-svg-icons';
 import { Link, useParams, useSearchParams,useNavigate, json   } from 'react-router-dom';
 import Slider from "./Slider/index"
-import Avt from "../../Asset/images/avt.jpg"
 import SliderImg from "../../Asset/images/102557336_3097466270292175_2765808264509443624_n.jpg"
-import ImgProduct from "./ImgProduct";
 // scss
 import './HomeMobile.scss'
 
 function App() {
+    const cookies = new Cookies
     // Parem
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
@@ -23,6 +25,7 @@ function App() {
     const [productsBackup, setProductsBackup] = useState([])
     const [cardProduct, setCardProduct] = useState([])
     const [page, setPage] = useState(1)
+    const [checkActiveCate, setCheckActiveCate] = useState(0)
     const [amountCard, setAmountCard] = useState(0)
     // context
     const cateRef = useRef([])
@@ -36,40 +39,38 @@ function App() {
     const { IdType } = useParams()
     // Call Api
   // Gửi dữ liệu lên API
-  async function updateTable(Table) {
+  async function fillterpProductCate(IdCate) {
+    setCheckActiveCate(IdCate)
     try {
-        const response = await axios.put(`${process.env.REACT_APP_IP_SEVER}/api/v12/updatetable`, Table);
-    } catch (error) {
+        const response = await axios.post(`${process.env.REACT_APP_IP_SEVER}/api/v12/filterproductcate`, {IdCate:IdCate,token:cookies.get('AccessTokenOrder')});
+       if(response.data.massege === 'Thanh cong') {
+            setProducts(response.data.data)
+       }
+    } catch (error) {   
         console.error('Lỗi khi thêm sản phẩm:', error);
         // Xử lý lỗi tại đây.
     }
     }
-    // Các hàm xử lý
-    const typeArrayProduct = (product,cate) => {
-        const Array = [...product];
-        const productFilterCate = Array.filter((product) => product.IdCategoris === cate )
-        return productFilterCate       
-            }
+      // Gửi dữ liệu lên API
+  async function addDetailProduct(detailproduct) {  
+    try {
+    const response =  await axios.post('http://localhost:8080/api/v12/createdetailproduct', detailproduct);
+    if(response.data.massege === 'Thanh cong') {
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Your work has been saved",
+        showConfirmButton: false,
+        timer: 1500
+      });
+    }
+    } catch (error) {
+      alert('Có lõi xảy ra vui lòng thử lại')
+    }
+  }
     const handlePageChange = (selectedItem) => {
-        // selectedItem.selected chứa số trang được chọn
-        // console.log('Selected page:', selectedItem.selected);
         setPage(selectedItem.selected + 1)
-        // Thực hiện các thao tác khác khi chuyển trang
       };
-      const handleClickDetailProduct = () => {
-
-      }
-      const handleClickCate = (id,idCate) => {
-        setPage(1)
-        cateAllRef.current.classList.remove('active')
-        for(let i = 0; i < cateRef.current.length; i++) {
-            if(cateRef.current[i] !== cateRef.current[id]){
-                cateRef.current[i].classList.remove('active')
-            }
-        }
-        cateRef.current[id].classList.add('active')
-        setProducts(typeArrayProduct(productsBackup,idCate))
-      }
       const handleClickAddCard = async (i,IdProduct) => {
         if(i !== null) {
         const indexCard = cartProduct.current[2].getBoundingClientRect()
@@ -102,16 +103,16 @@ function App() {
             }
    }, 2000);
    const newArr = JSON.parse(localStorage.getItem('card')) || []
-   for(let i = 0 ; i < productsBackup.length; i++) {
-        if(productsBackup[i].Id === IdProduct) {
+   for(let i = 0 ; i < products.length; i++) {
+        if(products[i].Id === IdProduct) {
             if(newArr.length === 0) {
-                newArr.push(productsBackup[i])
+                newArr.push(products[i])
                 localStorage.setItem('card', JSON.stringify(newArr))
                 setAmountCard(prev => prev + 1)
             }
             else {
                 const carNew = newArr.filter((productsCard) => productsCard.Id !== IdProduct)
-                carNew.push(productsBackup[i])
+                carNew.push(products[i])
                 localStorage.setItem('card', JSON.stringify(carNew))
                 setAmountCard(prev => prev + 1)
                 }
@@ -119,112 +120,32 @@ function App() {
                 }
                 }  
      }
-    const handleClickCateAll = () => {
-        cateAllRef.current.classList.add('active')
-    for(let i = 0; i < cateRef.current.length; i++) {
-        cateRef.current[i].classList.remove('active')
+    const handleClickAllproducts = async () => {
+        setCheckActiveCate(0)
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_IP_SEVER}/api/v12/getproductorder?token=${cookies.get('AccessTokenOrder')}`);
+           if(response.data.massege === 'Thanh cong') {
+                setProducts(response.data.data)
+           }
+        } catch (error) {   
+            console.error('Lỗi khi thêm sản phẩm:', error);
+        }
     }
-        setProducts(productsBackup)
-    }
-
     useEffect(() => {
-        cateAllRef.current.classList.add('active')
-        if(IdType && IdType !== 'All') {
-            const table = searchParams.get('table')
-            const Id = {
-                IdType: IdType
-            }
-            const Table = {
-                Status: 'Đang Dùng',
-                Id: parseInt(table)
-            }
-            const User = {
-                Buffe: IdType,
-                Table: parseInt(table)
-            }
-            updateTable(Table)
-            localStorage.setItem('Table',JSON.stringify(User))
-            axios.all([
-                axios.get(`${process.env.REACT_APP_IP_SEVER}/api/v12/showproduct`),
-                axios.post(`${process.env.REACT_APP_IP_SEVER}/api/v12/showproducttypes`,Id),
-                axios.get(`${process.env.REACT_APP_IP_SEVER}/api/v12/showcategori`),
-              ])
-                .then(axios.spread((Product, ProductType, Categori) => {
-                  setCategoris(Categori.data.data)
-                  const newProduct = []
-                  for(let i = 0; i < ProductType.data.data.length; i++) {
-                      for(let j = 0; j < Product.data.data.length;j++) {
-                          if(ProductType.data.data[i].IdProduct === Product.data.data[j].Id) {
-                              newProduct.push(Product.data.data[j])
-                          }
-                        }
-                    }
-                  setProducts(newProduct)
-                  setProductsBackup(newProduct)
-                }))
-                .catch (err => {
-                    console.error()
-                })
-            }
-            else if(IdType && IdType === 'All') {
-                const table = searchParams.get('table')
-                const Table = {
-                    Status: 'Đang Dùng',
-                    Id: parseInt(table)
-                }
-                const User = {
-                    Buffe: IdType,
-                    Table: parseInt(table)
-                }
-                updateTable(Table)
-                localStorage.setItem('Table',JSON.stringify(User))
+            if(cookies.get('AccessTokenOrder') !== undefined) {
                 axios.all([
-                    axios.get(`${process.env.REACT_APP_IP_SEVER}/api/v12/showproduct`),
-                    axios.get(`${process.env.REACT_APP_IP_SEVER}/api/v12/showcategori`),
-                  ])
-                    .then(axios.spread((Product, Categori) => {
-                      setCategoris(Categori.data.data)
-                      setProducts(Product.data.data)
-                      setProductsBackup(Product.data.data)
+                    axios.get(`${process.env.REACT_APP_IP_SEVER}/api/v12/getproductorder?token=${cookies.get('AccessTokenOrder')}`),
+                    axios.get(`${process.env.REACT_APP_IP_SEVER}/api/v12/getcateorder?token=${cookies.get('AccessTokenOrder')}`),
+                    ])
+                    .then(axios.spread((Product,Categoris) => {
+                        setProducts(Product.data.data)
+                        setCategoris(Categoris.data.data)
                     }))
                     .catch (err => {
                         console.error()
                     })
             }
-            else {
-                if(JSON.parse(localStorage.getItem('card')) !== null) {
-                    setCardProduct(JSON.parse(localStorage.getItem('card')).card)
-                    setAmountCard(JSON.parse(localStorage.getItem('card')).length)
-                }
-                else {
-                    setCardProduct([])
-                    setAmountCard(0)
-                }
-                if(localStorage.getItem('Table')) {
-                    navigate(`/mobile/buffe/${JSON.parse(localStorage.getItem('Table')).Buffe}?table=${JSON.parse(localStorage.getItem('Table')).Table}`);
-                }
-                axios.all([
-                    axios.get(`${process.env.REACT_APP_IP_SEVER}/api/v12/showproduct`),
-                    axios.get(`${process.env.REACT_APP_IP_SEVER}/api/v12/showcategori`),
-                  ])
-                    .then(axios.spread((Product, Categori) => {
-                      setProducts(Product.data.data)
-                      setProductsBackup(Product.data.data)
-                      setCategoris(Categori.data.data)
-                    }))
-                    .catch (err => {
-                        console.error()
-                    })
-            }
-            return () => {
-                for(let key in timeoutIdRef.current) {
-                    clearTimeout(timeoutIdRef.current[key]);
-                    delete timeoutIdRef.current[key]
-                }
-              }
-        },[IdType])
-    
-    // useEffect(() => {
+        },[])
     //     cateAllRef.current.classList.add('active')
     //     if(IdType && IdType !== 'All') {
     //         const table = searchParams.get('table')
@@ -242,9 +163,9 @@ function App() {
     //         updateTable(Table)
     //         localStorage.setItem('Table',JSON.stringify(User))
     //         axios.all([
-    //             axios.get('http://localhost:8080/api/v12/showproduct'),
-    //             axios.post('http://localhost:8080/api/v12/showproducttypes',Id),
-    //             axios.get('http://localhost:8080/api/v12/showcategori'),
+    //             axios.get(`${process.env.REACT_APP_IP_SEVER}/api/v12/showproduct`),
+    //             axios.post(`${process.env.REACT_APP_IP_SEVER}/api/v12/showproducttypes`,Id),
+    //             axios.get(`${process.env.REACT_APP_IP_SEVER}/api/v12/showcategori`),
     //           ])
     //             .then(axios.spread((Product, ProductType, Categori) => {
     //               setCategoris(Categori.data.data)
@@ -276,8 +197,8 @@ function App() {
     //             updateTable(Table)
     //             localStorage.setItem('Table',JSON.stringify(User))
     //             axios.all([
-    //                 axios.get('http://localhost:8080/api/v12/showproduct'),
-    //                 axios.get('http://localhost:8080/api/v12/showcategori'),
+    //                 axios.get(`${process.env.REACT_APP_IP_SEVER}/api/v12/showproduct`),
+    //                 axios.get(`${process.env.REACT_APP_IP_SEVER}/api/v12/showcategori`),
     //               ])
     //                 .then(axios.spread((Product, Categori) => {
     //                   setCategoris(Categori.data.data)
@@ -301,8 +222,8 @@ function App() {
     //                 navigate(`/mobile/buffe/${JSON.parse(localStorage.getItem('Table')).Buffe}?table=${JSON.parse(localStorage.getItem('Table')).Table}`);
     //             }
     //             axios.all([
-    //                 axios.get('http://localhost:8080/api/v12/showproduct'),
-    //                 axios.get('http://localhost:8080/api/v12/showcategori'),
+    //                 axios.get(`${process.env.REACT_APP_IP_SEVER}/api/v12/showproduct`),
+    //                 axios.get(`${process.env.REACT_APP_IP_SEVER}/api/v12/showcategori`),
     //               ])
     //                 .then(axios.spread((Product, Categori) => {
     //                   setProducts(Product.data.data)
@@ -320,16 +241,17 @@ function App() {
     //             }
     //           }
     //     },[IdType])
-    useEffect(() => {
-        for(let i = 0; i < cartProduct.current.length; i++) {
-            if(cartProduct.current[i].getAttribute('datacount') !== '0') {
-                cartProduct.current[i].classList.add('open')
-            }
-            else {
-                cartProduct.current[i].classList.remove('open')
-            }
-        }
-    },[amountCard])
+
+    // useEffect(() => {
+    //     for(let i = 0; i < cartProduct.current.length; i++) {
+    //         if(cartProduct.current[i].getAttribute('datacount') !== '0') {
+    //             cartProduct.current[i].classList.add('open')
+    //         }
+    //         else {
+    //             cartProduct.current[i].classList.remove('open')
+    //         }
+    //     }
+    // },[amountCard])
       // Phân trang
       const productPage = useMemo(() => {
         const count = products.filter(item => typeof item === 'object').length
@@ -361,10 +283,7 @@ function App() {
                     <header>
                         <div className="header_content">
                             <span>Location</span>
-                            <h2>Trần Hoàng Mỹ</h2>
-                        </div>
-                        <div className="header_img">
-                                <img style={{width: '30px', height: '30px',borderRadius: '6px',objectFit: 'cover'}} src={Avt}/>
+                            <h2>Khách hàng</h2>
                         </div>
                     </header>
                     <div className="header_search">
@@ -382,9 +301,9 @@ function App() {
                 </div>
                     <div className="mobile_content">
                             <div className='navbar_content'>
-                            <span ref={cateAllRef} onClick={handleClickCateAll}  style={{fontWeight: '400'}}>Tất Cả</span>
+                            <span onClick={() => handleClickAllproducts()} className={checkActiveCate === 0 ? 'active' : null}>Tất Cả</span>
                                 {categoris.map((valuaCate,indexCate) => (
-                                            <span onClick={() => handleClickCate(indexCate,valuaCate.Id)} ref={e => cateRef.current[indexCate] = e} style={{fontWeight: '400'}} key={indexCate}>{valuaCate.Name}</span>
+                                            <span className={checkActiveCate === valuaCate.Id ? 'active' : null} onClick={() => fillterpProductCate(valuaCate.Id)} key={indexCate}>{valuaCate.Name}</span>
                                         ))}                                                                                                                                                                                                                                              
                             </div>
                         <div className='product_container_mobile'>
@@ -397,7 +316,7 @@ function App() {
                                          <span style={{fontWeight:'700',color:'#333'}}>{product.Star}</span>
                                     </span>
                                     <div className='product_content_mobile-img-item'>
-                                        <ImgProduct children={product.Img} />
+                                        <img src={`${process.env.REACT_APP_IP_SEVER}/api/v12/showimgproduct/${product.Img}`} style={{width: '100%', height: '100%',objectFit: 'cover'}} />
                                     </div>
                                 </div>
                                 </Link>
@@ -419,7 +338,7 @@ function App() {
                                         <button ref = {e => cardButton.current[index] = e} onClick={() => handleClickAddCard(index,product.Id)} className='button_addcard'><FontAwesomeIcon icon={faPlus} />
                                         </button>
                                         <div ref={el => buttonFakeAddCard.current[index] = el} className='button_img-fake'>
-                                             <ImgProduct children={product.Img} />
+                                                <img src={`${process.env.REACT_APP_IP_SEVER}/api/v12/showimgproduct/${product.Img}`} style={{width: '100%', height: '100%',objectFit: 'cover'}} />
                                         </div>
                                     </div>
                                 </div>
@@ -448,10 +367,10 @@ function App() {
                             <div datacount = {0} ref={e => cartProduct.current[1] = e} className='navbar_footer-content-icon'>
                                 <FontAwesomeIcon icon={faBell} />
                             </div>
-                            <Link to='/order/card' datacount = {Amount} ref={e => cartProduct.current[2] = e} className='navbar_footer-content-icon'>
+                            <Link to={`/order/card?token=${cookies.get('AccessTokenOrder')}`} datacount = {Amount} ref={e => cartProduct.current[2] = e} className='navbar_footer-content-icon cardmobile'>
                                 <FontAwesomeIcon icon={faBasketShopping} /> 
                             </Link>
-                            <Link to='order/billorder' datacount = {0} ref={e => cartProduct.current[3] = e} className='navbar_footer-content-icon'>
+                            <Link to={`/order/billorder?token=${cookies.get('AccessTokenOrder')}`} datacount = {0} ref={e => cartProduct.current[3] = e} className='navbar_footer-content-icon'>
                                 <FontAwesomeIcon icon={faClipboard} />
                             </Link>
                         </div>

@@ -4,9 +4,8 @@ import { Link } from 'react-router-dom';
 
 
 function Sidebar() {
-    const [check, setCheck] = useState(true);
+    const [check, setCheck] = useState(0);
     // const [showScrollbar, setShowScrollbar] = useState(false);
-
     const sideBar = useRef()
     const sideBarActive = useRef([])
 
@@ -26,67 +25,58 @@ function Sidebar() {
             }}
         >
         <div className="sidebar-content js-simplebar">
-            <Link to="/" className="sidebar-brand">
+            <Link to="/admmin" className="sidebar-brand">
                 <span className="align-middle">Hello Admin</span>
                </Link>
             <ul className="sidebar-nav">
                 <li className="sidebar-header">
                     Pages
                 </li>
-
-                <li onClick={()=>handleButtonClick(0)} ref={el => sideBarActive.current[0] = el} className="sidebar-item">
+                <li onClick={() => setCheck(0)} className={check === 0 ? 'sidebar-item active' : 'sidebar-item'}>
                     <Link to="/admin" className="sidebar-link">
                         <Icon.Sliders className="align-middle"/> 
                         <span className="align-middle">Dashboard</span>
                      </Link>
                 </li>
-
-                <li onClick={()=>handleButtonClick(1)} ref={el => sideBarActive.current[1] = el} className="sidebar-item">
-                    <a className="sidebar-link">
-                    <Icon.User className="align-middle"/> 
-                     <span className="align-middle">Profile</span>
-                </a>
-                </li>
-
                 <li className="sidebar-header">
                     Tools & Components
                 </li>
 
-                <li onClick={()=>handleButtonClick(2)} ref={el => sideBarActive.current[2] = el} className="sidebar-item">
+                <li onClick={() => setCheck(1)} className={check === 1 ? 'sidebar-item active' : 'sidebar-item'}>
                     <Link to="/showbill" className="sidebar-link">
                             <Icon.AlignLeft style={{width: '24px'}} className="align-middle"/> 
                             <span className="align-middle">Đơn Hàng</span>  
                         </Link>                                
                 </li>
 
-                <li onClick={()=>handleButtonClick(3)} ref={el => sideBarActive.current[3] = el} className="sidebar-item">
+                <li  onClick={() => setCheck(2)} className={check === 2 ? 'sidebar-item active' : 'sidebar-item'}>
                     <Link to="/showtable" className="sidebar-link">
                                 <Icon.Plus style={{width: '24px'}} className="align-middle"/> 
                                 <span className="align-middle">Bàn</span>  
                             </Link>               
                 </li>
 
-                <li onClick={()=>handleButtonClick(4)} ref={el => sideBarActive.current[4] = el} className="sidebar-item">
+                <li  onClick={() => setCheck(3)} className={check === 3 ? 'sidebar-item active' : 'sidebar-item'}>
                     <Link to="/open" className="sidebar-link" href="">
                         <Icon.Grid className="align-middle"/> 
                         <span className="align-middle">Hoạt động</span>
                     </Link>
                 </li>
 
-                <li onClick={()=>handleButtonClick(5)} ref={el => sideBarActive.current[5] = el} className="sidebar-item">
+                <li  onClick={() => setCheck(4)} className={check === 4 ? 'sidebar-item active' : 'sidebar-item'}>
                     <Link to="/showslider" className="sidebar-link">
                     <Icon.AlignLeft className="align-middle"/> 
                      <span className="align-middle">Slider</span>
                      </Link>
                 </li>
 
-                <li onClick={()=>handleButtonClick(6)} ref={el => sideBarActive.current[6] = el} className="sidebar-item">
+                <li  onClick={() => setCheck(5)} className={check === 5 ? 'sidebar-item active' : 'sidebar-item'}>
                     <Link to="/createqr" className="sidebar-link">
                                 <Icon.Plus style={{width: '24px'}} className="align-middle"/> 
                                 <span className="align-middle">Tạo QR</span>  
                             </Link>               
                 </li>
-                <li onClick={()=>handleButtonClick(7)} ref={el => sideBarActive.current[7] = el} className="sidebar-item">
+                <li   onClick={() => setCheck(6)} className={check === 6 ? 'sidebar-item active' : 'sidebar-item'}>
                     <Link to="/comment" className="sidebar-link">
                                 <Icon.Plus style={{width: '24px'}} className="align-middle"/> 
                                 <span className="align-middle">Đánh giá</span>  
@@ -95,21 +85,14 @@ function Sidebar() {
                 <li className="sidebar-header">
                     Web Data
                 </li>
-                <li onClick={()=>handleButtonClick(8)} ref={el => sideBarActive.current[8] = el} className="sidebar-item">
-                     <Link to="/showacc" className="sidebar-link">    
-                            <Icon.Plus className="align-middle"/> 
-                            <span className="align-middle">Tài Khoản</span>                              
-                        </Link>
-                </li>
-
-                <li onClick={()=>handleButtonClick(9)} ref={el => sideBarActive.current[9] = el} className="sidebar-item">
+                <li  onClick={() => setCheck(7)} className={check === 7 ? 'sidebar-item active' : 'sidebar-item'}>
                     <Link to="/showtypes" className="sidebar-link">                                  
                             <Icon.Plus className="align-middle"/>
                             <span className="align-middle">Nhóm Sản Phẩm</span>
                         </Link>     
                 </li>
 
-                <li onClick={()=>handleButtonClick(10)} ref={el => sideBarActive.current[10] = el} className="sidebar-item">
+                <li  onClick={() => setCheck(8)} className={check === 8 ? 'sidebar-item active' : 'sidebar-item'}>
                     <Link to="/showdetailtype" className="sidebar-link">                               
                             <Icon.Plus className="align-middle"/>
                             <span className="align-middle">Chi Tiết Nhóm Sản Phẩm</span>
@@ -117,32 +100,32 @@ function Sidebar() {
                 </li>
 
 
-                <li onClick={()=>handleButtonClick(11)} ref={el => sideBarActive.current[11] = el} className="sidebar-item">
+                <li  onClick={() => setCheck(9)} className={check === 9 ? 'sidebar-item active' : 'sidebar-item'}>
                     <Link to="/showcategori" className="sidebar-link">
                             <Icon.Plus className="align-middle"/>                                                               
                             <span className="align-middle">Loại Sản Phẩm</span>
                         </Link>
                 </li>
 
-                <li onClick={()=>handleButtonClick(12)} ref={el => sideBarActive.current[12] = el} className="sidebar-item">
+                <li  onClick={() => setCheck(10)} className={check === 10 ? 'sidebar-item active' : 'sidebar-item'}>
                     <Link to="/showproduct" className="sidebar-link">
                             <Icon.Plus style={{width: '24px'}} className="align-middle"/> 
                             <span className="align-middle">Sản Phẩm</span>  
                         </Link>                                
                 </li>
-                <li onClick={()=>handleButtonClick(13)} ref={el => sideBarActive.current[13] = el} className="sidebar-item">
+                <li  onClick={() => setCheck(11)} className={check === 11 ? 'sidebar-item active' : 'sidebar-item'}>
                     <Link to="/showdetailproduct" className="sidebar-link">
                             <Icon.Plus style={{width: '24px'}} className="align-middle"/> 
                             <span className="align-middle">Chi Tiết Sản Phẩm</span>  
                         </Link>                                
                 </li>
-                <li onClick={()=>handleButtonClick(14)} ref={el => sideBarActive.current[14] = el} className="sidebar-item">
+                <li  onClick={() => setCheck(12)} className={check === 12 ? 'sidebar-item active' : 'sidebar-item'}>
                     <Link to="/showmenu" className="sidebar-link">
                             <Icon.Plus style={{width: '24px'}} className="align-middle"/> 
                             <span className="align-middle">Menu</span>  
                         </Link>                                
                 </li>
-                <li onClick={()=>handleButtonClick(15)} ref={el => sideBarActive.current[15] = el} className="sidebar-item">
+                <li  onClick={() => setCheck(13)} className={check === 13 ? 'sidebar-item active' : 'sidebar-item'}>
                     <Link to="/showvoucher" className="sidebar-link">
                             <Icon.Plus style={{width: '24px'}} className="align-middle"/> 
                             <span className="align-middle">Voucher</span>  

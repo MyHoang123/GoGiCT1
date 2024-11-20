@@ -1,15 +1,29 @@
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios'
-
+import { Cookies } from 'react-cookie';
 import QRCode from 'qrcode.react';
 import './CreateQr.scss'
+import { Type } from 'react-feather';
 function App() {
+  const cookies = new Cookies
     const [url, setUrl] = useState('');
     const [urlType, setUrlType] = useState('');
     const [urlTable, setUrlTable] = useState('');
     const [types, setTypes] = useState([])
     const [tables, setTables] = useState([])
     const qrContent = useRef()
+    async function createQR(IdTable,IdType) {
+      try {
+         const response = await axios.post('http://localhost:8080/api/v12/createqr', {IdTable:IdTable,IdType: IdType,token:cookies.get('AccessTokenAdmin')})
+         if(response.data.massege === 'Thanh cong') {
+            const urln = `${process.env.REACT_APP_IP_CLIENT}/order?token=${response.data.token}`
+            setUrl(urln)
+            qrContent.current.classList.add('open')
+          }
+      } catch (error) {
+          alert('Có lõi xảy ra vui lòng thử lại')
+      }
+  }
     useEffect(() => {
       axios.all([
         axios.get('http://localhost:8080/api/v12/showtype'),
@@ -25,9 +39,7 @@ function App() {
     },[]) 
     const handleClickCreateQR = () => {
       if(urlType !== null) {
-        const urln = `${process.env.REACT_APP_IP_CLIENT}/order/buffe/${urlType}?table=${urlTable}`
-        setUrl(urln)
-        qrContent.current.classList.add('open')
+        createQR(urlTable,urlType)
       }
       else {
         return null

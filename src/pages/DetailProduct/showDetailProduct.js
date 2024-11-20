@@ -26,16 +26,32 @@ const App = () => {
   // Gửi dữ liệu lên API
   async function addDetailProduct(detailproduct) {  
     try {
-      await axios.post('http://localhost:8080/api/v12/createdetailproduct', detailproduct);
-          notificeRef.current.classList.add('open')
-      // alert('Thêm mới thành công một nhóm sản phẩm')
+    const response =  await axios.post('http://localhost:8080/api/v12/createdetailproduct', detailproduct);
+    if(response.data.massege === 'Thanh cong') {
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Your work has been saved",
+        showConfirmButton: false,
+        timer: 1500
+      });
+    }
       // Thực hiện các hành động bổ sung tại đây sau khi sản phẩm được thêm thành công.
     } catch (error) {
-      console.error('Lỗi khi thêm sản phẩm:', error);
+      alert('Có lõi xảy ra vui lòng thử lại')
       // Xử lý lỗi tại đây.
    
     }
   }
+        // Gửi dữ liệu lên API Create
+        async function deleteDetailProduct(e) {
+          try {
+             await axios.post('http://localhost:8080/api/v12/deletedetailproducts',{IdType: e.data.IdType,IdProduct:e.data.IdProduct})
+          } catch (error) {
+            alert('Đã xảy ra lõi')
+          }
+        }
+      // Gửi dữ l
     // Gửi dữ liệu lên API
     async function showproductcate(IdType) {  
       try {
@@ -187,6 +203,7 @@ const App = () => {
         dataSource={detailProducts}
         onRowInserted={handleCreate}
         customizeColumns={customizeColumns}
+        onRowRemoved={deleteDetailProduct}
         showRowLines={true}
         showBorders={true}
         rowAlternationEnabled={true}

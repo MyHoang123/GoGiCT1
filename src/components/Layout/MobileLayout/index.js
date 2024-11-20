@@ -4,17 +4,25 @@ import io from 'socket.io-client';
 import './Mobile.scss'
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 import 'sweetalert2/src/sweetalert2.scss'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams  } from 'react-router-dom'
+import { Cookies } from 'react-cookie';
 export  const MobileContext = createContext()
 function App( {Children} ) {
+    const cookies = new Cookies
+    const [searchParam] = useSearchParams()
+    const token = searchParam.get('token')
     const [table, setTable] = useState(null);
+    const [socket, setSocket] = useState(null)
     const navigate = useNavigate();
     // ref
     const timeoutIdRef = useRef({});
     const timeouModal = useRef(null);
     const modalHello = useRef()
     // All Mobile,CreateQR
-    const checkout = (newSocket) => {
+    const handleClickStart = () => {
+        modalHello.current.classList.add('open')
+    }
+    const checkout = () => {
         Swal.fire({
             title: "Cảm Ơn Bạn Đã Thanh Toán. Đánh Giá",
             html: `
@@ -47,63 +55,55 @@ function App( {Children} ) {
           }).then((result) => {
             if(result.isConfirmed) {
                 // Xử lý sự kiện khi kết nối bị đóng
-                const IdClient = JSON.parse(localStorage.getItem('Table')).Table
-                newSocket.emit('disconnection', IdClient);
-                newSocket.disconnect();
-                localStorage.removeItem('Table')
-                localStorage.removeItem('card')
                 navigate('/')
                 }
                 else {
                 // Xử lý sự kiện khi kết nối bị đóng
-                const IdClient = JSON.parse(localStorage.getItem('Table')).Table
-                newSocket.emit('disconnection', IdClient);
-                newSocket.disconnect();
-                localStorage.removeItem('Table')
-                localStorage.removeItem('card')
                 navigate('/')
                 }
           });
     }
-    const handleClickStar = () => {
-        modalHello.current.classList.add('open')
-        timeouModal.current = setTimeout(() => {
-        modalHello.current.classList.remove('open')
-        modalHello.current.style.display = 'none'
-        }, 1990);
-    }
     useEffect(() => {
-        if(JSON.parse(localStorage.getItem('Table')) !== null) {
-        const IdClient = JSON.parse(localStorage.getItem('Table')).Table
-        const newSocket = io(`${process.env.REACT_APP_IP_SEVER}`,{
-            auth: {
-                token: 2
-            }
-           })
-        setTable(IdClient)
-        // Lắng nghe các sự kiện từ máy chủ
-        newSocket.on('repcheckoutsuccess', () => {
-            checkout(newSocket)
-        });
-        return () => {
-            newSocket.disconnect()
+        if(token !== undefined) {
+            cookies.set('AccessTokenOrder', token, { path: '/', maxAge: 604800 }); // 604800 giây = 7 ngày
+                const newSocket = io(`${process.env.REACT_APP_IP_SEVER}`,{
+                    auth: {
+                        token: token
+                    }
+                   })
+                   setSocket(newSocket)
+                   return () => {
+                       newSocket.disconnect()
+                   }
         }
-    }
     },[])
+    useEffect(() => {
+        if(socket !== null) {
+            socket.on('repcheckoutsuccess',() => {
+                cookies.remove('AccessTokenOrder')
+                checkout()
+            })
+            return () => {
+                socket.off('repcheckoutsuccess')
+            }
+        }
+    },[socket])
     const data = {
+        cookies,
+        socket,
         timeoutIdRef,
     }
     return ( 
         <MobileContext.Provider value={data}>
-            {/* <div className="mobile">
+            <div className="mobile">
             <div ref={modalHello} className='Modal_hellogogi'>
             <div className='Modale_content'>
                 <h1>Gogi sizzling delight, igniting tradition masterfully.</h1>
                 <p>The best grain, the finest roast, the powerful flavor.</p>
-                <button onClick={handleClickStar} className='button_pay_mobile'>Get Started</button>
+                <button onClick={handleClickStart} className='button_pay_mobile'>Get Started</button>
             </div>
         </div>
-            </div> */}
+            </div>
                 {Children}
         </MobileContext.Provider>
      );

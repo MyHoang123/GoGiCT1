@@ -1,19 +1,7 @@
 import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import {publicRoutes,mobileRoutes} from '~/Routes';
-import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detect';
-import React, { useState, useEffect } from 'react';
+import { isBrowser } from 'react-device-detect';
 function App() {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth);
-    };
-    window.addEventListener('resize', handleResize);
-    handleResize();
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
   if (isBrowser) {
     return (
       <Router>

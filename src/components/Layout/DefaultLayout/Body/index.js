@@ -5,8 +5,8 @@ import 'sweetalert2/src/sweetalert2.scss'
 import Accordion from 'react-bootstrap/Accordion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRocketchat } from '@fortawesome/free-brands-svg-icons';
-import { faChevronLeft, faChevronRight, faSquareCaretDown, faMagnifyingGlass, faListUl,faHeart,faCartShopping,faBagShopping,faCaretDown,faCheckDouble, faSpinner, faArrowLeft,faStarHalfStroke,faArrowLeftLong,faStar } from '@fortawesome/free-solid-svg-icons';
-import { IdElementContext } from '../IdElementContext';
+import { faChevronLeft, faChevronRight, faSquareCaretDown, faMagnifyingGlass, faListUl,faHeart,faCartShopping,faBagShopping,faCaretDown,faCheckDouble, faSpinner, faArrowLeft,faArrowLeftLong,faStar } from '@fortawesome/free-solid-svg-icons';
+import { IdElementContext } from '../IdElementContext'
 import './Body.scss'
 import iconHeaderBody1 from "../../../../Asset/images/iconHeaderBody1.png";
 import iconHeaderBody2 from "../../../../Asset/images/iconHeaderBody2.png";
@@ -15,10 +15,10 @@ import iconHeaderBody4 from "../../../../Asset/images/iconHeaderBody4.png";
 import menugogi from "../../../../Asset/images/gia-menu-gogi-house-221122-removebg-preview.png"
 // Page
 import PageNew from './PageNew';
+import PageYoutube from './PageYoutube';
 import { useContext, useEffect, useMemo, useRef, useState,memo, useCallback } from 'react';
 import { Cookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom'
-
 //Custom Hook
 import { useDebounce, RenderStar } from '~/hooks'
 function Body() {
@@ -42,8 +42,6 @@ function Body() {
     const [message, setMessage] = useState([])
     const [Star,setStar] = useState()
     const [cmtContent,setCmtContent] = useState(null)
-    const [bodyimg, setBodyimg] = useState([])
-    const [youtubelink, setYoutubeLink] = useState(null)
     const [searchValue, setSearchValue] = useState('')
     const [chat,setChat] = useState(false)
     const debounce = useDebounce(searchValue,500)
@@ -51,7 +49,7 @@ function Body() {
     const modalDetailProduct = useRef()
     const buttonFakeAddCard = useRef([])
     const imgAddCard = useRef()
-    const animationRef = useRef()
+    const animationRef = useRef([])
     const iconMenuArrow = useRef([])
     const indexCardProduct = useRef([])
     const cardButton = useRef([])
@@ -61,21 +59,9 @@ function Body() {
     const allStar = useRef()
     const valueChat = useRef()
     // Context
-    const {handleClickOpenLogin, Amount, setAmount, cartProduct,darkMode, titleHeaderBody,headerBodyContent,gogiBackround, itemHeaderBody,youtubeRef,bodyNhansu, socket } = useContext(IdElementContext)
+    const { Amount, setAmount, cartProduct,darkMode, titleHeaderBody,headerBodyContent,gogiBackround, itemHeaderBody,youtubeRef,bodyNhansu, socket } = useContext(IdElementContext)
     // ClassName
     const { IdProduct } = useContext(IdElementContext)
-      // Api
-    async function getChat(Account) {
-        try {
-                const response = await axios.post('http://localhost:8080/api/v12/showchat', Account);
-                if(response.data.massege === 'Thanh cong') {
-                    setMessage(response.data.data)
-                }
-            } catch (error) {
-             alert('Có lói xảy ra vui lòng thử lại')
-                // Xử lý lỗi tại đây.
-            }
-        }
     // Gửi dữ liệu lên API
      async function filterCategori(Filter) {
           try {
@@ -94,40 +80,38 @@ function Body() {
             cardButton.current[button].style.pointerEvents = 'none'
            const response = await axios.post('http://localhost:8080/api/v12/addcard', {IdProduct: IdProduct,token: cookies.get('AccessToken')});
            if(response.data.massege === 'Thanh cong') {
-                    setAmount(prev => prev + 1)
-                    cardButton.current[button].style.pointerEvents = 'auto'
-                    imgAddCard.current.src = `http://localhost:8080/api/v12/showimgproduct/${Img}`
-                    buttonFakeAddCard.current[button].classList.add('open')
-                    let x = 0
-                    let y = 0
-                    const speed = 0.4;
-                    let lastTime = 0;
-                    const animateAddcard = (timestamp) => {
-                        if (!lastTime) lastTime = timestamp;
-                        const deltaTime = timestamp - lastTime;
-                        lastTime = timestamp;
-                        const indexCard = cartProduct.current.getBoundingClientRect();
-                        const icardProduct = cardButton.current[button].getBoundingClientRect();
-                        const xTo = indexCard.left - icardProduct.left;
-                        const yTo = indexCard.top - icardProduct.top;
-                        const xDistance = xTo - x;
-                        const yDistance = yTo - y;
-                        if (Math.abs(xDistance) > 1) {
-                            x += (xDistance * (deltaTime / 500) * speed);
-                        }
-                    
-                        if (Math.abs(yDistance) > 1) {
-                            y += (yDistance * (deltaTime / 500) * speed);
-                        }
-                        buttonFakeAddCard.current[button].style.transform = `translate(${x.toFixed(0)}px, ${y.toFixed(0)}px)`;
-                        if (Math.abs(xDistance) > 10 || Math.abs(yDistance) > 10) {
-                            animationRef.current = requestAnimationFrame(animateAddcard);
-                        }else {
-                            buttonFakeAddCard.current[button].classList.remove('open')
-                        }
-                    };
-                    animationRef.current = requestAnimationFrame(animateAddcard)
-
+            cardButton.current[button].style.pointerEvents = 'auto'
+            buttonFakeAddCard.current[button].classList.add('open')
+            let x = 0
+            let y = 0
+            const speed = 0.4;
+            let lastTime = 0;
+            const animateAddcard = (timestamp) => {
+                if (!lastTime) lastTime = timestamp;
+                const deltaTime = timestamp - lastTime;
+                lastTime = timestamp;
+                const indexCard = cartProduct.current.getBoundingClientRect();
+                const icardProduct = cardButton.current[button].getBoundingClientRect();
+                const xTo = indexCard.left - icardProduct.left;
+                const yTo = indexCard.top - icardProduct.top;
+                const xDistance = xTo - x;
+                const yDistance = yTo - y;
+                if (Math.abs(xDistance) > 1) {
+                    x += (xDistance * (deltaTime / 500) * speed);
+                }
+            
+                if (Math.abs(yDistance) > 1) {
+                    y += (yDistance * (deltaTime / 500) * speed);
+                }
+                buttonFakeAddCard.current[button].style.transform = `translate(${x.toFixed(0)}px, ${y.toFixed(0)}px)`;
+                if (Math.abs(xDistance) > 10 || Math.abs(yDistance) > 10) {
+                    animationRef.current[button] = requestAnimationFrame(animateAddcard);
+                }else {
+                    buttonFakeAddCard.current[button].classList.remove('open')
+                }
+            };
+            animationRef.current[button] = requestAnimationFrame(animateAddcard)
+            setAmount(prev => prev += 1)
            }
            else {
                 Swal.fire({
@@ -159,11 +143,27 @@ function Body() {
         // Xử lý lỗi tại đây.
     }
     }
+    async function AddHistoryUser(User) {
+        try {
+            await axios.post('http://localhost:8080/api/v12/addhistoryuser', User);
+        } catch (error) {
+            console.error('Lỗi khi thêm sản phẩm:', error);
+            // Xử lý lỗi tại đây.
+        }
+        }
     const handleClickFilterCategori = useCallback((Id) => {
         const Filter = {
             IdType: null,
             IdCate: Id
         }
+        if(animationRef.current.length > 0) {
+            animationRef.current.forEach((ani) => {
+                cancelAnimationFrame(ani)
+            })
+            buttonFakeAddCard.current.forEach((btn) => {
+                btn.classList.remove('open')
+            })
+         }
         filterCategori(Filter)
     },[])
     const handleClickFilterProduct = useCallback((IdType,Idcate) => {
@@ -171,6 +171,14 @@ function Body() {
             IdType: IdType,
             IdCate:Idcate
         }
+        if(animationRef.current.length > 0) {
+            animationRef.current.forEach((ani) => {
+                cancelAnimationFrame(ani)
+            })
+            buttonFakeAddCard.current.forEach((btn) => {
+                btn.classList.remove('open')
+            })
+         }
         filterCategori(Filter)
     },[])
     const handleClickAll = useCallback(() => {
@@ -178,6 +186,14 @@ function Body() {
             IdType: null,
             IdCate: null,
         }
+        if(animationRef.current.length > 0) {
+            animationRef.current.forEach((ani) => {
+                cancelAnimationFrame(ani)
+            })
+            buttonFakeAddCard.current.forEach((btn) => {
+                btn.classList.remove('open')
+            })
+         }
         filterCategori(Filter)
     },[])
     const handleClickDetailProduct = useCallback((Id,Star,products) => {
@@ -194,6 +210,13 @@ function Body() {
         modalDetailProduct.current.style.display = 'flex'
             allStar.current.innerText = `${newStar}/5`
         setStar(Star)
+        if(cookies.get('AccessToken') !== undefined) {
+            const user = {
+                IdProduct: Id,
+                token: cookies.get('AccessToken')
+            }
+            AddHistoryUser(user)
+        }
     },[products])
     const handleClickRemoveDetailProduct = useCallback(() => {
         modalDetailProduct.current.style.display = 'none'
@@ -245,6 +268,14 @@ function Body() {
           const j = Math.floor(Math.random() * (i + 1));
           [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
         }
+        if(animationRef.current.length > 0) {
+            animationRef.current.forEach((ani) => {
+                cancelAnimationFrame(ani)
+            })
+            buttonFakeAddCard.current.forEach((btn) => {
+                btn.classList.remove('open')
+            })
+         }
         setProducts([...newArr,...Array])
     },[])
     const handleClickNewProduct = useCallback((products) => {
@@ -261,6 +292,14 @@ function Body() {
                 }
             }
         }
+        if(animationRef.current.length > 0) {
+            animationRef.current.forEach((ani) => {
+                cancelAnimationFrame(ani)
+            })
+            buttonFakeAddCard.current.forEach((btn) => {
+                btn.classList.remove('open')
+            })
+         }
         setProducts([...newArr, ...Array])
         },[])
     const handleClickMinProduct = useCallback((products) => {
@@ -277,6 +316,14 @@ function Body() {
               }
             }
           }
+          if(animationRef.current.length > 0) {
+            animationRef.current.forEach((ani) => {
+                cancelAnimationFrame(ani)
+            })
+            buttonFakeAddCard.current.forEach((btn) => {
+                btn.classList.remove('open')
+            })
+         }
           setProducts([...newArr, ...Array])
     },[])
     const handleClickMaxProduct = useCallback((products) => {
@@ -293,13 +340,37 @@ function Body() {
               }
             }
           }
+          if(animationRef.current.length > 0) {
+            animationRef.current.forEach((ani) => {
+                cancelAnimationFrame(ani)
+            })
+            buttonFakeAddCard.current.forEach((btn) => {
+                btn.classList.remove('open')
+            })
+         }
           setProducts([...newArr, ...Array])
     },[])
     const handleChangeSearch = useCallback((e) => {
         setSearchValue(e)
         setLoadSearch(true)
+         if(animationRef.current.length > 0) {
+            animationRef.current.forEach((ani) => {
+                cancelAnimationFrame(ani)
+            })
+            buttonFakeAddCard.current.forEach((btn) => {
+                btn.classList.remove('open')
+            })
+         }
     },[])
     const handlePageChange = useCallback((selectedItem) => {
+        if(animationRef.current.length > 0) {
+            animationRef.current.forEach((ani) => {
+                cancelAnimationFrame(ani)
+            })
+            buttonFakeAddCard.current.forEach((btn) => {
+                btn.classList.remove('open')
+            })
+         }
         setPage(selectedItem.selected + 1)
       },[])
     const handleClickSendChat = useCallback((e) => {
@@ -339,38 +410,6 @@ function Body() {
                     alert('Gửi lõi')
                 }
             })
-        
-        // else {
-        //     const data = {
-        //         IdReceiver: 1,
-        //         time: time,
-        //         containt: valueChat.current.value
-        //     }
-        //     socket.emit('chat',data,(response) => {
-        //         if(response === 'Thanh cong') {
-        //             data.Status = 0
-        //             setMessage(prev => [...prev,data])
-        //             valueChat.current.value = ''
-        //             valueChat.current.focus()
-        //             socket.on('repchat',(status) => {
-        //                 if(status === null) {
-        //                     alert('Đã xảy ra lõi vui lòng thử lại')
-        //                 }
-        //                 else {
-        //                     data.Status = status.Status
-        //                     data.IdSend = status.IdSend
-        //                     setMessage(prev => [...prev,data])
-        //                     valueChat.current.value = ''
-        //                     valueChat.current.focus()
-        //                     socket.off('repchat')
-        //                 }
-        //             })
-        //         }
-        //         else {
-        //             alert('Gửi lõi')
-        //         }
-        //     })
-        // }
        }
     },[message,socket])
     const handleClickOpenChat = useCallback((socket) => {
@@ -382,19 +421,6 @@ function Body() {
             }
         })
         }
-        // if(cookies.get('AccessToken') !== undefined) {
-        //     if(message.length === 0) {
-        //         const Account = {
-        //             IdSend: 1,
-        //             token: cookies.get('AccessToken')
-        //         }
-        //         getChat(Account)
-        //     }
-        //     if(message.length > 0) {
-            //     }
-            //     setChat(true)
-            // }
-
     },[])
     useEffect(() => {
         axios.all([
@@ -403,22 +429,21 @@ function Body() {
             axios.get('http://localhost:8080/api/v12/showtype'),
             axios.get('http://localhost:8080/api/v12/showmenu'),
             axios.get('http://localhost:8080/api/v12/showdetailtypes'),
-            axios.get('http://localhost:8080/api/v12/showimgbody'),
           ])
-            .then(axios.spread((Product, Categori,Types,Menu,detailType, imgBody, ) => { 
+            .then(axios.spread((Product, Categori,Types,Menu,detailType, ) => { 
               setProducts(Product.data.data)
               setCategoris(Categori.data.data)
               setTypes(Types.data.data)
               setMenu(Menu.data.data)
               setDetailType(detailType.data.data)
-              setBodyimg(imgBody.data.data)
-              setYoutubeLink(`https://www.youtube.com/embed/${imgBody.data.data[3].Img}`)
             }))
             .catch (err => {
                 console.error()
             })
             return () => {
-                cancelAnimationFrame(animationRef.current)
+                animationRef.current.forEach((ani) => {
+                    cancelAnimationFrame(ani)
+                })
             }
         },[])
      // Phân trang
@@ -488,9 +513,6 @@ function Body() {
         <>
         {/* <div className='backround_header_body'></div> */}
             <div className={`header_body ${darkMode ? 'darkmode' : ''}`}>
-                {/* <div className={'img_intro'}>
-                    <News />
-                </div> */}
                 <img ref={gogiBackround} className={'menugogi_backround'} src={menugogi} alt=""/>
             </div>
             <div className={`backround_content ${darkMode ? 'darkmode' : ''}`}>
@@ -543,7 +565,7 @@ function Body() {
                                         Danh mục Sản Phẩm
                                     </h3>
                                     <ul className={'category-list'}>
-                                <Accordion>
+                                             <Accordion>
                                     {menu.map((value,index)=>(
                                             <Accordion.Item style={{width: '100%',position:'relative'}} onClick={(e) => handleClickShowMenu(e,index)} key={index} eventKey={index}>
                                                 <Accordion.Header style={{position: 'relative'}}  className={'category-item__link'}> <span style={{fontWeight: '500',zIndex: '10'}}>{value.Name} <span ref={e => iconMenuArrow.current[index] = e} className='arrow_menu'><FontAwesomeIcon icon={faArrowLeft} /></span></span> </Accordion.Header>
@@ -706,7 +728,6 @@ function Body() {
                                 ) : null)
                                 ))}
                         </div>
-                        {/* <!-- Phân Trang --> */}
                         <ReactPaginate className='home-product_pagination'
                         pageCount={productPage[1]} // Tổng số trang
                         pageRangeDisplayed={3} // Số lượng trang hiển thị trên thanh phân trang
@@ -838,26 +859,7 @@ function Body() {
                         </div>
                     {/* <!--  --> */}
                 </div>
-                <div className={`backround_youtube ${darkMode ? 'darkmode' : ''}`}>
-                    <div className={'youtube_container'}>
-                        <div ref={(e) => youtubeRef.current[0] = e} style={{transform: 'translateX(-114px)',transition: 'transform .5s ease-in-out,opacity .5s ease-in-out',opacity:'0'}} className={'youtube_content'}>
-                            <iframe width="640" height="360" src={(bodyimg.length !== 0 ? (youtubelink) : (null))} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
-                        </div>
-                        <div className={'youtube_img'}>
-                            <div ref={(e) => youtubeRef.current[1] = e} className={'youtube_img-item'}>
-                                <img style={{filter: 'brightness(80%)'}} src={(bodyimg.length !== 0 ? (`http://localhost:8080/api/v12/bodyimg/${bodyimg[0].Img}`) : (null))}/>
-                                <div className={'overflow'}>
-                                    <h1>Đại Tiệc Nướng Lẩu Hàn Quốc</h1>
-                                </div>
-                            </div>
-                            <div  ref={(e) => youtubeRef.current[2] = e}  className={'youtube_img-item-f'}>
-                                <img className={'youtube_img-item-img'} src={(bodyimg.length !== 0 ? (`http://localhost:8080/api/v12/bodyimg/${bodyimg[1].Img}`) : (null))} />
-                                <img className={'youtube_img-item-img'} src={(bodyimg.length !== 0 ? (`http://localhost:8080/api/v12/bodyimg/${bodyimg[2].Img}`) : (null))} />
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
+                <PageYoutube data = {{youtubeRef}} />
                 {/* Nhan Sự */}
                 <div ref={bodyNhansu} className={'body_nhansu'}>
                         <div className={'overlay_body-nhansu'}>
@@ -879,35 +881,10 @@ function Body() {
                             </div>
                         </div>
                 </div>
-                <div className={'backround_tintuc'}>
-                    <div className={'tintuc grid wide'}>
-                        <div className={'header_tintuc'}>                        
-                            <h3 className={'blog'}>Blog</h3>
-                            <h1 className={'title'}>TIN TỨC</h1>
-                        </div>
-                        <div className={'body_tintuc'}>
-                            <div className={'body_tintuc-img'}>
-                                <div className={'body_tintuc-img-new-icon'}>
-                                    <span style={{color: '#fff', textAlign: 'center',fontStyle: 'italic', fontSize: '17px'}}>NEW</span>
-                                </div>
-                                <div className={'body_tintuc-img-item'}>
-                                        <PageNew />
-                                </div>
-                            </div>
-                            <div className={'body_tintuc-container'}>
-                                <h2 className={'body_tintuc-container-tips'}>TIPS ẨM THỰC</h2>
-                                <h1 className={'body_tintuc-container-header'}>[MN] KING BBQ BUFFET 179K – DUY NHẤT TẠI 11 TỈNH MIỀN NAM</h1>
-                                <h3 className={'body_tintuc-container-time'}>18 MARCH</h3>
-                                <p className={'body_tintuc-container-contain'}>🔥 Chào các đồng nướng! Tất cả mọi người đã sẵn sàng cho một cơn sốt ẩm thực tại King BBQ  chưa nào? MENU BUFFET MỚI – CHỈ 179.000 VNĐ Tặng thêm 01 phần lẩu Tokbokki cực “HOT” Buffet 179k tại King BBQ cũng là một lựa chọn tuyệt vời cho mọi dịp họp mặt, […]</p>
-                                <a href="" className={'body_tintuc-container-button'}>READ MORE</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <PageNew />
             </div>
                 <div datacount={Amount} ref={cartProduct} onClick={cookies.get('AccessToken') !== undefined ? () => navigate('/card') : () => navigate('/loginuser') } className='cart_product-container'>
                     <FontAwesomeIcon className='cart_product-icon' icon={faBagShopping} />
-                    <img ref={imgAddCard} className='Img_AddCard'/>
                 </div>
                 <div onClick={() => handleClickOpenChat(socket)} style={chat ? {opacity:'0'} : {opacity:'1',transition:'opacity 1s .2s ease-in-out'}} className='chat_container'>
                     <span>Chat</span>

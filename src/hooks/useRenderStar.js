@@ -13,7 +13,7 @@ function useRenderStar({ Star }) {
                 <FontAwesomeIcon style={{color: '#fc0'}} icon={faStar} />
             </div>
             ): 
-            (Star > 4.3 && Star < 4.8 ? (
+            (Star > 4.3 && Star <= 4.8 ? (
             <div className='four-star-svg'>
                 <FontAwesomeIcon style={{color: '#fc0'}} icon={faStar} />
                 <FontAwesomeIcon style={{color: '#fc0'}} icon={faStar} />

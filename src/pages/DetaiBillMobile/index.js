@@ -1,17 +1,44 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+
+
+import axios from 'axios'
+
+import { useCallback, useEffect, useRef, useState, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLocationCrosshairs, faChevronLeft, faPhoneVolume } from '@fortawesome/free-solid-svg-icons';
 import { faClipboard as faClipboardRegular , faStar as faStarRerular} from '@fortawesome/free-regular-svg-icons'; 
-import test from '../../Asset/images/avt.jpg'
+import test from '../../Asset/images/avtmale.png'
 import classNames from "classnames/bind"
+import { MobileContext } from '../../components/Layout/MobileLayout1'
+import {Link, useParams} from 'react-router-dom';
+
 import styles from './DetailbillMobile.module.scss'
 import Map from './map'
 const cx = classNames.bind(styles)
 
 function App() {
+    const { IdBill } = useParams()
+    const [bill,setBill] = useState([])
     const Line = useRef()
     const mapContainer = useRef(null)
     const navRef = useRef(null)
+    const LastItemRef = useRef()
+    const {cookies, billUpdate, handleClickOpenCmtDetai} = useContext(MobileContext)
+    async function CheckPayStatus(IdPay) {
+        try {
+        const response =  await axios.post('http://localhost:8080/api/v12/CheckPayOrder', {app_trans_id:IdPay});
+        if(response.data.result.return_code === 1) {
+            const newArr = [...bill]
+            newArr.StatusPay = 1
+            setBill(newArr)
+        }else {
+            const newArr = [...bill]
+            newArr.StatusPay = 2
+            setBill(newArr)
+        }
+        } catch (error) {
+          console.error('Lỗi khi thêm sản phẩm:', error)
+        }
+      }
     const handleClickRemoveNav = useCallback(() => {
         if(navRef.current.style.top === '180px') {
             navRef.current.style.top = '0px'
@@ -19,13 +46,66 @@ function App() {
             navRef.current.style.top = '180px'
         }
     },[])
+    useEffect(() => {
+        if(cookies.get('AccessToken') !== undefined) {	
+            if(billUpdate !== null && bill.length !== 0) {
+                const newArr = [...bill]
+                newArr[0].Status = billUpdate.Status
+                setBill(newArr)
+                Line.current.style.width = billUpdate.Status === 1 ? '20%' : billUpdate.Status === 2 ? '40%' : billUpdate.Status === 3 ? '80%' : billUpdate.Status === 4 ? '80%' : ''
+                if(billUpdate.Status === 3){
+                    LastItemRef.current.style.cursor = 'pointer'
+                }
+                else if(billUpdate.Status === 4) {
+                    LastItemRef.current.style.cursor = 'auto'
+                    LastItemRef.current.classList.add(cx('open'))
+                }
+            }
+        }
+      },[billUpdate])
+    useEffect(() => {
+        if(cookies.get('AccessToken') !== undefined) {
+            axios.all([
+              axios.post('http://localhost:8080/api/v12/getbill',{
+                IdBill: IdBill,
+                token: cookies.get('AccessToken')
+              }),
+            ])
+              .then(axios.spread((Bill) => {
+                console.log(Bill)
+                if(Bill.data.data[0].PayMent.length > 0 && Bill.data.data[0].StatusPay !== 1 ) {
+                    CheckPayStatus(Bill.data.data[0].PayMent)
+                }
+                setBill(Bill.data.data)
+                if(Bill.data.data[0].Status === 0 ) {
+                    Line.current.style.width = '0'
+                }else if(Bill.data.data[0].Status === 1) {
+                    Line.current.style.width = '20%'
+                }else if(Bill.data.data[0].Status === 2) {
+                    Line.current.style.width = '40%'
+                }else if (Bill.data.data[0].Status === 3){
+                    Line.current.style.width = '80%'
+                    LastItemRef.current.style.cursor = 'pointer'
+                }else if (Bill.data.data[0].Status === 4) {
+                    Line.current.style.width = '80%'
+                    LastItemRef.current.classList.add(cx('open'))
+                }
+              }))
+              .catch (err => {
+                  console.error()
+              })
+        }else {
+            alert('Có lõi xảy ra vui lòng thử lại sau')
+        }
+      }, [])
+    
     return ( 
         <div  className={cx('Detailbill_body')}>
                 <div ref={mapContainer} className={cx('Detailbill_body_map')}>
                     <div className={cx('Detailbill_body_map_button')}>
-                        <div className={cx('Detailbill_body_map_button_left')}>
+                        <Link to='/purchase' className={cx('Detailbill_body_map_button_left')}>
                             <FontAwesomeIcon className={cx('Detailbill_body_map_button_left-icon')} icon={faChevronLeft} />
-                        </div>
+                        </Link>
                         <div className={cx('Detailbill_body_map_button_right')}>
                             <FontAwesomeIcon className={cx('Detailbill_body_map_button_left-icon')} icon={faLocationCrosshairs} />
                         </div>
@@ -36,7 +116,7 @@ function App() {
                 <div onClick={handleClickRemoveNav} className={cx('Detailbill_body_info_buttonhiden')}></div>
                     <div className={cx('Detailbill_body_info_header')}>
                         <h2>5 minutes left</h2>
-                        <h3>Delivery to: <strong>Thoi Binh Can Tho</strong></h3>
+                        <h3>Delivery to: <strong className={cx('Detailbill_body_info_header_address')}>Thoi Binh Can Tho</strong></h3>
                         <div className={cx('show_detail_bill_body_status')}>
                     <div className={cx('show_detail_bill_body_status-item')}>
                         <div className={cx('show_detail_bill_body_status-item-icon-1')}>
@@ -179,24 +259,24 @@ function App() {
                         </div>
                         
                     </div>
-                    <div className={cx('show_detail_bill_body_status-item')}>
-                        <div className={cx('show_detail_bill_body_status-item-icon')}>
-                            <FontAwesomeIcon style={{height:'18px',color:'#2dc258'}} icon={faStarRerular} />
+                    <div onClick={() => handleClickOpenCmtDetai(bill[0].Id)} className={cx('show_detail_bill_body_status-item')}>
+                        <div ref={LastItemRef} className={cx('show_detail_bill_body_status-item-icon')}>
+                            <FontAwesomeIcon style={{height:'18px'}} icon={faStarRerular} />
                         </div>
                         <div className={cx('show_detail_bill_body_status-item_title')}>
                             <h2 style={{marginBottom:'0',fontSize:'12px',textAlign:'center'}}>Đánh giá</h2>
                             <h3 style={{textAlign:'center',color: 'rgba(0, 0, 0, .26)',marginBottom:'0',fontSize:'12px'}}>20/11/2024</h3>
                         </div>
                     </div>
-                </div>
                 <div ref={Line} className={cx('show_detail_bill_body_line')}></div>
                 <div className={cx('show_detail_bill_body_line_1')}></div>
+                </div>
                 <div className={cx('show_detail_bill_body_line_2')}></div>
                 </div>
                 <div className={cx('detail_allprice')}>
                     <h3>Tổng tiền hàng: 30.000đ</h3>
                     <h3>Phí ship: 15.000đ</h3>
-                    <h3>Giảm giá: 30.000đ</h3>
+                    <h3>Giảm giá: 40.000đ</h3>
                 </div>
                 <div className={cx('detailbill_infoshiper')}>
                     <div className={cx('detailbill_infoshiper_container')}>

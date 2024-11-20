@@ -34,6 +34,7 @@
                 width: 40px;
                 height: 40px;
                 background-color: #fefefe;
+                color: #808080;
                 border-radius: 10px;
                 .Detailbill_body_map_button_left-icon {
                     height: 18px;
@@ -59,7 +60,7 @@
   // height: 48%; 
   display: flex;
   justify-content: flex-end;
-  padding: 0 40px 10px 40px;
+  padding: 0 20px 10px 20px;
   align-items: center;
   position: relative;
   flex-direction: column;
@@ -87,10 +88,16 @@
         align-items: center;
         flex-direction: column;
         justify-content: center;
+      h3 {
+        text-align: center;
+        width: 70%;
+        line-height: 20px;
+      }
     }
 }
 .show_detail_bill_body_status {
     display: flex;
+    position: relative;
     width: 100%;
     justify-content: space-between;
     align-items: center;
@@ -119,11 +126,10 @@
     width: 40px;
     height: 40px;
     border: 5px solid #c8c8c8;
-    // border: 5px solid #2dc258;
     transition: border 1s .7s ease-in-out  ;
 }
 .show_detail_bill_body_status-item-icon svg {
-  color: #c8c8c8 !important;
+  color: #c8c8c8;
 }
 .show_detail_bill_body_status-item-icon-1 {
   background-color: #fff;
@@ -249,7 +255,7 @@
   }
   /* truck upper body */
   .truckBody {
-    width: 64px;
+    width: 58px;
     height: fit-content;
     margin-bottom: 9px;
     animation: motion 1s linear infinite;
@@ -268,7 +274,7 @@
   }
   /* truck's tires */
   .truckTires {
-    width: 80px;
+    width: 73px;
     height: fit-content;
     display: flex;
     align-items: center;
@@ -278,7 +284,7 @@
     bottom: 0;
   }
   .truckTires svg {
-    width: 24px;
+    width: 16px;
   }
   
   .road {
@@ -378,23 +384,37 @@
   }
   
 }
-
+.show_detail_bill_body_status-item-icon.open {
+  border: 5px solid #2dc258;
+  background-color: #fff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  transition: border 1s 3s ease-in;
+}
+.show_detail_bill_body_status-item-icon.open svg {
+  color: #2dc258;
+  transition: color 1s 3s ease-in;
+}
 .show_detail_bill_body_line {
-    position: absolute;
-    top: 92px;
-    left: 60px;
-    height: 4px;
-    width: 68%;
-    z-index: 1;
-    background-color: #2dc258;
-    transition: width 3s ease-in-out;
+  position: absolute;
+  top: 17px;
+  left: 53px;
+  height: 4px;
+  width: 0%;
+  z-index: 1;
+  background-color: #2dc258;
+  transition: width 3s ease-in-out;
 }
 .show_detail_bill_body_line_1 {
   position: absolute;
-  top: 92px;
-  left: 60px;
+  top: 17px;
+  left: 53px;
   height: 4px;
-  width: 68%;
+  width: 69%;
   z-index: 0;
   background-color: #c8c8c8;
 }
