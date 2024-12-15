@@ -18,11 +18,4 @@
 .env.test.local
 .env.production.local
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 
-
-package-lock.json package.json public/adminkit/css/app.css public/adminkit/js/app.js public/adminkit/js/app.js.LICENSE.txt public/index.html public/manifest.json public/robots.txt src/App.js src/App.test.js src/components/Layout/AdminLayout/js/app.js src/components/Layout/AdminLayout/js/app.js.LICENSE.txt src/components/Layout/AdminLayout/scss/1-variables/_app.scss src/components/Layout/AdminLayout/scss/2-mixins/_button.scss src/components/Layout/AdminLayout/scss/3-components/_avatar.scss src/components/Layout/AdminLayout/scss/3-components/_buttons.scss src/components/Layout/AdminLayout/scss/3-components/_card.scss src/components/Layout/AdminLayout/scss/3-components/_chart.scss src/components/Layout/AdminLayout/scss/3-components/_content.scss src/components/Layout/AdminLayout/scss/3-components/_dropdown.scss src/components/Layout/AdminLayout/scss/3-components/_feather.scss src/components/Layout/AdminLayout/scss/3-components/_footer.scss src/components/Layout/AdminLayout/scss/3-components/_hamburger.scss src/components/Layout/AdminLayout/scss/3-components/_list-group.scss src/components/Layout/AdminLayout/scss/3-components/_main.scss src/components/Layout/AdminLayout/scss/3-components/_navbar.scss src/components/Layout/AdminLayout/scss/3-components/_reboot.scss src/components/Layout/AdminLayout/scss/3-components/_sidebar.scss src/components/Layout/AdminLayout/scss/3-components/_sizing.scss src/components/Layout/AdminLayout/scss/3-components/_stat.scss src/components/Layout/AdminLayout/scss/3-components/_tables.scss src/components/Layout/AdminLayout/scss/3-components/_type.scss src/components/Layout/AdminLayout/scss/3-components/_wrapper.scss src/components/Layout/AdminLayout/scss/4-utilities/_cursors.scss src/components/Layout/AdminLayout/scss/5-vendor/_flatpickr.scss src/components/Layout/AdminLayout/scss/5-vendor/_simplebar.scss src/components/Layout/AdminLayout/scss/app.scss src/index.js src/reportWebVitals.js src/setupTests.js
-.env.development .gitignore
-src/Asset/Vidoe/*.mp4
