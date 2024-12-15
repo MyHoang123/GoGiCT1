@@ -204,7 +204,7 @@ function IdElementProvider( {children} ) {
       }, [indexSlide]);
       useEffect(() => {
         if(cookies.get('AccessToken') !== undefined) {
-           const newSocket = io('http://localhost:8080',{
+           const newSocket = io('https://severgogi.onrender.com',{
             auth: {
                 token: cookies.get('AccessToken')
             }
