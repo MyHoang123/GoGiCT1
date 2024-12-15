@@ -2,14 +2,13 @@
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
 import io from 'socket.io-client';
-import { useLocation, useNavigate } from 'react-router-dom'
+import {  useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import classNames from "classnames/bind"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faMessage,faAngleDown,faMagnifyingGlass,faCaretDown, faCheckDouble,faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import {faSquareCaretRight as faSquareCaretRightRegular,faSquareCaretDown as faSquareCaretDownRegular,faPaperPlane as faPaperPlaneRegular, faSquareCaretLeft as faSquareCaretLeftRegular  } from '@fortawesome/free-regular-svg-icons'; 
 import styles from './Admin.module.scss'
-import logo from '../../../Asset/images/logo-gogi-house-X5 (1).png'
 import { Cookies } from 'react-cookie'
 import  './scss/app.scss';
 import {useCallback, useEffect, useRef, useState, createContext} from 'react';
@@ -17,12 +16,7 @@ export const ElementContextAdmin = createContext()
 const cx = classNames.bind(styles)
 function AdminLayout( {Children} ) {
     const cookies = new Cookies()
-    const location = useLocation()
     const navigate = useNavigate()
-    const [checklogin, setCheckLogin] = useState(false)
-    const [acc,setAcc] = useState('')
-    const [loading,setLoading] = useState(false)
-    const [pass,setPass] = useState('')
     const [chat,setChat] = useState(false)
     const [socket, setSocket] = useState(null)
     const [socketOrder, setSocketOrder] = useState(null)
@@ -38,7 +32,7 @@ function AdminLayout( {Children} ) {
     // Api
     async function getMessageList() {
         try {
-                const response = await axios.post('http://localhost:8080/api/v12/showallchat', {
+                const response = await axios.post('https://severgogi.onrender.com/api/v12/showallchat', {
                     token: cookies.get('AccessTokenAdmin')
                 });
                 if(response.data.massege === 'Thanh cong') {
@@ -166,7 +160,7 @@ function AdminLayout( {Children} ) {
     }
     useEffect(() => {
         if(cookies.get('AccessTokenAdmin') !== undefined) {
-           const newSocket = io('http://localhost:8080',{
+           const newSocket = io('https://severgogi.onrender.com',{
             auth: {
                 token: cookies.get('AccessTokenAdmin')
             }
@@ -279,7 +273,7 @@ function AdminLayout( {Children} ) {
 
                 </div> */}
                 <div className='Sidebar_container'>
-            <Sidebar />
+            <Sidebar cookies = {cookies}  />
                 </div>
             <div ref={mainRef} className='main'>
                 <Navbar socket={socket !== null ? socket : null} handleOnclick={handleAddClass} />
@@ -328,7 +322,7 @@ function AdminLayout( {Children} ) {
                             {listMessage.map((ls,index) => (
                                 <div onClick={() => handleClickUser(ls.Name,ls.IdSend,socket,listMessage)} key={index} style={activeUser.Name === ls.Name ? {background:'rgba(0, 0, 0, 0.08)'} : null} className={cx('massage_content_sidebar_list')}>
                                     <div className={cx('massage_content_sidebar_list-avt')}>
-                                        <img style={{borderRadius:'50%',width:'35px',height:'35px',objectFit:'cover'}} src={ls.Name.length === 10 ? `http://localhost:8080/api/v12/avtuser/${ls.Avt}`: `${ls.Avt}` }/>
+                                        <img style={{borderRadius:'50%',width:'35px',height:'35px',objectFit:'cover'}} src={ls.Name.length === 10 ? `https://severgogi.onrender.com/api/v12/avtuser/${ls.Avt}`: `${ls.Avt}` }/>
                                     </div>
                                     <div className={cx('massage_content_sidebar_list-user')}>
                                         <h2>{ls.Name}</h2>

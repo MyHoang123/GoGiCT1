@@ -56,14 +56,21 @@ const App = () => {
     async function showproductcate(IdType) {  
       try {
        const response = await axios.post('http://localhost:8080/api/v12/showproductcate', IdType);
-        for(let i in response.data.data) {
-          for(let j in detailProducts) {
-            if(response.data.data[i].Id === detailProducts[j].IdProduct) {
-              response.data.data.splice(i,1)
-            }
-          }
-        }
-        setProductSelects(response.data.data)
+       if(response.data.massege === 'Thanh cong') {
+         console.log(response)
+       const result = response.data.data.reduce((acc, curr) => {
+            return [...acc,...curr];
+          }, []);
+          // for(let i in result) {
+          //   for(let j in detailProducts) {
+          //     if(result[i].Id === detailProducts[j].IdProduct) {
+          //       result.splice(i,1)
+          //     }
+          //   }
+          // }
+          setProductSelects(result)
+       }
+
         // Thực hiện các hành động bổ sung tại đây sau khi sản phẩm được thêm thành công.
       } catch (error) {
         console.error('Lỗi khi thêm sản phẩm:', error);
@@ -105,6 +112,7 @@ const App = () => {
     const IdType = {
       IdType: e.target.value
     }
+    console.log(IdType)
     showproductcate(IdType)
     setType(e.target.value)
   }
@@ -178,6 +186,7 @@ const App = () => {
                                 </select>
                                 {productSelects !== null ? (
                                    <select className="input" onChange={(e) => setProductSelect(e.target.value)} required>
+                                     <option value='0'>Chọn sản phẩm</option>
                                    {productSelects.map((data, i)=> (
                                      <option key={i} value={data.Id}>{data.Name}</option>
                                  ))}

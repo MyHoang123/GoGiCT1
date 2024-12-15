@@ -17,15 +17,6 @@ const App = () => {
   const [productapi, setProductapi] = useState([])
   const [categori, setCategori] = useState([])
   const [categoriBackup, setCategoriBackup] = useState([])
-  const [categoriApi, setCategoriApi] = useState(1)
-  const [name, setName] = useState('')
-  const [price, setPrice] = useState()
-  const [dscip, setDscip] = useState('')
-  const [img, setImg] = useState('')
-  const [nameUpdate, setNameUpdate] = useState('')
-  const [priceUpdate, setPriceUpdate] = useState(1)
-  const [dscipUpdate, setDscipUpdate] = useState('')
-  const [imgUpdate, setImgUpdate] = useState('')
   const [IdUpdate, setIdUpdate] = useState('')
   const [ImgOld, setImgOld] = useState('')
 // Dev Express
@@ -47,7 +38,6 @@ const App = () => {
   const modelFormUpdate = useRef()
   const cartFile = useRef()
   const cartFileUpdate = useRef()
-  const inputFileImageUpdate = useRef()
   const dataGidRef = useRef()
   const notificeRef = useRef()
   //DevExpress  
@@ -85,7 +75,7 @@ const App = () => {
     const productFilter = Array.filter((product) => product.IdCategoris === i )
     return productFilter
       }
-  const cellRender = (data) => <div style={{backgroundImage: `url(http://localhost:8080/api/v12/showimgproduct/${data.value})`,width: '80px',height: '50px',backgroundPosition: 'center center',backgroundSize: 'cover' }} ></div>
+  const cellRender = (data) => <div style={{backgroundImage: `url(https://severgogi.onrender.com/api/v12/showimgproduct/${data.value})`,width: '80px',height: '50px',backgroundPosition: 'center center',backgroundSize: 'cover' }} ></div>
   const handleClickOpenModelCreate = () => {
     modelForm.current.classList.add('open')
   }
@@ -96,7 +86,7 @@ const App = () => {
     inputPrice.current[1].value = e.data.Price
     inputDsrip.current[1].value = e.data.Dsription
     inputIdCate.current[1].value = e.data.IdCategoris
-    cartFileUpdate.current.style.backgroundImage = `url(http://localhost:8080/api/v12/showimgproduct/${e.data.Img})`
+    cartFileUpdate.current.style.backgroundImage = `url(https://severgogi.onrender.com/api/v12/showimgproduct/${e.data.Img})`
     modelFormUpdate.current.classList.add('open')
   }
   const handleClickRemoveModel = useCallback((i) => {
@@ -119,9 +109,6 @@ const App = () => {
       cartFile.current.style.backgroundImage = `url()`
     }
   },[])
-  const handleSelect = (e) => {
-    setCategoriApi(e.target.value)
-  }
   const handleUploadFile = (e) => { 
     if(e.target.files[0] !== undefined) {
       const img = e.target.files[0]
@@ -131,7 +118,6 @@ const App = () => {
   const handleUploadFileUpdate = (e) => { 
     if(e.target.files[0] !== undefined) {
       const img = e.target.files[0]
-      setImgUpdate(img)
       cartFileUpdate.current.style.backgroundImage = `url(${URL.createObjectURL(img)})`
     }
   }
@@ -180,7 +166,7 @@ const App = () => {
     // Gửi dữ liệu lên API Create
     async function deleteproduct(product) {
       try {
-         await axios.post('http://localhost:8080/api/v12/deleteproduct',product)
+         await axios.post('https://severgogi.onrender.com/api/v12/deleteproduct',product)
       } catch (error) {
         alert('Đã xảy ra lõi')
       }
@@ -194,7 +180,7 @@ const App = () => {
       formData.append('Price', product.Price)
       formData.append('Dsription', product.Dsription)
       formData.append('IdCategoris', product.IdCategoris)
-      const response = await axios.post('http://localhost:8080/api/v12/createproduct', formData, {
+      const response = await axios.post('https://severgogi.onrender.com/api/v12/createproduct', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': cookies.get('AccessTokenAdmin')
@@ -216,7 +202,7 @@ const App = () => {
   async function updateProduct(product) {
     if(product.Img === null) {
       product.token = cookies.get('AccessTokenAdmin')
-     const respone = await axios.put('http://localhost:8080/api/v12/editproduct', product);
+     const respone = await axios.put('https://severgogi.onrender.com/api/v12/editproduct', product);
       if(respone.data.massege === 'Thanh cong') {
         notificeRef.current.classList.add('open')
         setProductapi(product)
@@ -236,7 +222,7 @@ const App = () => {
         formData.append('IdCategoris', product.IdCategoris)
         formData.append('Id', product.Id)
         formData.append('ImgOld', product.ImgOld)
-        const respone = await axios.put('http://localhost:8080/api/v12/updateproduct', formData, {
+        const respone = await axios.put('https://severgogi.onrender.com/api/v12/updateproduct', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             'Authorization': cookies.get('AccessTokenAdmin')
@@ -258,8 +244,8 @@ const App = () => {
   // API
   useEffect(() => {
     axios.all([
-      axios.get('http://localhost:8080/api/v12/showproductadmin'),
-      axios.get('http://localhost:8080/api/v12/showcategori')
+      axios.get('https://severgogi.onrender.com/api/v12/showproductadmin'),
+      axios.get('https://severgogi.onrender.com/api/v12/showcategori')
     ])
       .then(axios.spread((Product, Categori) => {
         const products = Product.data.data;

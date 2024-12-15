@@ -22,7 +22,7 @@ function PageNew() {
     const [imgPageNew, setImgPageNew] = useState([])
       useEffect(() => {
         axios.all([
-          axios.get('http://localhost:8080/api/v12/showimgpagenew'),
+          axios.get('https://severgogi.onrender.com/api/v12/showimgpagenew'),
         ])
           .then(axios.spread((ImgPageNew) => {
               setImgPageNew(ImgPageNew.data.data)
@@ -46,16 +46,16 @@ function PageNew() {
           className="mySwiper"
         >
           <SwiperSlide>
-                <img src={(imgPageNew.length !== 0 ? (`http://localhost:8080/api/v12/bodyimg/${imgPageNew[0].Img}`) : (null))} className="slide_swiper-img" />
+                <img src={(imgPageNew.length !== 0 ? (`https://severgogi.onrender.com/api/v12/bodyimg/${imgPageNew[0].Img}`) : (null))} className="slide_swiper-img" />
           </SwiperSlide>
           <SwiperSlide>
-                 <img src={(imgPageNew.length !== 0 ? (`http://localhost:8080/api/v12/bodyimg/${imgPageNew[1].Img}`) : (null))} className="slide_swiper-img" />
+                 <img src={(imgPageNew.length !== 0 ? (`https://severgogi.onrender.com/api/v12/bodyimg/${imgPageNew[1].Img}`) : (null))} className="slide_swiper-img" />
           </SwiperSlide>
           <SwiperSlide>
-                  <img src={(imgPageNew.length !== 0 ? (`http://localhost:8080/api/v12/bodyimg/${imgPageNew[2].Img}`) : (null))} className="slide_swiper-img" />
+                  <img src={(imgPageNew.length !== 0 ? (`https://severgogi.onrender.com/api/v12/bodyimg/${imgPageNew[2].Img}`) : (null))} className="slide_swiper-img" />
           </SwiperSlide>
           <SwiperSlide>
-                <img src={(imgPageNew.length !== 0 ? (`http://localhost:8080/api/v12/bodyimg/${imgPageNew[3].Img}`) : (null))} className="slide_swiper-img" />
+                <img src={(imgPageNew.length !== 0 ? (`https://severgogi.onrender.com/api/v12/bodyimg/${imgPageNew[3].Img}`) : (null))} className="slide_swiper-img" />
           </SwiperSlide>
         </Swiper>
       </>

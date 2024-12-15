@@ -1,6 +1,4 @@
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFacebookF } from '@fortawesome/free-brands-svg-icons';
 import styles from './LoginUser.module.scss'
 import classNames from "classnames/bind"
 const cx = classNames.bind(styles)

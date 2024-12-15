@@ -1,5 +1,5 @@
 
-
+import { memo } from 'react';
 import axios from 'axios'
 
 import { useContext, useEffect, useState } from "react";
@@ -11,7 +11,7 @@ function App() {
     const {youtubeRef} = useContext(IdElementContext)
     useEffect(() => {
         axios.all([
-            axios.get('http://localhost:8080/api/v12/showimgbody'),
+            axios.get('https://severgogi.onrender.com/api/v12/showimgbody'),
           ])
             .then(axios.spread((imgBody, ) => { 
               setBodyimg(imgBody.data.data)
@@ -29,14 +29,14 @@ function App() {
             </div>
             <div className={'youtube_img'}>
                 <div ref={(e) => youtubeRef.current[1] = e} className={'youtube_img-item'}>
-                    <img style={{filter: 'brightness(80%)'}} src={(bodyimg.length !== 0 ? (`http://localhost:8080/api/v12/bodyimg/${bodyimg[0].Img}`) : (null))}/>
+                    <img style={{filter: 'brightness(80%)'}} src={(bodyimg.length !== 0 ? (`https://severgogi.onrender.com/api/v12/bodyimg/${bodyimg[0].Img}`) : (null))}/>
                     <div className={'overflow'}>
                         <h1>Đại Tiệc Nướng Lẩu Hàn Quốc</h1>
                     </div>
                 </div>
                 <div  ref={(e) => youtubeRef.current[2] = e}  className={'youtube_img-item-f'}>
-                    <img className={'youtube_img-item-img'} src={(bodyimg.length !== 0 ? (`http://localhost:8080/api/v12/bodyimg/${bodyimg[1].Img}`) : (null))} />
-                    <img className={'youtube_img-item-img'} src={(bodyimg.length !== 0 ? (`http://localhost:8080/api/v12/bodyimg/${bodyimg[2].Img}`) : (null))} />
+                    <img className={'youtube_img-item-img'} src={(bodyimg.length !== 0 ? (`https://severgogi.onrender.com/api/v12/bodyimg/${bodyimg[1].Img}`) : (null))} />
+                    <img className={'youtube_img-item-img'} src={(bodyimg.length !== 0 ? (`https://severgogi.onrender.com/api/v12/bodyimg/${bodyimg[2].Img}`) : (null))} />
                 </div>
             </div>
         </div>
@@ -44,4 +44,4 @@ function App() {
      );
 }
 
-export default App;
+export default memo(App);

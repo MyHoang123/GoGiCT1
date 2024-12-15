@@ -1,24 +1,22 @@
 import * as Icon from 'react-feather';
 import {useRef, useState,useEffect, useCallback, memo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
-function Sidebar() {
+function Sidebar({cookies}) {
+    const navigate = useNavigate()
     const [check, setCheck] = useState(0);
     // const [showScrollbar, setShowScrollbar] = useState(false);
     const sideBar = useRef()
     const sideBarActive = useRef([])
 
-      const handleButtonClick = useCallback((id) => {
-        for(let i = 0; i < sideBarActive.current.length; i++) {
-            if(sideBarActive.current[i] !==  sideBarActive.current[id]){
-                sideBarActive.current[i].classList.remove('active')
-            }
-        }
-         sideBarActive.current[id].classList.add('active')
+      const handleClickLogOut = useCallback(() => {
+        cookies.remove('AccessTokenAdmin', { path: '/' })
+        navigate('/')
+        setCheck(14)
       },[])
+      console.log(cookies)
     return (  
-
         <nav ref={sideBar} id="sidebar" className="sidebar js-sidebar" 
             style={{
                 overflowY:  'scroll'
@@ -131,8 +129,12 @@ function Sidebar() {
                             <span className="align-middle">Voucher</span>  
                         </Link>                                
                 </li>
+                <li  className='sidebar-item'>
+                    <button onClick={handleClickLogOut} className="sidebar-link">
+                            <span className="align-middle">Đăng xuất</span>  
+                        </button>                                
+                </li>
             </ul>
-
             <div className="sidebar-cta">
                 <div className="sidebar-cta-content">
                     <strong className="d-inline-block mb-2">Upgrade to Pro</strong>

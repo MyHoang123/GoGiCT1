@@ -11,7 +11,7 @@ import MOMO from '../../Asset/images/MOMO.png'
 import HERE from '../../Asset/images/HEREPAY.jpg'
 // Scss
 import { Link , useNavigate} from 'react-router-dom';
-import { useEffect, useRef, useState,useMemo,useCallback, useContext } from 'react';
+import { useEffect, useRef, useState,useMemo, useContext } from 'react';
 import classNames from "classnames/bind"
 import styles from './CardMobile.module.scss'
 const cx = classNames.bind(styles)
@@ -39,7 +39,7 @@ const noteRef = useRef([])
 
 async function CreateBill(Bill) {
     try {
-        const response = await axios.post('http://localhost:8080/api/v12/createbill', Bill)
+        const response = await axios.post('https://severgogi.onrender.com/api/v12/createbill', Bill)
         if(response.data.massege === 'Thanh cong') {
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
@@ -97,7 +97,7 @@ const handleClickNext = (Id,i,Price,CheckCard) => {
         setCheckCard((prev) => [...prev,{Id:Id,Price:Price}])
     }
 }
-const handleClickChangCard = useCallback((Id,Price,CheckCard) => {
+const handleClickChangCard = (Id,Price,CheckCard) => {
     const productCard = CheckCard.filter((card) => card.Id === Id)
     if(productCard.length > 0) {
         setCheckCard(prev => prev.filter((card) => card.Id !== Id))
@@ -105,12 +105,12 @@ const handleClickChangCard = useCallback((Id,Price,CheckCard) => {
     else {
         setCheckCard((prev) => [...prev,{Id:Id,Price:Price}])
     }
-},[])
+}
 const handleClickPrev = async (Id,i,Price,CheckCard) => {
     let quantity = parseInt(qualityRef.current[i].innerText)
     if(quantity <= 1) {
         try {
-            const response = await axios.post('http://localhost:8080/api/v12/deletecard', {IdProduct: Id,token: cookies.get('AccessToken')})   
+            const response = await axios.post('https://severgogi.onrender.com/api/v12/deletecard', {IdProduct: Id,token: cookies.get('AccessToken')})   
             if(response.data.massege === 'Thanh cong') {
                 setCardProduct(prev => prev.filter(product => product.Id !== Id))
             }
@@ -288,7 +288,7 @@ const handleClickCheckVoucher = async () => {
           }
           else {
             try {
-                const response =  await axios.post('http://localhost:8080/api/v12/checkvoucher', {voucher: value,token: cookies.get('AccessToken')})
+                const response =  await axios.post('https://severgogi.onrender.com/api/v12/checkvoucher', {voucher: value,token: cookies.get('AccessToken')})
                 if(response.data.massege === "voucher khong ton tai") {
                   setVoucher(0)
                   return `Voucher không hợp lệ !`
@@ -311,9 +311,7 @@ const handleClickCheckVoucher = async () => {
 useEffect(() => {
     if(cookies.get('AccessToken') !== undefined) {
         axios.all([
-            axios.post('http://localhost:8080/api/v12/showcard',{
-                token: cookies.get('AccessToken')
-            }),
+            axios.get(`https://severgogi.onrender.com/api/v12/showcard?token=${cookies.get('AccessToken')}`),
           ])
             .then(axios.spread((Card,) => {
                 if(Card.data.massege === 'Thanh Cong') {
@@ -392,7 +390,7 @@ const totalPay = useMemo(() => {
                         <label htmlFor={`CheckBox_Product_card_${index}`} className={cx('Product_card-item')}>
                             <div onClick={() => handleClickChangCard(product.Id,product.Price,checkCard)} className={cx('product_card-item_left')}>
                                 <div className={cx('Product_card-item_img')}>
-                                     <img src={`http://localhost:8080/api/v12/showimgproduct/${product.Img}`}  style={{width: '100%', height: '100%',objectFit: 'cover'}} />
+                                     <img src={`https://severgogi.onrender.com/api/v12/showimgproduct/${product.Img}`}  style={{width: '100%', height: '100%',objectFit: 'cover'}} />
                                 </div>
                                 <div className={cx('Product_card-item_name')}>
                                     <span style={{fontSize: '14px',color:'#333'}}>{product.Name}</span>

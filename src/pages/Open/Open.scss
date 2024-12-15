@@ -130,7 +130,7 @@
 }
 .Open_btn_save-item {
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
     width: 30%;
     height: 100%;
 button {
@@ -224,6 +224,7 @@ button {
    }
    .card-img img {
     object-fit: cover;
+    height: 100%;
    }
    .card-info {
     padding-top: 10%;

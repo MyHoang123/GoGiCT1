@@ -25,7 +25,7 @@ function AppMobile( {Children} ) {
     const modalHello = useRef()
     async function createComment(comment) {
         try {
-           const response = await axios.post('http://localhost:8080/api/v12/createcomment', comment)
+           const response = await axios.post('https://severgogi.onrender.com/api/v12/createcomment', comment)
            if(response.data.massege === 'Thanh cong') {
             const newArr = [...bills]
             for(let i in newArr) {
@@ -83,7 +83,7 @@ function AppMobile( {Children} ) {
     useEffect(() => {
         if(cookies.get('AccessToken') !== undefined) {
             axios.all([
-                axios.post('http://localhost:8080/api/v12/showlengthcard',{token: cookies.get('AccessToken')}),
+                axios.post('https://severgogi.onrender.com/api/v12/showlengthcard',{token: cookies.get('AccessToken')}),
               ])
                 .then(axios.spread((lengthCard) => {
                         setAmount(lengthCard.data.data)
@@ -95,7 +95,7 @@ function AppMobile( {Children} ) {
     },[])
     useEffect(() => {
         if(cookies.get('AccessToken') !== undefined) {
-           const newSocket = io('http://localhost:8080',{
+           const newSocket = io('https://severgogi.onrender.com',{
             auth: {
                 token: cookies.get('AccessToken')
             }
@@ -145,11 +145,11 @@ function AppMobile( {Children} ) {
                                             <div className={cx('Purchase_content_body_container_body')}>
                                                 <div className={cx('Purchase_content_body_container_body-left')}>
                                                     <div className={cx('Purchase_content_body_container_body-left-img')}>
-                                                        <img src={`http://localhost:8080/api/v12/showimgproduct/${product.Img}`}/>
+                                                        <img src={`https://severgogi.onrender.com/api/v12/showimgproduct/${product.Img}`}/>
                                                     </div>
                                                     <div className={cx('Purchase_content_body_container_body-left-content')}>
                                                         <h3>{product.Name}</h3>
-                                                        <h3 style={{color: 'rgba(0, 0, 0, .54)'}}>Phân loại: Thịt bò</h3>
+                                                        <h3 style={{color: 'rgba(0, 0, 0, .54)'}}>Phân loại: {product.NameCate}</h3>
                                                         <h3 style={{fontSize:'11px'}}>x{product.sl}</h3>
                                                     </div>
                                                 </div>

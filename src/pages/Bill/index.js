@@ -5,83 +5,54 @@ import { Cookies } from 'react-cookie'
 import React, {useState, useEffect,useRef,useContext,useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import './Bill.scss'
-import DataGrid, {Scrolling, Pager, Column, Editing, Paging,Lookup,} from 'devextreme-react/data-grid';
+import DataGrid, {Scrolling, Pager, Column, Editing, Paging} from 'devextreme-react/data-grid';
 import { ElementContextAdmin } from '../../components/Layout/AdminLayout/index'
 const App = () => {
   const cookies = new Cookies()
   const { Bill } = useParams()
 // State
   const [billApi, setBillApi] = useState({})
+
   const [bill, setBill] = useState([])
 	const [idNoti,setIdnoti] = useState(1)
+	const [StatusPay,setStatusPay] = useState(0)
   const [products, setProducts] = useState([])
   const { socket } = useContext(ElementContextAdmin)
 // Ref
 const modelBill = useRef()
-  // Dev Express
     // Gửi dữ liệu lên API
-    async function updateBill(Bill) {
-        try {
-        const response =  await axios.put('http://localhost:8080/api/v12/updatebill', Bill);
-            if(response.data.massege === 'Thanh cong') {
-              const newArr = [...bill]
-              for(let i in newArr) {
-                if(newArr[i].Id === Bill.Id) {
-                  newArr[i].Status = Bill.Status
-                }
-              }
-              setBill(newArr)
-              if(Bill.Status === 'Đã Nhận') {
-                socket.emit('confirm', response.data.data,billApi.IdAcc)
-              }else if (Bill.Status === 'Đang Giao') {
-                socket.emit('ship',Bill.IdAcc)
-              }
-            }
-        } catch (error) {
-          console.error('Lỗi khi thêm sản phẩm:', error);
-          // Xử lý lỗi tại đây.
-        }
+    async function CheckPayStatus(IdPay) {
+      try {
+      const response =  await axios.post('https://severgogi.onrender.com/api/v12/CheckPayOrder', {app_trans_id:IdPay});
+      if(response.data.result.return_code === 1) {
+        setStatusPay(1)
+      }else {
+        setStatusPay(2)
       }
-      async function getProduct(product) {
-        const Id = product.reduce((acc,curr) => {
-          return [...acc,curr.Id]
-      },[])
-      const data = {IdProduct:Id,token:cookies.get('AccessTokenAdmin')}
-        try {
-        const response =  await axios.post('http://localhost:8080/api/v12/showproductbill', data);
-        const newData = []
-            for(let i in product) {
-                const PriceProduct = response.data.data.find((price => price.Id === product[i].Id))
-                const newArr = PriceProduct
-                const sl = product[i].Price / PriceProduct.Price
-                newArr.Price = product[i].Price
-                newArr.sl = sl
-                newArr.Note = product[i].Note !== undefined ? product[i].Note : null
-                newData.push(newArr)
-            }           
-            setProducts(newData)
-            modelBill.current.classList.add('open')
-        } catch (error) {
-          console.error('Lỗi khi thêm sản phẩm:', error);
-          // Xử lý lỗi tại đây.
-        }
+      } catch (error) {
+        console.error('Lỗi khi thêm sản phẩm:', error);
+        // Xử lý lỗi tại đây.
       }
-    // Dev Express
+    }
     useEffect(() => {})
     const customizeColumns = useCallback((columns) => {
       columns[0].width = 70;
     },[])
     // Các hàm xử lý
     const handleClickShowDetail = useCallback((e) => {
-      console.log(JSON.parse(e.data.Data))
+      console.log(e)
       if(e) {
-        setBillApi({IdBill:e.data.Id,Note:e.data.Note,IdAcc:e.data.IdAcc})
+        setBillApi({IdBill:e.data.Id,Note:e.data.Note,IdAcc:e.data.IdAcc,StatusPay: e.data.StatusPay})
         setProducts(JSON.parse(e.data.Data))
         modelBill.current.classList.add('open')
+        if(e.data.PayMent !== "") {
+          CheckPayStatus(e.data.PayMent)
+        }
       }
     },[])
     const handleClickRemoveDetailBill = useCallback(() => {
         modelBill.current.classList.remove('open')
+        setStatusPay(0)
     },[])
     const handleUpdateBill = (Id,IdAcc,data,Status) => {
       if(Status === 3) {
@@ -142,9 +113,10 @@ const modelBill = useRef()
         token: cookies.get('AccessTokenAdmin')
       }
       axios.all([
-        axios.post('http://localhost:8080/api/v12/showallbill',Account),
+        axios.post('https://severgogi.onrender.com/api/v12/showallbill',Account),
       ])
         .then(axios.spread((Bill) => {
+          console.log(Bill)
           setBill(Bill.data.data)
         }))
         .catch (err => {
@@ -162,44 +134,44 @@ const modelBill = useRef()
         <div onClick={handleClickRemoveDetailBill} ref={modelBill} className='modal_shodetail-bill'>
             <div onClick={e => e.stopPropagation()} className='detailbill'>
               <h2 className='detailbill_header'>Thông tin đơn hàng</h2>
-                <div className='IdBill_content'>Mã đơn hàng: <b>KTPM0120</b></div>
-                <div className='IdBill_content'><b>Thanh toán khi nhận hàng</b></div>
+                <div className='IdBill_content'>Mã đơn hàng: <b>KTPM0120{billApi.IdBill}</b></div>
+                <div className='IdBill_content'><b>{StatusPay === 0 ? 'Thanh toán khi nhận hàng' : StatusPay === 1 ? 'Đã thanh toán' : 'Chờ thanh toán'}</b></div>
                 <div className='bill_content'>           
-                                        {products.map((pd,index) => (
-                                                <div key={index} className='bill'>                                      
-                                                    <div  className='bill_content-item'>
-                                                        <div className='bill_content-item-img'>
-                                                            <img style={{width: '100%', height: '100%',objectFit: 'cover', zIndex: '100'}} src={`http://localhost:8080/api/v12/showimgproduct/${pd.Img}`} />
-                                                        </div>
-                                                        <div className='bill_content-item-product'>  
-                                                            <div className='Information'>
-                                                                <h2>{pd.Name}</h2>
-                                                                <h3>Phân Loại Size: M</h3>
-                                                                <span>x{pd.sl}</span>
-                                                            </div>
-                                                            <div className='price'>
-                                                                <span>{pd.Price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '₫'}</span>
-                                                            </div>                                   
-                                                        </div>             
-                                                    </div>
-                                                    {pd.Note !== null ? (
-                                                       <div className='note_bill'><FontAwesomeIcon style={{marginRight:'4px',width:'12px'}} icon={faPen} />{pd.Note}</div>
-                                                    ) : null }
-                                                </div>
-                                        ))}
-                                </div>
-                                <div className='button_bill'>
-                                    <div className='note_bill_content'>
-                                  {billApi.Note !== '' ? (
-                                      <p className='note_bill_content-item'>{billApi.Note}</p>
-                                  ) : null}
+                        {products.map((pd,index) => (
+                                <div key={index} className='bill'>                                      
+                                    <div  className='bill_content-item'>
+                                        <div className='bill_content-item-img'>
+                                            <img style={{width: '100%', height: '100%',objectFit: 'cover', zIndex: '100'}} src={`https://severgogi.onrender.com/api/v12/showimgproduct/${pd.Img}`} />
+                                        </div>
+                                        <div className='bill_content-item-product'>  
+                                            <div className='Information'>
+                                                <h2>{pd.Name}</h2>
+                                                <h3>Phân Loại: {pd.NameCate}</h3>
+                                                <span>x{pd.sl}</span>
+                                            </div>
+                                            <div className='price'>
+                                                <span>{pd.Price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '₫'}</span>
+                                            </div>                                   
+                                        </div>             
                                     </div>
-                                    <div className='button_check'>
-                                        <button  onClick={() => handleUpdateBill(billApi.IdBill,billApi.IdAcc,null,1)} className="button">
-                                          Xác nhận đơn hàng
-                                        </button>
-                                    </div>
+                                    {pd.Note !== undefined ? (
+                                        <div className='note_bill'><FontAwesomeIcon style={{marginRight:'4px',width:'12px'}} icon={faPen} />{pd.Note}</div>
+                                    ) : null }
                                 </div>
+                        ))}
+                </div>
+                <div className='button_bill'>
+                    <div className='note_bill_content'>
+                  {billApi.Note !== '' ? (
+                      <p className='note_bill_content-item'>{billApi.Note}</p>
+                  ) : null}
+                    </div>
+                    <div className='button_check'>
+                        <button  onClick={() => handleUpdateBill(billApi.IdBill,billApi.IdAcc,null,1)} className="button">
+                          Xác nhận đơn hàng
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     <React.Fragment>
@@ -257,7 +229,7 @@ const modelBill = useRef()
             <>
             <div className='button_container'>
                 <div className='showdetail'><button onClick={() => handleClickShowDetail(data)} className="button">Xem chi tiết</button></div>
-                {(data.data.Status === 0 ? (<div className='delete'><button className="button">Từ chối</button></div>) : (
+                {(data.data.Status === 0 ? (<div className='delete'><button onClick={() => handleUpdateBill(data.data.Id,data.data.IdAcc,data.data.Data,5)} className="button">Từ chối</button></div>) : (
                   data.data.Status === 1 ? (<div onClick={() => handleUpdateBill(data.data.Id,data.data.IdAcc,null,2)} className='ship'><button className="button">Giao Hàng</button></div>) : 
                   (data.data.Status === 2 ? (<div onClick={() => handleUpdateBill(data.data.Id,data.data.IdAcc,data.data.Data,3)} className='ship'><button className="button">Đã Xong</button></div>) : null)
                 ))}

@@ -19,12 +19,13 @@ function App() {
     const Line = useRef()
     const LastItemRef = useRef()
     // 
-    const { billUpdate, handleClickOpenCmtDetai } = useContext(ContextPurchase)
+    const { billUpdate, handleClickShowComment } = useContext(ContextPurchase)
 // API
     // Gửi dữ liệu lên API
     async function CheckPayStatus(IdPay) {
         try {
-        const response =  await axios.post('http://localhost:8080/api/v12/CheckPayOrder', {app_trans_id:IdPay});
+        const response =  await axios.post('https://severgogi.onrender.com/api/v12/CheckPayOrder', {app_trans_id:IdPay});
+        console.log(response)
         if(response.data.result.return_code === 1) {
             const newArr = [...bill]
             newArr.StatusPay = 1
@@ -45,7 +46,7 @@ useEffect(() => {
             const newArr = [...bill]
             newArr[0].Status = billUpdate.Status
             setBill(newArr)
-            Line.current.style.width = billUpdate.Status === 1 ? '20%' : billUpdate.Status === 2 ? '40%' : billUpdate.Status === 3 ? '60%' : billUpdate.Status === 4 ? '80%' : ''
+            Line.current.style.width = billUpdate.Status === 1 ? '20%' : billUpdate.Status === 2 ? '40%' : billUpdate.Status === 3 ? '60%' : billUpdate.Status === 4 ? '80%' : bill.Status === 5 ? '0%' : null
             if(billUpdate.Status === 3){
                 LastItemRef.current.style.cursor = 'pointer'
             }
@@ -59,7 +60,7 @@ useEffect(() => {
 useEffect(() => {
     if(cookie.get('AccessToken') !== undefined) {
         axios.all([
-          axios.post('http://localhost:8080/api/v12/getbill',{
+          axios.post('https://severgogi.onrender.com/api/v12/getbill',{
             IdBill: IdBill,
             token: cookie.get('AccessToken')
           }),
@@ -78,9 +79,13 @@ useEffect(() => {
             }else if (Bill.data.data[0].Status === 3){
                 Line.current.style.width = '60%'
                 LastItemRef.current.style.cursor = 'pointer'
-            }else {
+            }else if (Bill.data.data[0].Status === 4){
                 Line.current.style.width = '80%'
+                LastItemRef.current.style.cursor = 'pointer'
                 LastItemRef.current.classList.add(cx('open'))
+            }else if (Bill.data.data[0].Status === 5){
+                Line.current.style.width = '0%'
+                LastItemRef.current.style.cursor = 'pointer'
             }
           }))
           .catch (err => {
@@ -119,7 +124,7 @@ useEffect(() => {
                                         bill[0].Status === 3 ? (
                                                <h3 style={{marginBottom:'0', color:'#990000'}}>Đã Nhận</h3>
                                         ) : (
-                                            <h3 style={{marginBottom:'0', color:'#990000'}}>Đánh giá</h3>
+                                            bill[0].Status === 4 ? (<h3 style={{marginBottom:'0', color:'#990000'}}>Đánh giá</h3>) : (<h3 style={{marginBottom:'0', color:'#990000'}}>Đã hủy</h3>)
                                         )
                                     )
                                 )
@@ -136,7 +141,7 @@ useEffect(() => {
                         </div>
                         <div className={cx('show_detail_bill_body_status-item_title')}>
                             <h2 style={{marginBottom:'0'}}>Đơn Hàng Đã Đặt</h2>
-                            <h3 style={{textAlign:'center',color: 'rgba(0, 0, 0, .26)',marginBottom:'0'}}>20/11/2024</h3>
+                            <h3 style={{textAlign:'center',color: 'rgba(0, 0, 0, .26)',marginBottom:'0'}}>{bill.length > 0 ? bill[0].DateOnly : null}</h3>
                         </div>
                     </div>
                     <div className={cx('show_detail_bill_body_status-item')}>
@@ -153,7 +158,7 @@ useEffect(() => {
                         </div>
                         <div className={cx('show_detail_bill_body_status-item_title')}>
                             <h2>Chờ Chế Biến</h2>
-                            <h3 style={{textAlign:'center',color: 'rgba(0, 0, 0, .26)'}}>20/11/2024</h3>
+                            <h3 style={{textAlign:'center',color: 'rgba(0, 0, 0, .26)'}}>{bill.length > 0 ? bill[0].DateOnly : null}</h3>
                         </div>
                     </div>
                     <div className={cx('show_detail_bill_body_status-item')}>
@@ -267,7 +272,7 @@ useEffect(() => {
                         </div>
                         <div className={cx('show_detail_bill_body_status-item_title')}>
                             <h2>Đang Giao</h2>
-                            <h3 style={{textAlign:'center',color: 'rgba(0, 0, 0, .26)'}}>20/11/2024</h3>
+                            <h3 style={{textAlign:'center',color: 'rgba(0, 0, 0, .26)'}}>{bill.length > 0 ? bill[0].DateOnly : null}</h3>
                         </div>
                         
                     </div>
@@ -279,16 +284,16 @@ useEffect(() => {
                         </div>
                         <div className={cx('show_detail_bill_body_status-item_title')}>
                             <h2>Đã Nhận Hàng</h2>
-                            <h3 style={{textAlign:'center',color: 'rgba(0, 0, 0, .26)'}}>20/11/2024</h3>
+                            <h3 style={{textAlign:'center',color: 'rgba(0, 0, 0, .26)'}}>{bill.length > 0 ? bill[0].DateOnly : null}</h3>
                         </div>
                     </div>
-                    <div onClick={() => handleClickOpenCmtDetai(bill[0].Id)} className={cx('show_detail_bill_body_status-item')}>
+                    <div onClick={bill.length > 0 ? bill[0].Status === 3 ? () => handleClickShowComment(bill[0].Id,bill[0].Data) : null : null} className={cx('show_detail_bill_body_status-item')}>
                         <div ref={LastItemRef} className={cx('show_detail_bill_body_status-item-icon')}>
                             <FontAwesomeIcon style={{width:'30px',height:'30px'}} icon={faStarRerular} />
                         </div>
                         <div className={cx('show_detail_bill_body_status-item_title')}>
                             <h2>Đánh giá</h2>
-                            <h3 style={{textAlign:'center',color: 'rgba(0, 0, 0, .26)'}}>20/11/2024</h3>
+                            <h3 style={{textAlign:'center',color: 'rgba(0, 0, 0, .26)'}}>{bill.length > 0 ? bill[0].DateOnly : null}</h3>
                         </div>
                     </div>
                 </div>

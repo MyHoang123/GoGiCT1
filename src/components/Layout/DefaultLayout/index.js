@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom'
 import Body from "./Body"
 import Header1 from "./Head"
 import Footer from "./Footer"
-import { useCallback, useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
 
 const cx = classNames.bind(styles)
 
@@ -22,6 +22,7 @@ function DefaultLayout() {
         }
         const handleLoad = () => {
             setLoading(true)
+            document.body.style.overflow = 'auto'
             sessionStorage.setItem('load',true)
           };
           window.addEventListener('load', handleLoad);

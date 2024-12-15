@@ -15,7 +15,7 @@ function App() {
     const cookies = new Cookies()
     async function login(Account) {
         try {
-                const response = await axios.post('http://localhost:5000/api/v12/loginadmin', Account);
+                const response = await axios.post('https://severgogi.onrender.com/api/v12/loginadmin', Account);
                 if(response.data.massege === 'that bai') {
                     alert('Đăng nhập thất bại')
                 }
@@ -56,15 +56,6 @@ function App() {
                                 </div>
                             </div>
                             <div className={cx('header_body_card-right')}>
-                                {/* <div className={cx('header_body_card-right_content')}>
-                                            <div className={cx('header_body-card-right_input')}>
-                                                <input onChange={(e) => handleChangeSearch(e.target.value)} style={{width:'100%',height:'100%'}} type='text' placeholder='Tìm kiếm' />
-                                                <FontAwesomeIcon style={{margin:'auto',fontSize:'20px',position:'absolute',right:'4px',top:'8px'}} className={loadSearch ? cx('search_load_card_open') : cx('search_load_card')} icon={faSpinner} />
-                                            </div>
-                                            <div className={cx('header_body_card-right_icon')}>
-                                                    <FontAwesomeIcon icon={faMagnifyingGlass} />
-                                            </div>
-                                    </div> */}
                             </div>
                         </div>
             </div>

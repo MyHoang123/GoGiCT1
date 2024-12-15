@@ -1,7 +1,8 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect, useContext } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
+import {ElementContextAdmin} from '../../components/Layout/AdminLayout'
 import { DndContext, DragOverlay, closestCenter } from '@dnd-kit/core';
 import { SortableContext, arrayMove, rectIntersection } from '@dnd-kit/sortable';
 import Swal from 'sweetalert2/dist/sweetalert2.js'
@@ -17,14 +18,14 @@ function DragAndDropExample() {
   const [dropZoneItems, setDropZoneItems] = useState([])
   const [categoris, setCategoris] = useState([])
   const [activeItem, setActiveItem] = useState(null)
-
-
+  const [status,setStatus] = useState(false)
+  const {cookies} = useContext(ElementContextAdmin)
 
  // Gửi dữ liệu lên API
  async function updataVisible(product) {
   try {
-    const response =  await axios.put('http://localhost:8080/api/v12/updatevisible', product);
-    if(response.data.massege === "Success") {
+    const response =  await axios.put('https://severgogi.onrender.com/api/v12/updatevisible', product);
+    if(response.data.massege === "Thanh cong") {
       Swal.fire({
         position: "top-end",
         icon: "success",
@@ -81,12 +82,32 @@ function DragAndDropExample() {
     }
     setActiveItem(null);
   }
-  const handleClickEdit = (e) => {
-    if(e.target.checked === true) {
-      setCheckEdit(true)
+  const handleClickEdit = async (e) => {
+    if(e.target.checked) {
+      try {
+        const response = await axios.post('https://severgogi.onrender.com/api/v12/onOpen',{status: 1, token: cookies.get('AccessTokenAdmin')});
+        if(response.data.massege === "Thanh cong") {
+          setStatus(true)
+        }
+        else {
+          setStatus(false)
+        }
+    } catch (error) {
+        alert('Có lõi xảy ra vui lòng thử lại')
+    }
     }
     else {
-      setCheckEdit(false)
+      try {
+        const response = await axios.post('https://severgogi.onrender.com/api/v12/onOpen',{status: 0, token: cookies.get('AccessTokenAdmin')});
+        if(response.data.massege === "Thanh cong") {
+          setStatus(false)
+        }
+        else {
+          setStatus(true)
+        }
+    } catch (error) {
+        alert('Có lõi xảy ra vui lòng thử lại')
+    }
     }
   }
   const handleClickFilterCate = (id) => {
@@ -121,19 +142,23 @@ function DragAndDropExample() {
   }
   const handleClickSaveProduct = () => {
       if(dropZoneItems.length > 0) {
-        const result = dropZoneItems.reduce((acc,curr) => {
+        const resultV = dropZoneItems.reduce((acc,curr) => {
           return [...acc,curr.Id]
         },[])
-        const products = {
-          IdProduct: result,
+        const resultH = products.reduce((acc,curr) => {
+          return [...acc,curr.Id]
+        },[])
+        const productsn = {
+          IdProductH: resultH,
+          IdProductV: resultV,
         }
-        updataVisible(products)
+        updataVisible(productsn)
       }
   }
   useEffect(() => {
     axios.all([
-      axios.get('http://localhost:8080/api/v12/showproductadmin'),
-      axios.get('http://localhost:8080/api/v12/showcategori'),
+      axios.get('https://severgogi.onrender.com/api/v12/showproductadmin'),
+      axios.get('https://severgogi.onrender.com/api/v12/showcategori'),
     ])
       .then(axios.spread((product,categori) => {
         const dropItem = []
@@ -154,6 +179,24 @@ function DragAndDropExample() {
           console.error()
       })
   }, [])
+  useEffect(() => {
+    axios.all([
+        axios.post('https://severgogi.onrender.com/api/v12/checkstatus',{
+            token: cookies.get('AccessTokenAdmin')
+        }),
+    ])
+        .then(axios.spread((checkStatus) => {
+            if(checkStatus.data.massege === 'Thanh cong') {
+              setStatus(true)
+            }
+            else {
+              setStatus(false)
+            }
+        }))
+        .catch (err => {
+            console.error()
+        })
+},[])
   return (
     <DndContext
       onDragStart={handleDragStart}
@@ -167,12 +210,12 @@ function DragAndDropExample() {
           </div>
           <div className='button_edit-slider'>
             <label className="switch">
-              <input onChange={e => handleClickEdit(e)} type="checkbox" className="input"/>
+              <input checked={status} onChange={e => handleClickEdit(e)} type="checkbox" className="input"/>
               <span className="slider_checkedit"></span>
             </label>
           </div>
           <div className='btn_checkin-status'>
-            <span>{checkEdit ? ('Bật') : ('Tắt')}</span>
+            {/* <span>{checkEdit ? ('Bật') : ('Tắt')}</span> */}
           </div>
         </div>
       </div>
@@ -191,7 +234,7 @@ function DragAndDropExample() {
               </div>
           </div>
           <div className='Open-container-header-item'>
-              <h1>Trưng bài</h1>
+              <h1>Trưng bày</h1>
               <div className='Open-container_categorilist'>
                 <div className="radio-inputs">
                 {categoris.map((cate,i) => (

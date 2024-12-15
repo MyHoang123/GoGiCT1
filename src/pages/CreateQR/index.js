@@ -14,7 +14,7 @@ function App() {
     const qrContent = useRef()
     async function createQR(IdTable,IdType) {
       try {
-         const response = await axios.post('http://localhost:8080/api/v12/createqr', {IdTable:IdTable,IdType: IdType,token:cookies.get('AccessTokenAdmin')})
+         const response = await axios.post('https://severgogi.onrender.com/api/v12/createqr', {IdTable:IdTable,IdType: IdType,token:cookies.get('AccessTokenAdmin')})
          if(response.data.massege === 'Thanh cong') {
             const urln = `${process.env.REACT_APP_IP_CLIENT}/order?token=${response.data.token}`
             setUrl(urln)
@@ -26,8 +26,8 @@ function App() {
   }
     useEffect(() => {
       axios.all([
-        axios.get('http://localhost:8080/api/v12/showtype'),
-        axios.get('http://localhost:8080/api/v12/showtableqr'),
+        axios.get('https://severgogi.onrender.com/api/v12/showtype'),
+        axios.get('https://severgogi.onrender.com/api/v12/showtableqr'),
       ])
         .then(axios.spread((Type,Table,) => {
           setTypes(Type.data.data)
@@ -53,14 +53,15 @@ function App() {
         <select className='createqr_content-type' onChange={e => setUrlType(e.target.value)}>
           <option>Chọn Gói</option>
           {types.map((type,i) => (
-            (type.Name === '' ? null : (
+            (type.Name === '' ? 
+              (
+                <option value={type.Id} key={i}>Gọi món</option>
+              ) : (
               <option value={type.Id} key={i}>{type.Name}</option>
             ))
           ))}
-              <option value='All'>Gọi Món</option>
         </select>
         <select onChange={e => setUrlTable(e.target.value)} className='createqr_content-table'>
-          <option>Chọn Bàn</option>
           {tables.map((table,i) => (
             <option value={table.Id} key={i}>{table.Name}</option>
           ))}

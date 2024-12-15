@@ -30,9 +30,9 @@ function Purchase( {Children} ) {
     const starCmt = useRef([])
     const checked = useRef([])
 
-    async function createComment(comment) {
+    async function createComment(Comment,i) {
         try {
-           const response = await axios.post('http://localhost:8080/api/v12/createcomment', comment)
+           const response = await axios.post('https://severgogi.onrender.com/api/v12/createcomment', Comment)
            if(response.data.massege === 'Thanh cong') {
             const newArr = [...bills]
             for(let i in newArr) {
@@ -41,13 +41,39 @@ function Purchase( {Children} ) {
                     setBills(newArr)
                 }
             }
-            delete comment.token
-            setComment(prev => [...prev,comment])
-            setBillUpdate({IdBill:comment.IdBill,Status:4})
+            setBillUpdate({IdBill:Comment.IdBill,Status:4})
+            delete Comment.IdBill
+            delete Comment.token
+            const newComment = [...comment]
+            newComment[i] = Comment
+            setComment(newComment)
            }
         } catch (error) {
             console.error('Lỗi khi thêm sản phẩm:', error);
             // Xử lý lỗi tại đây.
+        }
+    }
+    async function showComment(User) {
+        try {
+           const response = await axios.post('https://severgogi.onrender.com/api/v12/showcommentuser', User)
+           if(response.data.massege === 'Thanh cong') {
+                setComment(response.data.data)
+                setModalCmt(true)
+            }
+        } catch (error) {
+            console.error('Lỗi khi thêm sản phẩm:', error);
+            // Xử lý lỗi tại đây.
+        }
+    }
+    const handleClickShowComment = (IdBill,data) => {
+        if(IdBill !== null) {
+            setIdBill(IdBill)
+            const user = {
+                IdBill: IdBill,
+                token: cookie.get('AccessToken')
+            }
+            setProduct(JSON.parse(data))
+            showComment(user)
         }
     }
     const handleClickLogOut = () => {
@@ -65,21 +91,9 @@ function Purchase( {Children} ) {
                 IdBill: IdBill,
                 token: cookie.get('AccessToken')
             }
-            createComment(Comment)
+            createComment(Comment,i)
         }
     const handleClickRemoveCmt = () => {
-        if(containtCmt.current.length > 0) {
-            for(let i = 0 ; i < product.length; i++){
-                starCmt.current = []
-                containtCmt.current[i].value = ''
-            }
-            containtCmt.current = []
-        }
-            for(let i = 1; i <= product.length * 5; i++) {
-                if(checked.current[i] !== null) {
-                    checked.current[i].checked = false
-                }
-            }
         setModalCmt(false)
         setComment([])
     }
@@ -97,7 +111,7 @@ function Purchase( {Children} ) {
         if(cookie.get('AccessToken') === undefined) {
             navigate('/')
         }else {
-            const newSocket = io('http://localhost:8080',{
+            const newSocket = io('https://severgogi.onrender.com',{
                 auth: {
                     token: cookie.get('AccessToken')
                 }
@@ -132,6 +146,9 @@ function Purchase( {Children} ) {
                 })
         }
     },[socket,bills])
+    useEffect(() => {
+        console.log(comment)
+    },[comment])
     if(cookie.get('AccessToken') !== undefined) {
         return ( 
             <>
@@ -148,7 +165,7 @@ function Purchase( {Children} ) {
                             ) : (
                         <li className={cx('header_navbar-item')} >
                           <div className={cx('header_navbar_img-user')}>
-                            <img style={{borderRadius:'50%'}} src={JSON.parse(localStorage.getItem('Account')).Classify === 'user' ? `http://localhost:8080/api/v12/avtuser/${JSON.parse(localStorage.getItem('Account')).Avt}`: `${JSON.parse(localStorage.getItem('Account')).Avt}` } className={cx('header_navbar-user-img')}/>
+                            <img style={{borderRadius:'50%'}} src={JSON.parse(localStorage.getItem('Account')).Classify === 'user' ? `https://severgogi.onrender.com/api/v12/avtuser/${JSON.parse(localStorage.getItem('Account')).Avt}`: `${JSON.parse(localStorage.getItem('Account')).Avt}` } className={cx('header_navbar-user-img')}/>
                         </div>
                             <span className={cx('header_navbar-user-name')}>
                                 {JSON.parse(localStorage.getItem('Account')).UserName}
@@ -191,7 +208,7 @@ function Purchase( {Children} ) {
                                     <div className={cx('body_purchase_content_container-item-info')}>
                                        <div className={cx('body_purchase_content_container-item-info_header')}>
                                             <div className={cx('body_purchase_content_container-item-info_header-img')}>
-                                                <img src={JSON.parse(localStorage.getItem('Account')).Classify === 'user' ? `http://localhost:8080/api/v12/avtuser/${JSON.parse(localStorage.getItem('Account')).Avt}`: `${JSON.parse(localStorage.getItem('Account')).Avt}` }/>
+                                                <img src={JSON.parse(localStorage.getItem('Account')).Classify === 'user' ? `https://severgogi.onrender.com/api/v12/avtuser/${JSON.parse(localStorage.getItem('Account')).Avt}`: `${JSON.parse(localStorage.getItem('Account')).Avt}` }/>
                                             </div>
                                             <div className={cx('body_purchase_content_container-item-info_header-username')}>
                                                 <h3>{JSON.parse(localStorage.getItem('Account')).UserName}</h3>
@@ -221,7 +238,7 @@ function Purchase( {Children} ) {
                                        </ul>
                                     </div>
                                     <div className={cx('body_purchase_content_container-item-page')}>
-                                        <ContextPurchase.Provider value={{handleClickOpenCmtDetai,setComment, setProduct, Avt,setAvt,socket,billUpdate,bills,setBills, setIdBill, setProduct, setModalCmt}}>
+                                        <ContextPurchase.Provider value={{handleClickOpenCmtDetai,setComment, setProduct, Avt,setAvt,socket,billUpdate,bills,setBills, setIdBill, setProduct, setModalCmt, handleClickShowComment}}>
                                             {Children}
                                         </ContextPurchase.Provider>
                                     </div>
@@ -237,11 +254,11 @@ function Purchase( {Children} ) {
                                                             <div className={cx('Purchase_content_body_container_body')} style={{padding:'2px 10px'}}>
                                                                 <div className={cx('Purchase_content_body_container_body-left')}>
                                                                     <div className={cx('Purchase_content_body_container_body-left-img')}>
-                                                                        <img style={{width:'90%',objectFit:'cover'}} src={`http://localhost:8080/api/v12/showimgproduct/${product.Img}`}/>
+                                                                        <img style={{width:'90%',objectFit:'cover'}} src={`https://severgogi.onrender.com/api/v12/showimgproduct/${product.Img}`}/>
                                                                     </div>
                                                                     <div className={cx('Purchase_content_body_container_body-left-content')}>
                                                                         <h3>{product.Name}</h3>
-                                                                        <h3 style={{color: 'rgba(0, 0, 0, .54)'}}>Phân loại: Thịt bò</h3>
+                                                                        <h3 style={{color: 'rgba(0, 0, 0, .54)'}}>Phân loại: {product.NameCate}</h3>
                                                                         <h3 style={{fontSize:'14px'}}>x{product.sl}</h3>
                                                                     </div>
                                                                 </div>
@@ -250,68 +267,70 @@ function Purchase( {Children} ) {
                                                                 </div>
                                                             </div>
                                                             <h2>Đánh giá sản phẩm</h2>
-                                            {comment[i] !== undefined ? (
-                                                <div className={cx('comment_container_star')}>
-                                                        <div  className={cx('rating')}>
-                                                            <span></span>
-                                                                <input ref={null} type="radio" id={`star-1${0+(i*5)}`} name={`star-1radio-${i}`} defaultChecked = {comment[i].Star === 5 ? true : false} disabled  />
-                                                                <label htmlFor={`star-1${0+(i*5)}`}>
-                                                                    <svg style={{cursor:'default'}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
-                                                                </label>
-                                                                <input ref={null} type="radio" id={`star-1${1+(i*5)}`} name={`star-1radio-${i}`} defaultChecked = {comment[i].Star === 4 ? true : false} disabled  />
-                                                                <label htmlFor={`star-1${1+(i*5)}`}>
-                                                                    <svg style={{cursor:'default'}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
-                                                                </label>
-                                                                <input ref={null} type="radio" id={`star-1${2+(i*5)}`} name={`star-1radio-${i}`} defaultChecked = {comment[i].Star === 3 ? true : false} disabled   />
-                                                                <label htmlFor={`star-1${2+(i*5)}`}>
-                                                                    <svg style={{cursor:'default'}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
-                                                                </label>
-                                                                <input ref={null} type="radio" id={`star-1${3+(i*5)}`} name={`star-1radio-${i}`} defaultChecked = {comment[i].Star === 2 ? true : false} disabled   />
-                                                                <label htmlFor={`star-1${3+(i*5)}`}>
-                                                                    <svg style={{cursor:'default'}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
-                                                                </label>
-                                                                <input ref={null} type="radio" id={`star-1${4+(i*5)}`} name={`star-1radio-${i}`} defaultChecked = {comment[i].Star === 1 ? true : false} disabled   />
-                                                                <label htmlFor={`star-1${4+(i*5)}`}>
-                                                                    <svg style={{cursor:'default'}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
-                                                                </label>
+                                                        {comment.length > 0 ? (
+                                                            (comment[i].Star !== null ? (
+                                                                <div className={cx('comment_container_star')}>
+                                                                        <div  className={cx('rating')}>
+                                                                            <span></span>
+                                                                                <input ref={null} type="radio" id={`star-1${0+(i*5)}`} name={`star-1radio-${i}`} defaultChecked = {comment[i].Star === 5 ? true : false} disabled  />
+                                                                                <label htmlFor={`star-1${0+(i*5)}`}>
+                                                                                    <svg style={{cursor:'default'}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
+                                                                                </label>
+                                                                                <input ref={null} type="radio" id={`star-1${1+(i*5)}`} name={`star-1radio-${i}`} defaultChecked = {comment[i].Star === 4 ? true : false} disabled  />
+                                                                                <label htmlFor={`star-1${1+(i*5)}`}>
+                                                                                    <svg style={{cursor:'default'}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
+                                                                                </label>
+                                                                                <input ref={null} type="radio" id={`star-1${2+(i*5)}`} name={`star-1radio-${i}`} defaultChecked = {comment[i].Star === 3 ? true : false} disabled   />
+                                                                                <label htmlFor={`star-1${2+(i*5)}`}>
+                                                                                    <svg style={{cursor:'default'}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
+                                                                                </label>
+                                                                                <input ref={null} type="radio" id={`star-1${3+(i*5)}`} name={`star-1radio-${i}`} defaultChecked = {comment[i].Star === 2 ? true : false} disabled   />
+                                                                                <label htmlFor={`star-1${3+(i*5)}`}>
+                                                                                    <svg style={{cursor:'default'}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
+                                                                                </label>
+                                                                                <input ref={null} type="radio" id={`star-1${4+(i*5)}`} name={`star-1radio-${i}`} defaultChecked = {comment[i].Star === 1 ? true : false} disabled   />
+                                                                                <label htmlFor={`star-1${4+(i*5)}`}>
+                                                                                    <svg style={{cursor:'default'}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
+                                                                                </label>
+                                                                    </div>
+                                                                        <div className={cx('text_comment')}>
+                                                                        <p style={{color:'#333',border:'1px solid #333'}} ref={e => containtCmt.current[i] = e} className={cx('comment-input')}>{comment[i].Containt}</p>
+                                                                    </div>
+                                                                    </div>                                   
+                                                                ) : (
+                                                                    <div className={cx('comment_container_star')}>
+                                                                       <div className={cx('rating')}>
+                                                                            <input ref={e => checked.current[1+(i*5)] = e} onChange={() => starCmt.current[i] = 5} type="radio" name={`star-${i}`} id={`star${0+(i*5)}`} />
+                                                                            <label htmlFor={`star${0+(i*5)}`}>
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
+                                                                            </label>
+                                                                            <input ref={e => checked.current[2 + (i*5)] = e} onChange={() => starCmt.current[i] = 4} type="radio" name={`star-${i}`} id={`star${1+(i*5)}`} />
+                                                                            <label htmlFor={`star${1+(i*5)}`}>
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
+                                                                            </label>
+                                                                            <input ref={e => checked.current[3 + (i*5)] = e} onChange={() => starCmt.current[i] = 3} type="radio" name={`star-${i}`} id={`star${2+(i*5)}`} />
+                                                                            <label htmlFor={`star${2+(i*5)}`}>
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
+                                                                            </label>
+                                                                            <input ref={e => checked.current[4 + (i*5)] = e} onChange={() => starCmt.current[i] = 2} type="radio" name={`star-${i}`} id={`star${3+(i*5)}`} />
+                                                                            <label htmlFor={`star${3+(i*5)}`}>
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
+                                                                            </label>
+                                                                            <input ref={e => checked.current[5 + (i*5)] = e} onChange={() => starCmt.current[i] = 1} type="radio" name={`star-${i}`} id={`star${4+(i*5)}`} />
+                                                                            <label htmlFor={`star${4+(i*5)}`}>
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
+                                                                            </label>
+                                                                         </div>
+                                                                        <div className={cx('text_comment')}>
+                                                                            <textarea ref={e => containtCmt.current[i] = e} className={cx('comment-input')} spellCheck={false} placeholder="Nhập bình luận và đánh giá của bạn..."></textarea>
+                                                                        </div>
+                                                                        <div onClick={() => handleClickComment(product.Id,i)} className={cx('button_submit-comment')}>
+                                                                            <button className={cx('comic-button')}>Đánh Giá</button>
+                                                                         </div>
+                                                                    </div>
+                                                                )))                            
+                                                         : null}
                                                     </div>
-                                                        <div className={cx('text_comment')}>
-                                                        <p style={{color:'#333',border:'1px solid #333'}} ref={e => containtCmt.current[i] = e} className={cx('comment-input')}>{comment[i].Containt}</p>
-                                                    </div>
-                                                    </div>                                   
-                                                ) : (
-                                                    <div className={cx('comment_container_star')}>
-                                                       <div className={cx('rating')}>
-                                                            <input ref={e => checked.current[1+(i*5)] = e} onChange={() => starCmt.current[i] = 5} type="radio" name={`star-${i}`} id={`star${0+(i*5)}`} />
-                                                            <label htmlFor={`star${0+(i*5)}`}>
-                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
-                                                            </label>
-                                                            <input ref={e => checked.current[2 + (i*5)] = e} onChange={() => starCmt.current[i] = 4} type="radio" name={`star-${i}`} id={`star${1+(i*5)}`} />
-                                                            <label htmlFor={`star${1+(i*5)}`}>
-                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
-                                                            </label>
-                                                            <input ref={e => checked.current[3 + (i*5)] = e} onChange={() => starCmt.current[i] = 3} type="radio" name={`star-${i}`} id={`star${2+(i*5)}`} />
-                                                            <label htmlFor={`star${2+(i*5)}`}>
-                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
-                                                            </label>
-                                                            <input ref={e => checked.current[4 + (i*5)] = e} onChange={() => starCmt.current[i] = 2} type="radio" name={`star-${i}`} id={`star${3+(i*5)}`} />
-                                                            <label htmlFor={`star${3+(i*5)}`}>
-                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
-                                                            </label>
-                                                            <input ref={e => checked.current[5 + (i*5)] = e} onChange={() => starCmt.current[i] = 1} type="radio" name={`star-${i}`} id={`star${4+(i*5)}`} />
-                                                            <label htmlFor={`star${4+(i*5)}`}>
-                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
-                                                            </label>
-                                                         </div>
-                                                        <div className={cx('text_comment')}>
-                                                            <textarea ref={e => containtCmt.current[i] = e} className={cx('comment-input')} spellCheck={false} placeholder="Nhập bình luận và đánh giá của bạn..."></textarea>
-                                                        </div>
-                                                        <div onClick={() => handleClickComment(product.Id,i)} className={cx('button_submit-comment')}>
-                                                            <button className={cx('comic-button')}>Đánh Giá</button>
-                                                         </div>
-                                                    </div>
-                                                )}                                          
-                                            </div>
                                                 ))}
                                             </div>
                                         </div>

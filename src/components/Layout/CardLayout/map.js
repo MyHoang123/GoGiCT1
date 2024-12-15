@@ -1,4 +1,4 @@
-import React, { useEffect, useRef,useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import mapboxgl from 'mapbox-gl'
 import axios from 'axios'
 
@@ -6,12 +6,11 @@ import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css'
-const MapboxExample = ({children}) => {  
+const MapboxExample = ({children, setDestination}) => {  
   const mapContainerRef = useRef()
   const mapRef = useRef()
   const markerRef = useRef()
 // Tọa độ trung tâm của Cần Thơ
-const centerCoordinates = [105.782, 10.030];
   useEffect(() => {  
     mapboxgl.accessToken = 'pk.eyJ1IjoibXlob2FuZzEyMyIsImEiOiJjbTFlZzF2d2cydWR0MmtvajFwYnB5OW42In0.-CeNZom6cnNBEsAWVumPuQ'
     mapRef.current = new mapboxgl.Map({  
@@ -55,6 +54,8 @@ const centerCoordinates = [105.782, 10.030];
       newMarker.setLngLat(coordinates)
       newMarker.addTo(mapRef.current)
       markerRef.current = newMarker
+      const newDes = `${coordinates.lat},${coordinates.lng}`
+      setDestination(newDes)
       addAddress()
   });
   mapRef.current.on('style.load', () => {
@@ -139,8 +140,7 @@ const centerCoordinates = [105.782, 10.030];
 async function addAddress() {
   try {
    const response = await axios.get(`https://api.mapbox.com/search/geocode/v6/reverse?longitude=${markerRef.current._lngLat.lng}&latitude=${markerRef.current._lngLat.lat}&access_token=pk.eyJ1IjoibXlob2FuZzEyMyIsImEiOiJjbTFlZzF2d2cydWR0MmtvajFwYnB5OW42In0.-CeNZom6cnNBEsAWVumPuQ`);
-
-    children(response.data.features[0].properties.full_address)
+   children(response.data.features[0].properties.full_address)
   } catch (error) {
     console.error('Lỗi khi thêm sản phẩm:', error);
     // Xử lý lỗi tại đây.
@@ -153,7 +153,7 @@ async function addAddress() {
         mapRef.current.remove();
     }
   }, [])
-  return <div id="map" ref={mapContainerRef} style={{ width: '500px', height: '430px' }} />;  
+  return <div id="map" ref={mapContainerRef} style={{ width: '400px', height: '500px' }} />;  
 };  
   
 export default MapboxExample;

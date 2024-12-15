@@ -1,8 +1,7 @@
 
 import axios from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { MobileContext } from '../../components/Layout/MobileLayout'
-import Swal from 'sweetalert2/dist/sweetalert2.js'
+
 import 'sweetalert2/src/sweetalert2.scss'
 import { faAngleLeft,faHeart,faStar,faMedal,faCalendarMinus } from '@fortawesome/free-solid-svg-icons';
 // FakeImg
@@ -10,11 +9,10 @@ import { RenderStar } from '~/hooks'
 
 // Scss
 import "./DetailProductMobile.scss"
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate} from 'react-router-dom';
 
 function App() {
-    const navigate = useNavigate();
     const [productsMobile, setProductsMobile] = useState([
         {
             Name: '',
@@ -24,138 +22,13 @@ function App() {
     ])
     const [comment,setComment] = useState(null)
     const { IdProduct } = useParams();
-    // Các hàm xử lý
-
-
-// Hàm
-// const handleClickOrder = () => {
-//     if(localStorage.getItem('Table')) {
-//         const newArr = JSON.parse(localStorage.getItem('card')) || []
-//         if(newArr.length === 0) {
-//             const swalWithBootstrapButtons = Swal.mixin({
-//                 customClass: {
-//                   confirmButton: "btn btn-success",
-//                   cancelButton: "btn btn-danger"
-//                 },
-//                 buttonsStyling: false
-//               });
-//               swalWithBootstrapButtons.fire({
-//                 title: "Are you sure?",
-//                 text: "You won't be able to revert this!",
-//                 icon: "warning",
-//                 showCancelButton: true,
-//                 confirmButtonText: "Đồng Ý!",
-//                 cancelButtonText: "Tư Chối!",
-//                 reverseButtons: true
-//               }).then((result) => {
-//                 if (result.isConfirmed) {
-//                     newArr.push(productsMobile[0])
-//                     localStorage.setItem('card', JSON.stringify(newArr))   
-                    
-//                   swalWithBootstrapButtons.fire({
-//                     title: "Thành Công!",
-//                     text: "Bạn Đã Đặt Món Thành Công !",
-//                     icon: "success"
-//                   }).then((result) => {
-//                     if(result.isConfirmed) {
-//                         navigate(`/mobile/buffe/${JSON.parse(localStorage.getItem('Table')).Table}/mobile/card`)
-//                         }
-//                         else {
-//                         navigate(`/mobile/buffe/${JSON.parse(localStorage.getItem('Table')).Table}/mobile/card`)
-//                         }
-//                   });
-//                 }
-//                 else if (
-//                   /* Read more about handling dismissals below */
-//                   result.dismiss === Swal.DismissReason.cancel
-//                 ) {
-//                   swalWithBootstrapButtons.fire({
-//                     title: "Cancelled",
-//                     text: "Your imaginary file is safe :)",
-//                     icon: "error"
-//                   });
-//                 }
-//               });
-
-           
-//         }
-//         else {
-//             for(let i in newArr) {
-//                 if(parseInt(IdProduct) === newArr[i].Id) {
-//                     console.log('hihi')
-//                     Swal.fire({
-//                         icon: "error",
-//                         title: "Oops...",
-//                         text: "Sản phẩm đã tồn tại trong giỏ hàng !",
-//                         footer: '<a href="#">Why do I have this issue?</a>'
-//                       });
-//                       break
-//                 }
-//                 else {
-//                     const swalWithBootstrapButtons = Swal.mixin({
-//                         customClass: {
-//                           confirmButton: "btn btn-success",
-//                           cancelButton: "btn btn-danger"
-//                         },
-//                         buttonsStyling: false
-//                       });
-//                       swalWithBootstrapButtons.fire({
-//                         title: "Are you sure?",
-//                         text: "You won't be able to revert this!",
-//                         icon: "warning",
-//                         showCancelButton: true,
-//                         confirmButtonText: "Đồng Ý!",
-//                         cancelButtonText: "Tư Chối!",
-//                         reverseButtons: true
-//                       }).then((result) => {
-//                         if (result.isConfirmed) {
-//                             newArr.push(productsMobile[0])
-//                             localStorage.setItem('card', JSON.stringify(newArr))                        
-//                           swalWithBootstrapButtons.fire({
-//                             title: "Thành Công!",
-//                             text: "Bạn Đã Đặt Món Thành Công !",
-//                             icon: "success"
-//                           }).then((result) => {
-//                             if(result.isConfirmed) {
-//                                 navigate(`/mobile/buffe/${JSON.parse(localStorage.getItem('Table')).Table}/mobile/card`)
-//                                 }
-//                                 else {
-//                                 navigate(`/mobile/buffe/${JSON.parse(localStorage.getItem('Table')).Table}/mobile/card`)
-//                                 }
-//                           });
-//                         }
-//                         else if (
-//                           /* Read more about handling dismissals below */
-//                           result.dismiss === Swal.DismissReason.cancel
-//                         ) {
-//                           swalWithBootstrapButtons.fire({
-//                             title: "Cancelled",
-//                             text: "Your imaginary file is safe :)",
-//                             icon: "error"
-//                           });
-//                         }
-//                       });
-//                 }
-//             }
-//          }
-//     }
-//     else {
-//         Swal.fire({
-//             icon: "error",
-//             title: "Oops...",
-//             text: "Không tìm thấy thông tin !",
-//             footer: '<a href="#">Why do I have this issue?</a>'
-//           });
-//     }
-    
-// }
     useEffect(() => {
         const Id = {
             IdProduct: IdProduct
         }
         axios.all([
-            axios.post('http://localhost:8080/api/v12/showproductid', Id),
-            axios.post('http://localhost:8080/api/v12/showcommentorder', Id),
+            axios.post('https://severgogi.onrender.com/api/v12/showproductid', Id),
+            axios.post('https://severgogi.onrender.com/api/v12/showcommentorder', Id),
         ])
         .then(axios.spread((Product,Comment) => {
             setProductsMobile(Product.data.data)
@@ -166,19 +39,6 @@ function App() {
         .catch (err => {
             console.error()
         })
-        // axios.all([
-        //     axios.post(`${process.env.REACT_APP_IP_SEVER}/api/v12/showproductid`, Id),
-        //     axios.post(`${process.env.REACT_APP_IP_SEVER}/api/v12/showcommentorder`, Id),
-        // ])
-        // .then(axios.spread((Product,Comment) => {
-        //     setProductsMobile(Product.data.data)
-        //     if(Comment.data.data !== undefined) {
-        //         setComment(Comment.data.data)
-        //     }
-        // }))
-        // .catch (err => {
-        //     console.error()
-        // })
     },[])
     return ( 
         <>
@@ -197,7 +57,7 @@ function App() {
                             (product.Id === parseInt(IdProduct) ? (
                                 <div key={i}>
                                     <div className='Detail_mobile-img'>
-                                            <img src={`http://localhost:8080/api/v12/showimgproduct/${product.Img}`} style={{width: '100%', height: '100%',objectFit: 'cover',borderRadius:'50%'}} />
+                                            <img src={`https://severgogi.onrender.com/api/v12/showimgproduct/${product.Img}`} style={{width: '100%', height: '100%',objectFit: 'cover',borderRadius:'50%'}} />
                                     </div>
                                     <div className='Detail_mobile-noti'>
                                         <h2>{product.Name}</h2>
@@ -234,7 +94,7 @@ function App() {
                                             <div key={index} className='content_showcomment-item'>
                                                 <div className='content_showcomment-info'>
                                                     <div className='content_showcomment-item-img'>
-                                                        <img style={{width: '100%',height: '100%',borderRadius: '50%',objectFit: 'cover', zIndex: '100'}} src={cmt.Classify === 'user' ? `http://localhost:8080/api/v12/avtuser/${cmt.Avt}`: `${cmt.Avt}` } />
+                                                        <img style={{width: '100%',height: '100%',borderRadius: '50%',objectFit: 'cover', zIndex: '100'}} src={cmt.Classify === 'user' ? `https://severgogi.onrender.com/api/v12/avtuser/${cmt.Avt}`: `${cmt.Avt}` } />
                                                     </div>
                                                     <div className='content_showcomment-user'>
                                                         <div className='content_showcomment-item-name'>

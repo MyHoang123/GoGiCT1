@@ -5,20 +5,35 @@ import { useNavigate } from 'react-router-dom'
 import { Cookies } from 'react-cookie'
 import { AuthContext } from '../../components/Layout/LoginUser';
 import FacebookLogin from '../../Asset/images/facebooklogin.png'
-import GoogleLogin from '../../Asset/images/gogilogin.png'
+import GoogleLogin1 from '../../Asset/images/gogilogin.png'
+import { LoginSocialFacebook } from 'reactjs-social-login';
+import { GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from 'jwt-decode';
 import classNames from "classnames/bind"
 import styles from './ModalAuthen.module.scss'
-import { useCallback, useMemo, useRef, useState, useContext } from 'react'
+import { useCallback, useMemo, useState, useContext } from 'react'
 const cx = classNames.bind(styles)
 
 function App() {
     const navigate = useNavigate()
     const cookies = new Cookies()
-
     const [checkOTP,setCheckOTP] = useState(false)
     // UseContext
     const {checkRegister, setCheckRegister, pass, setPass, phone, setPhone  } = useContext(AuthContext)
-
+    // Gửi dữ liệu lên API
+    async function chekcLogin(Account) {
+        try {
+         const response = await axios.post('https://severgogi.onrender.com/api/v12/checkuser', Account);
+         if(response.data.massege === 'Thanh cong') {
+            localStorage.setItem('Account',JSON.stringify(response.data.data))
+            cookies.set('AccessToken', response.data.token, { path: '/', maxAge: 604800 }); // 604800 giây = 7 ngày
+            navigate('/')
+           }
+        } catch (error) {
+          console.error('Lỗi khi thêm sản phẩm:', error);
+          // Xử lý lỗi tại đây.
+        }
+      }
     const checkBtnSuccess = useMemo(() => {
         if(checkOTP) {
             if(phone.length > 0) {
@@ -146,7 +161,7 @@ function App() {
                                                  <span>Facebook</span>
                                             </div>
                                             <div className={cx('Modal_login_socials_right')}>
-                                                <img src={GoogleLogin}/>
+                                                <img src={GoogleLogin1}/>
                                                 <span>Google</span>
                                             </div>
                                         </div>
@@ -169,7 +184,7 @@ function App() {
                                             )}
                                         </div>
                                         <div className={cx('Modal_login_help')}>
-                                            <span>Quên mật khẩu</span>
+                                            <span></span>
                                             {checkOTP ? (
                                                  <span onClick={() => setCheckOTP(false)}>Đăng nhập với mật khẩu</span>
                                             ) : (
@@ -182,14 +197,41 @@ function App() {
                                             <span></span>
                                         </div>
                                         <div className={cx('Modal_login_socials')}>
-                                            <div className={cx('Modal_login_socials_left')}>
+                                                 <LoginSocialFacebook
+                                                    className={cx('Modal_login_socials_left')}
+                                                    appId="1849390372235152"
+                                                    onResolve={(res) => {
+                                                        const account = {
+                                                            UserName: res.data.name,
+                                                            Email: res.data.email,
+                                                            Avt: res.data.picture.data.url
+                                                        } 
+                                                        chekcLogin(account)
+                                                    }}
+                                                    >
                                                  <img src={FacebookLogin}/>
-                                                 <span>Facebook</span>
-                                            </div>
-                                            <div className={cx('Modal_login_socials_right')}>
-                                                <img src={GoogleLogin}/>
-                                                <span>Google</span>
-                                            </div>
+                                                 <span>Đăng nhập với facebook</span>
+                                                        {/* <FacebookLoginButton  style={{fontSize: '12px'}} className={cx('auth-form_socials-span')} /> */}
+                                                    </LoginSocialFacebook>
+                                            <GoogleLogin
+                                            className={cx('Modal_login_socials_right')}
+                                                            onSuccess={(response) => {
+                                                                const decode = jwtDecode(response.credential)
+                                                                const account = {
+                                                                    UserName: decode.name,
+                                                                    Avt: decode.picture,
+                                                                    Email: decode.email ,
+                                                                }
+                                                                chekcLogin(account)
+                                                            }}
+                                                            onError={() => {
+                                                                console.log('Login fail')
+                                                            }}
+                                                        
+                                                        >
+                                                    {/* <img src={GoogleLogin1}/>
+                                                    <span>Google</span> */}
+                                                        </GoogleLogin>
                                         </div>
                                             <div className={cx('Modal_login_btn_register')}>
                                                 Bạn mới biết đến GOGI? <span onClick={() => setCheckRegister(true)}>Đăng ký</span> 

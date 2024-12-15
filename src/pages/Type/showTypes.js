@@ -12,7 +12,7 @@
       // Gửi dữ liệu lên API Create
       async function deleteType(e) {
         try {
-           await axios.post('http://localhost:8080/api/v12/deletetype',{IdType: e.data.Id})
+           await axios.post('https://severgogi.onrender.com/api/v12/deletetype',{IdType: e.data.Id})
         } catch (error) {
           alert('Đã xảy ra lõi')
         }
@@ -20,7 +20,7 @@
     // Gửi dữ liệu lên API
     async function addType(type) {
       try {
-        await axios.post('http://localhost:8080/api/v12/createtypes', type);
+        await axios.post('https://severgogi.onrender.com/api/v12/createtypes', type);
         setTypesapi(type)
         notificeRef.current.classList.add('open')
       } catch (error) {
@@ -31,7 +31,7 @@
       //   // Gửi dữ liệu lên API Update
       async function updateType(type) {
         try {
-          await axios.put('http://localhost:8080/api/v12/updatetype', type);
+          await axios.put('https://severgogi.onrender.com/api/v12/updatetype', type);
           setTypesapi(type)
           notificeRef.current.classList.add('open')
         } catch (error) {
@@ -41,6 +41,7 @@
       // Dev Express
       // Các hàm xử lý
     const handleCreate = (e) => {
+      console.log(e)
       const data = e.data
       delete data.Id
       setTypesapi(data)
@@ -53,12 +54,13 @@
     // API
     useEffect(() => {
       axios.all([
-        axios.get('http://localhost:8080/api/v12/showtypeadmin'),
-        axios.get('http://localhost:8080/api/v12/showmenu')
+        axios.get('https://severgogi.onrender.com/api/v12/showtypeadmin'),
+        axios.get('https://severgogi.onrender.com/api/v12/showmenu')
       ])
         .then(axios.spread((Type,Menu,) => {
           const type = Type.data.data
           const menu = Menu.data.data
+          console.log(type)
           setMenu(menu)
           setTypes(type)
         }))
@@ -115,6 +117,9 @@
             alignment='center'
             />
           <Column dataField="Name"
+          alignment="center" 
+          />
+          <Column dataField="Price"
           alignment="center" 
           />
           <Column dataField="IdMenu"

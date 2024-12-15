@@ -34,7 +34,7 @@ function AppMobile() {
             setActiveCate(Id)
         }
         try {
-            const response = await axios.post('http://localhost:8080/api/v12/filtercategori', {IdType:IdType,IdCate:Id});
+            const response = await axios.post('https://severgogi.onrender.com/api/v12/filtercategori', {IdType:IdType,IdCate:Id});
             if(response.data.massege === 'Thanh cong') {
                 setPage(1)
                 setProducts(response.data.data)
@@ -46,7 +46,7 @@ function AppMobile() {
     async function addCard(IdProduct,button) {
         try {
             cardButton.current[button].style.pointerEvents = 'none'
-           const response = await axios.post('http://localhost:8080/api/v12/addcard', {IdProduct: IdProduct,token: cookies.get('AccessToken')});
+           const response = await axios.post('https://severgogi.onrender.com/api/v12/addcard', {IdProduct: IdProduct,token: cookies.get('AccessToken')});
            if(response.data.massege === 'Thanh cong') {
             cardButton.current[button].style.pointerEvents = 'auto'
             buttonFakeAddCard.current[button].style.display = 'block'
@@ -97,8 +97,28 @@ function AppMobile() {
             // Xử lý lỗi tại đây.
         }
     }
-    const handleClickFindProduct = (e) => {
-        
+    const handleSearchChangeInput = (e) => {
+        if(page !== 1) {
+            setPage(1)
+        }
+        const result = []
+        products.forEach((product) => {
+            if(product.Name.toLowerCase().includes(e.toLowerCase())) {
+                result.unshift({...product,Status: 'visible'})
+            }
+            else {
+                result.push({...product,Status: 'hidden'})
+            }
+        })
+        if(animationRef.current.length > 0) {
+            animationRef.current.forEach((ani) => {
+                cancelAnimationFrame(ani)
+            })
+            buttonFakeAddCard.current.forEach((btn) => {
+                btn.classList.remove('open')
+            })
+         }
+        setProducts(result)
     }
       const handleClickAddCard =  useCallback(async(button,Id) => {
         if(button !== null) {
@@ -137,8 +157,8 @@ function AppMobile() {
     },[])
     useEffect(() => {
         axios.all([
-            axios.get('http://localhost:8080/api/v12/showproduct'),
-            axios.get('http://localhost:8080/api/v12/showcategori'),
+            axios.get('https://severgogi.onrender.com/api/v12/showproduct'),
+            axios.get('https://severgogi.onrender.com/api/v12/showcategori'),
           ])
             .then(axios.spread((Product, Categori, ) => { 
               setProducts(Product.data.data)
@@ -181,14 +201,14 @@ function AppMobile() {
                 </div>
                 {JSON.parse(localStorage.getItem('Account')) === null ? null : (
                 <div className={cx('header_img')}>
-                        <img style={{width: '30px', height: '30px',borderRadius: '6px',objectFit: 'cover'}} src={JSON.parse(localStorage.getItem('Account')).Classify === 'user' ? `http://localhost:8080/api/v12/avtuser/${JSON.parse(localStorage.getItem('Account')).Avt}`: `${JSON.parse(localStorage.getItem('Account')).Avt}` }/>
+                        <img style={{width: '30px', height: '30px',borderRadius: '6px',objectFit: 'cover'}} src={JSON.parse(localStorage.getItem('Account')).Classify === 'user' ? `https://severgogi.onrender.com/api/v12/avtuser/${JSON.parse(localStorage.getItem('Account')).Avt}`: `${JSON.parse(localStorage.getItem('Account')).Avt}` }/>
                 </div>
                 )}
             </header>
             <div className={cx('header_search')}>
                 <div className={cx('icon-search')}>
                     <Icon.Search style={{width: '15%',marginRight: '4px'}} />
-                    <input onChange={(e) => handleClickFindProduct(e)} className={cx('header_search_input')} placeholder='Tìm kiếm sản phẩm' />
+                    <input  onChange={(e) => handleSearchChangeInput(e.target.value)} className={cx('header_search_input')} placeholder='Tìm kiếm sản phẩm' />
                 </div>
                 <div className={cx('header_search-listIcon')}>
                     <FontAwesomeIcon style={{fontSize:'20px'}} icon={faSliders} />
@@ -198,7 +218,7 @@ function AppMobile() {
         <div className={cx('slider')}>
             {/* <Slider children={SliderImg} /> */}
             <video ref={videoRef} className={cx('video_mobile')} style={{width:'100%',height:'100%',pointerEvents:'none'}} muted autoPlay loop>
-                <source src={'http://localhost:8080/api/v12/video/gogi.mp4'} type="video/mp4" />
+                <source src={'https://severgogi.onrender.com/api/v12/video/gogi.mp4'} type="video/mp4" />
                 <source src="/video.webm" type="video/webm" />
                 Trình duyệt của bạn không hỗ trợ thẻ video.
             </video>
@@ -213,7 +233,8 @@ function AppMobile() {
                     </div>
                 <div className={cx('product_container_mobile')}>
                 {productPage[0].map((product,index) => (
-                    <div key={index} className={cx('product_content_mobile')}>
+                    (product.Status === 'visible' ? (
+                        <div key={index} className={cx('product_content_mobile')}>
                         <Link to={`/detail/${product.Id}`}>
                         <div className={cx('product_content_mobile-img')}>
                             <span className={cx('product_content_mobile-star')}>
@@ -221,7 +242,7 @@ function AppMobile() {
                                  <span style={{fontWeight:'700',color:'#333'}}>{product.Star}</span>
                             </span>
                             <div className={cx('product_content_mobile-img-item')}>
-                                 <img src={`http://localhost:8080/api/v12/showimgproduct/${product.Img}`} style={{width: '100%', height: '100%',objectFit: 'cover', zIndex: '100'}} />
+                                 <img src={`https://severgogi.onrender.com/api/v12/showimgproduct/${product.Img}`} style={{width: '100%', height: '100%',objectFit: 'cover', zIndex: '100'}} />
                             </div>
                         </div>
                         </Link>
@@ -230,7 +251,7 @@ function AppMobile() {
                                 <h2>{product.Name}</h2>
                             </div>
                             <div className={cx('product_size')}>
-                                <h2>size lớn</h2>
+                                <h2>{product.NameCate}</h2>
                             </div>
                             <div className={cx('product_price')}>
                                 {
@@ -243,13 +264,13 @@ function AppMobile() {
                                 <button ref = {e => cardButton.current[index] = e} onClick={() => addCard(product.Id,index)} className={cx('button_addcard')}><FontAwesomeIcon icon={faPlus} />
                                 </button>
                                 <div ref={el => buttonFakeAddCard.current[index] = el} className={cx('button_img-fake')}>
-                                    <img src={`http://localhost:8080/api/v12/showimgproduct/${product.Img}`} style={{width: '100%', height: '100%',objectFit: 'cover', zIndex: '100'}} />
+                                    <img src={`https://severgogi.onrender.com/api/v12/showimgproduct/${product.Img}`} style={{width: '100%', height: '100%',objectFit: 'cover', zIndex: '100'}} />
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                ))}
+                    ) : null
+                )))}
                     {/*  */}
                     
                     {/*  */}

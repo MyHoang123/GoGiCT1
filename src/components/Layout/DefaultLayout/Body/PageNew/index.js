@@ -1,5 +1,5 @@
 
-
+import { memo } from 'react';
 import Slide from'./Slide'
 
 function App() {
@@ -32,4 +32,4 @@ function App() {
      );
 }
 
-export default App;
+export default memo(App);

@@ -20,7 +20,7 @@ const notificeRef = useRef()
           // Gửi dữ liệu lên API Create
           async function deleteDetailType(e) {
             try {
-               await axios.post('http://localhost:8080/api/v12/deletedetailtype',{IdType: e.data.IdType,IdCategoris:e.data.IdCategoris})
+               await axios.post('https://severgogi.onrender.com/api/v12/deletedetailtype',{IdType: e.data.IdType,IdCategoris:e.data.IdCategoris})
             } catch (error) {
               alert('Đã xảy ra lõi')
             }
@@ -28,7 +28,7 @@ const notificeRef = useRef()
   // Gửi dữ liệu lên API
   async function addDetailType(detailtype) {
     try {
-      await axios.post('http://localhost:8080/api/v12/createdetailtypes', detailtype);
+      await axios.post('https://severgogi.onrender.com/api/v12/createdetailtypes', detailtype);
         notificeRef.current.classList.add('open')
     } catch (error) {
       console.error('Lỗi khi thêm sản phẩm:', error);
@@ -77,9 +77,9 @@ const notificeRef = useRef()
   // API
   useEffect(() => {
     axios.all([
-      axios.get('http://localhost:8080/api/v12/showcategori'),
-      axios.get('http://localhost:8080/api/v12/showtypeadmin'),
-      axios.get('http://localhost:8080/api/v12/showdetailtypes')
+      axios.get('https://severgogi.onrender.com/api/v12/showcategori'),
+      axios.get('https://severgogi.onrender.com/api/v12/showtypeadmin'),
+      axios.get('https://severgogi.onrender.com/api/v12/showdetailtypes')
     ])
       .then(axios.spread((Categori, Type, detailType,) => {
         const categori = Categori.data.data

@@ -2,100 +2,49 @@ import './Table.scss'
 import axios from 'axios'
 import imgTable from '../../Asset/images/table.jpg';
 import { ElementContextAdmin } from '../../components/Layout/AdminLayout'
-import { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { tab } from '@testing-library/user-event/dist/tab';
-import { Details } from 'devextreme-react/cjs/file-manager';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+
 function App() {
-    const [socket, setSocket] = useState(null);
+    const [bill, setBill] = useState(null);
+    const [checkEdit, setCheckEdit] = useState(false);
     const [tables, setTables] = useState([])
     const [productsTable, setProductTable] = useState([])
     const [tableId, setTablesId] = useState()
-    const [checkTable, setCheckTable] = useState()
-    const [detailProductTable, setDetailProductTable] = useState([])
     const [notiTable, setNotiTable] = useState([])
     const [notiContent, setnotiContent] = useState(null)
     // Ref
     const RefTable = useRef()
+    const nameTable = useRef()
+    const IdDelete = useRef()
     const headerDetalTable = useRef()
     const notificeRefTable = useRef([])
     const notiContentRef = useRef([])
     const { socketOrder, cookies } = useContext(ElementContextAdmin)
-    // Gửi dữ liệu lên API
-async function showProductTable() {
-    try {
-      const response =  await axios.get(`http://localhost:8080/api/v12/getproductbillorder?token=${cookies.get('AccessTokenAdmin')}`);
-      console.log("🚀 ~ showProductTable ~ response:", response)
-      if(response.data.massege === "Không tìm thấy đơn hàng") {
-        setProductTable(response.data.data)
-      }
-    } catch (error) {
-        console.error('Lỗi khi thêm sản phẩm:', error);
-        // Xử lý lỗi tại đây.
-    }
-}
-// Gửi dữ liệu lên API
-async function updateTable(Table) {
-    try {
-        await axios.put('http://localhost:8080/api/v12/updatetable', Table);
-    } catch (error) {
-        console.error('Lỗi khi thêm sản phẩm:', error);
-        // Xử lý lỗi tại đây.
-    }
-    }// Gửi dữ liệu lên API
-async function deleteTableProduct(Table) {
-    try {
-        const response = await axios.put('http://localhost:8080/api/v12/deleteproductorder', Table);
-        if(response.data.massege === "success CreateBill") {
-            socket.emit('successproduct', Table.IdTable,Table.Id)
-            }
-    } catch (error) {
-        console.error('Lỗi khi thêm sản phẩm:', error);
-        // Xử lý lỗi tại đây.
-    }
-    }
-    // Gửi dữ liệu lên API
-async function updateproduct(Table) {
-    try {
-       const response = await axios.put('http://localhost:8080/api/v12/updateproductorder', Table);
-        if(response.data.massege === "success CreateBill") {
-        socket.emit('successproduct', Table.IdTable,Table.Id)
-        }
-    } catch (error) {
-        console.error('Lỗi khi thêm sản phẩm:', error);
-        // Xử lý lỗi tại đây.
-    }
-    }
-    // Gửi dữ liệu lên API
-async function updateBillOrder(Table) {
-    try {
-        await axios.put('http://localhost:8080/api/v12/updatebillorder', Table);
-    } catch (error) {
-        console.error('Lỗi khi thêm sản phẩm:', error);
-        // Xử lý lỗi tại đây.
-    }
-    }
     // Các hàm xử lý
-    const handleClickOpenTable = async (Id,Name) => {
-        try {
-            const response =  await axios.get(`http://localhost:8000/api/v12/getproductbillordertable/${Id}?token=${cookies.get('AccessTokenAdmin')}`);
-            if(response.data.massege === "Thanh cong") {
-                setProductTable(response.data.data)    
-                setTablesId(Id)
-                notificeRefTable.current[Id].classList.remove('open')
-                RefTable.current.classList.add('open')
-                headerDetalTable.current.innerText = `${Name}`
-            }
-          } catch (error) {
-              console.error('Lỗi khi thêm sản phẩm:', error);
-              // Xử lý lỗi tại đây.
-          }
+    const handleClickOpenTable = async (Id,Status) => {
+        if(Status === 'Đang Dùng') {
+            RefTable.current.classList.add('open')
+            setTablesId(Id)
+            try {
+                const response =  await axios.get(`http://localhost:8000/api/v12/getproductbillordertable/${Id}?token=${cookies.get('AccessTokenAdmin')}`);
+                if(response.data.massege === "Thanh cong") {
+                    const {Data, ...resolve} = response.data.data
+                    setBill(resolve)
+                    setProductTable(JSON.parse(response.data.data.Data))    
+                    notificeRefTable.current[Id].classList.remove('open')
+                }
+              } catch (error) {
+                  console.error('Lỗi khi thêm sản phẩm:', error);
+                  // Xử lý lỗi tại đây.
+              }
+        }
     }
     const handleClickRemoveShowBill = () => {
         RefTable.current.classList.remove('open')
     }
-    const handleClickCheckBill = (Id,IdDetail,Status) => {
+    const handleClickCheckBill = (IdDetail,Status) => {
         if(tableId !== null) {
-            socketOrder.emit('updateProduct',Id,IdDetail,tableId,Status)
+            socketOrder.emit('updateProduct',IdDetail,tableId,Status)
             if(productsTable.length > 0) {
                 const newArr = [...productsTable]
                 newArr.forEach((product)=> {
@@ -107,8 +56,49 @@ async function updateBillOrder(Table) {
             }
         }
     }
+    const handleSubmitCreateTable = useCallback(async (e) => {
+        e.preventDefault()
+        if(nameTable.current.value !== '') {
+            try {
+                const response =  await axios.post(`https://severgogi.onrender.com/api/v12/createtable`,{name: nameTable.current.value,token: cookies.get('AccessTokenAdmin')});
+              if(response.data.massege === 'Thanh cong') {
+                const newArr = [...tables]
+                const table = {Id: response.data.data, Name: `Bàn Số ${nameTable.current.value}`,Status: 'Bàn Trống'}
+                newArr.push(table)
+                setTables(newArr)
+              }
+              } catch (error) {
+                  console.error('Lỗi khi thêm sản phẩm:', error);
+                  // Xử lý lỗi tại đây.
+              }
+            
+        }
+        else {
+            alert('Vui lòng nhập số bàn')
+        }
+    },[tables])
+    const handleSubmitDeleteTable = useCallback(async (e) => {
+        e.preventDefault()
+        if(IdDelete.current.value !== 0) {
+            try {
+                const response =  await axios.post(`https://severgogi.onrender.com/api/v12/deletetable`,{IdTable: IdDelete.current.value,token: cookies.get('AccessTokenAdmin')});
+              if(response.data.massege === 'Thanh cong') {
+                const result = tables.filter((table) => table.Id !== parseInt(IdDelete.current.value))
+                setTables(result)
+              }
+              } catch (error) {
+                  console.error('Lỗi khi thêm sản phẩm:', error);
+                  // Xử lý lỗi tại đây.
+              }
+            
+        }
+        else {
+            alert('Vui lòng chọn số bàn')
+        }
+    },[tables])
     const handleClickCheckout = () => {
-        socketOrder.emit('checkoutsuccess', tableId,(data) => {
+        const newPrice = bill !== null ? bill.Price : 0
+        socketOrder.emit('checkoutsuccess',newPrice, tableId,(data) => {
             if(data === 'Thanh cong') {
                 handleClickRemoveShowBill()
                 const newTable = [...tables]
@@ -123,7 +113,7 @@ async function updateBillOrder(Table) {
     }
     useEffect(() => {
         axios.all([
-          axios.get('http://localhost:8080/api/v12/showtable'),
+          axios.get('https://severgogi.onrender.com/api/v12/showtable'),
         ])
           .then(axios.spread((Table,) => {
             setTables(Table.data.data)
@@ -131,7 +121,7 @@ async function updateBillOrder(Table) {
           .catch (err => {
               console.error()
             })
-        },[notiContent,checkTable])
+        },[notiContent])
     useEffect(() => {
         for(let i = 0 ; i < tables.length; i++) {
             for(let j = 0; j < notiTable.length; j++) {
@@ -192,7 +182,25 @@ async function updateBillOrder(Table) {
             }
         }
         return Count
-    },[checkTable,notiContent,tables,notiTable])
+    },[notiContent,tables,notiTable])
+    const totalPay = useMemo(() => {
+        let totalAll = 0
+        const VAT = 0.08
+        if(bill !== null) {
+            if(bill.nameType === '') {
+                productsTable.forEach(product => {
+                    if(product.Status === 1) {
+                        totalAll = totalAll + product.Price
+                    }
+                });
+                return [totalAll + (totalAll * VAT),totalAll]
+            }
+            else if (bill.Price > 0) {
+                return [bill.Price + (bill.Price * 0.08),bill.Price]
+            }
+        }
+        return [0,0]
+     },[productsTable])
     return ( 
         <>
             <div className="Table_Container">
@@ -200,7 +208,7 @@ async function updateBillOrder(Table) {
                 <span className='Table_Container-qualitytable'>{tableUser}/{tables.length}</span>
                     <div className='Table_content'>
                         {tables.map((table,index) => (
-                            <div onClick={() => handleClickOpenTable(table.Id,table.Name)} key={index} className='Table_item'>
+                            <div onClick={() => handleClickOpenTable(table.Id,table.Status)} key={index} className='Table_item'>
                                 <h2>{table.Name}</h2>
                                 <img className='Table-icon' src={imgTable} />
                                 <h2>{table.Status}</h2>
@@ -210,55 +218,109 @@ async function updateBillOrder(Table) {
                             </div>
                         ))}
                     </div>
+                    <div className='btn_addtable'>
+                        <button onClick={() => setCheckEdit(true)} type="button" className="button">
+                        <span className="button__text">Chỉnh sửa</span>
+                        <span className="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" stroke="currentColor" height="24" fill="none" className="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
+                        </button>
+                    </div>
             </div>
-            <div ref={RefTable} onClick={handleClickRemoveShowBill} className='modal_detailbillorder'>
-                <div onClick={(e) => e.stopPropagation()} className='detailbill_content'>
-                    <div className='bill'>                          
-                    <h1 ref={headerDetalTable}>Bàn Số 1</h1>  
-                    <h2>(Gọi Món)</h2>
-                    <div className='detailbill_container_products'>
-                    {productsTable.length !== 0 ? (
-                        (productsTable.map((product,index) => (
-                                    <div key={index} className='bill_content-item'>
-                                        <div className='bill_content-item-img'>
-                                             <img src={`${process.env.REACT_APP_IP_SEVER}/api/v12/showimgproduct/${product.Img}`}/>
-                                        </div>
-                                        <div className='bill_content-item-product'>  
-                                            <div className='Information'>
-                                                <h2>{product.Name}</h2>
-                                                <h3>Phân Loại Size: M</h3>
-                                                <span style={{fontSize: '10px'}}>x{product.Quantity}</span>
-                                            </div>
-                                            <div className='price'>
-                                                <div className='price_item'>
-                                                    {/* <h2 style={{color: product.Status === 0 ? '#3fb800' : product.Status === 0 ? '#afaf00' : '#ba3939'}}>{product.Status}</h2> */}
-                                                    <span style={{fontSize: '14px'}}>{product.Price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '₫'}</span>
-                                                </div>
-                                            </div>                    
-                                                <div className='button_detailproductOrder'>
-                                                <div className='button_container'> 
-                                                    {(product.Status === 1 ? <div className='showdetail'><h2>Đã giao </h2></div> : null)}
-                                                    {(product.Status === 2 ? <div className='showdetail'><h3>Đã hủy</h3></div> : null)}
-                                                    {(product.Status === 0 ? <div className='showdetail'><button onClick={() => handleClickCheckBill(product.Id,product.IdDetail,1)} className="button">Lên Món</button></div> : null)}
-                                                    {(product.Status === 0 ? (<div className='delete'><button onClick={() => handleClickCheckBill(product.Id,product.IdDetail,2)}  className="button">Từ chối</button></div>) : null)}
-                                                    </div>
-                                                </div>
-                                        </div>             
-                                    </div>
-                        )))
-                    ) : (
-                        <h1>Khong tìm thấy sản phẩm</h1>
-                    )}
-                    </div>
-                        </div>
-                    <div className='detailbill_content-footer'>
-                                <div onClick={handleClickCheckout} className='button_checkout_billorder'>
-                                    <button className="comic-button">Đã Thanh Toán</button>
-                                </div>
-                    </div>
 
-                </div>
+            <div ref={RefTable} onClick={handleClickRemoveShowBill} className='modal_detailbillorder'>
+                    <div onClick={(e) => e.stopPropagation()} className='detailbill_content'>
+                        <div className='bill'>                          
+                        <h1 ref={headerDetalTable}>{bill !== null ? bill.Name : null}</h1>  
+                        <h2>{bill !== null ? bill.Price === 0 ? 'Gọi món': bill.nameType : null}</h2>
+                        <div className='detailbill_container_products'>
+                        {productsTable.length !== 0 ? (
+                            (productsTable.map((product,index) => (
+                                        <div key={index} className='bill_content-item'>
+                                            <div className='bill_content-item-img'>
+                                                <img src={`${process.env.REACT_APP_IP_SEVER}/api/v12/showimgproduct/${product.Img}`}/>
+                                            </div>
+                                            <div className='bill_content-item-product'>  
+                                                <div className='Information'>
+                                                    <h2>{product.Name}</h2>
+                                                    <h3>Phân Loại: {product.NameCate}</h3>
+                                                    <span style={{fontSize: '10px'}}>x{product.Quantity}</span>
+                                                </div>
+                                                <div className='price'>
+                                                    <div className='price_item'>
+                                                        {/* <h2 style={{color: product.Status === 0 ? '#3fb800' : product.Status === 0 ? '#afaf00' : '#ba3939'}}>{product.Status}</h2> */}
+                                                        <span style={{fontSize: '14px'}}>{product.Price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '₫'}</span>
+                                                    </div>
+                                                </div>                    
+                                                    <div className='button_detailproductOrder'>
+                                                    <div className='button_container'> 
+                                                        {(product.Status === 1 ? <div className='showdetail'><h2>Đã giao </h2></div> : null)}
+                                                        {(product.Status === 2 ? <div className='showdetail'><h3>Đã hủy</h3></div> : null)}
+                                                        {(product.Status === 0 ? <div className='showdetail'><button onClick={() => handleClickCheckBill(product.IdDetail,1)} className="button">Lên Món</button></div> : null)}
+                                                        {(product.Status === 0 ? (<div className='delete'><button onClick={() => handleClickCheckBill(product.IdDetail,2)}  className="button">Từ chối</button></div>) : null)}
+                                                        </div>
+                                                    </div>
+                                            </div>             
+                                        </div>
+                            )))
+                        ) : (
+                            <h1>Khong tìm thấy sản phẩm</h1>
+                        )}
+                        </div>
+                            </div>
+                        <div className='detailbill_content-footer'>
+                                        <div className='detailbill_content-footer_price'>
+                                            <div className='price_container'>
+                                                <span className='price_container-item'>Giá:</span>
+                                                <span className='price_container-item'>{totalPay[1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '₫'}</span>
+                                            </div>
+                                            <div className='price_container'>
+                                                <span className='price_container-item'>VAT:</span>
+                                                <span className='price_container-item'>8%</span>
+                                            </div>
+                                            <div className='price_container'>
+                                                <span className='price_container-item'>Tổng cộng:</span>
+                                                <span className='price_container-item'>{totalPay[0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '₫'}</span>
+                                            </div>
+                                        </div>
+                                    <div onClick={handleClickCheckout} className='button_checkout_billorder'>
+                                        <button className="comic-button">Đã Thanh Toán</button>
+                                    </div>
+                        </div>
+
+                    </div>
             </div>
+            <div onClick={() => setCheckEdit(false)} className={checkEdit ? 'modal_edittable open' : 'modal_edittable'}>
+                    <div className="wrapper_edittable">
+                            <div onClick={e => e.stopPropagation()} className="card-switch">
+                                <label className="switch">
+                                <input type="checkbox" className="toggle"/>
+                                <span className="slider_edittable"></span>
+                                <span className="card-side"></span>
+                                <div className="flip-card__inner">
+                                    <div className="flip-card__front">
+                                        <div className="title">Xóa bàn</div>
+                                        <form onSubmit={e => handleSubmitDeleteTable(e)} className="flip-card__form" action="">
+                                        <select ref={IdDelete} className='createqr_content-type_table'>
+                                            <option value='0'>Chọn bàn</option>
+                                            {tables.map((table) => (
+                                                <option key={table.Id} value={table.Id}>{table.Name}</option>
+                                            ))}
+                                        </select>
+                                            <button type='submit' className="flip-card__btn">Let`s go!</button>
+                                        </form>
+                                    </div>
+                                    <div className="flip-card__back">
+                                        <div className="title">Thêm bàn</div>
+                                        <form onSubmit={e => handleSubmitCreateTable(e)} className="flip-card__form" action="">
+                                            <input ref={nameTable} className="flip-card__input" placeholder="Số bàn" type="number"/>
+                                            <button className="flip-card__btn">Confirm!</button>
+                                        </form>
+                                    </div>
+                                </div>
+                                </label>
+                            </div>   
+                    </div>
+                </div>
+
         </>
      );
 }

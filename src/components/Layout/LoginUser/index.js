@@ -1,8 +1,6 @@
 import logo from '../../../Asset/images/logo-gogi-house-X5 (1).png'
-import {Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import Footer from '../DefaultLayout/Footer'
-
-
 
 
 import classNames from "classnames/bind"
@@ -14,6 +12,7 @@ const cx = classNames.bind(styles)
 
 
 function App( {Children} ) {
+    
     const navigate = useNavigate()
     const [checkRegister,setCheckRegister] = useState(false)
     const [passn,setPassn] = useState('')

@@ -13,7 +13,7 @@ const notificeRef = useRef()
           // Gửi dữ liệu lên API Create
           async function deleteCategoris(e) {
             try {
-               await axios.post('http://localhost:8080/api/v12/deletecategoris',{IdCategoris:e.data.Id})
+               await axios.post('https://severgogi.onrender.com/api/v12/deletecategoris',{IdCategoris:e.data.Id})
             } catch (error) {
               alert('Đã xảy ra lõi')
             }
@@ -21,7 +21,7 @@ const notificeRef = useRef()
   // Gửi dữ liệu lên API
   async function addCategori(categori) {
     try {
-      await axios.post('http://localhost:8080/api/v12/createcategori', categori);
+      await axios.post('https://severgogi.onrender.com/api/v12/createcategori', categori);
          setCategoriapi(categori)
         notificeRef.current.classList.add('open')
     } catch (error) {
@@ -33,7 +33,7 @@ const notificeRef = useRef()
     //   // Gửi dữ liệu lên API Update
     async function updateCategori(categori) {
       try {
-         await axios.put('http://localhost:8080/api/v12/updatecategori', categori);
+         await axios.put('https://severgogi.onrender.com/api/v12/updatecategori', categori);
           notificeRef.current.classList.add('open')
           setCategoriapi(categori)
         // alert('Thêm mới thành công một nhóm sản phẩm')
@@ -68,7 +68,7 @@ const notificeRef = useRef()
   // API
   useEffect(() => {
     axios.all([
-      axios.get('http://localhost:8080/api/v12/showcategori'),
+      axios.get('https://severgogi.onrender.com/api/v12/showcategori'),
     ])
       .then(axios.spread((Categori) => {
         const products = Categori.data.data;

@@ -14,7 +14,7 @@ const navigate = useNavigate()
 	const notifice = useRef()
 	async function updateNoti(Token) {
         try {
-                const response = await axios.post('http://localhost:5000/api/v12/updatenoti', Token);
+                const response = await axios.post('https://severgogi.onrender.com/api/v12/updatenoti', Token);
                 if(response.data.massege === 'thanh cong') {
 					setAmount(0)
                 }
@@ -37,6 +37,12 @@ const navigate = useNavigate()
 		// Thực hiện các hành động khác khi hover
 	  };
 	  const handleMouseLeave = () => {
+		  try {
+			  axios.post('https://severgogi.onrender.com/api/v12/sendnoti', {token: cookies.get('AccessTokenAdmin')});
+		  } catch (error) {
+				  alert('Có lói xảy ra vui lòng thử lại')
+			  // Xử lý lỗi tại đây.
+		  }
 		if(notifice.lenght !== 0) {
 			const result = notifis.reduce((acc,curr) => {
 				const temp = {...curr}
@@ -62,7 +68,7 @@ const navigate = useNavigate()
 			token: cookies.get('AccessTokenAdmin')
 		}
 		axios.all([
-		  axios.post('http://localhost:8080/api/v12/shownotifi',Account),
+		  axios.post('https://severgogi.onrender.com/api/v12/shownotifi',Account),
 		])
 		  .then(axios.spread((Noti) => {
 			if(Noti.data.massege === 'Thanh cong') {

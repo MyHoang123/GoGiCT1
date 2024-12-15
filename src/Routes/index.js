@@ -2,7 +2,6 @@
 import DefaultLayout from "~/components/Layout/DefaultLayout";
 import AdminLayout from "~/components/Layout/AdminLayout";
 import MobileLayout from "~/components/Layout/MobileLayout1";
-import Order from "~/components/Layout/MobileLayout";
 import CardLayout from "~/components/Layout/CardLayout";
 import Purchase from "~/components/Layout/Purchase";
 import LogInAdmin from "~/components/Layout/LoginAdmin";
@@ -21,7 +20,6 @@ import Open from "~/pages/Open/index.js";
 import showDetailProduct from "~/pages/DetailProduct/showDetailProduct";
 import showVoucher from "~/pages/Voucher/index";
 // Acc
-import ShowAcc from "~/pages/Account/showAcc";
 import showBill from "~/pages/Bill/index";
 import showComment from "~/pages/Comment/index";
 import User from "~/pages/User/index";
@@ -36,20 +34,11 @@ import showTable from "~/pages/Table";
 // Mobile
 import HomeMobile from "~/pages/HomeMobile2";
 import LoginUser from "~/pages/LoginUserMobile";
-import HomeOrder from "~/pages/HomeMobile";
 import CardMobile from "~/pages/CardMobile2";
 import InfoUser from "~/pages/InfoUser";
 import PurchaseMobile from "~/pages/PurchaseMobile";
-
-import OrderCard from "~/pages/CardMobile";
 import DetailBillMobile from "~/pages/DetaiBillMobile";
 import ModalAuthenOTPMobile from "~/pages/LoginUserMobile/AuthenOTP";
-
-
-import BillMobileOrder from "~/pages/BillMobileOrder";
-import DetaiProductMobile from "~/pages/DetailProductMobile";
-import DetaiProductMobileOrder from "~/pages/DetailProductOrder";
-
 const publicRoutes = [
     // Product
     {path: '/showproduct', component: showProduct, layout: AdminLayout ,},
@@ -85,18 +74,9 @@ const mobileRoutes = [
         {path: '/', component: HomeMobile, layout: MobileLayout ,},
         {path: '/loginuser', component: LoginUser, layout: MobileLayout ,},
         {path: '/loginuser/authenotp', component: ModalAuthenOTPMobile, layout: MobileLayout ,},
-        {path: '/detail/:IdProduct', component: DetaiProductMobile, layout: MobileLayout ,},
         {path: '/purchase/:IdBill', component: DetailBillMobile, layout: MobileLayout ,},
         {path: '/card', component: CardMobile, layout: MobileLayout ,},
         {path: '/user', component: InfoUser, layout: MobileLayout ,},
         {path: '/purchase', component: PurchaseMobile, layout: MobileLayout ,},
-        {path: '/mobile/billorder', component: BillMobileOrder, layout: MobileLayout,},
-        // Order
-        // {path: '/mobile/card', component: CardMobile, layout: MobileLayout ,},
-        {path: '/order/buffe/:IdType/order/billorder', component: BillMobileOrder, layout: MobileLayout ,},
-        {path: '/order/detail/:IdProduct', component: DetaiProductMobileOrder, layout: Order ,},
-        {path: '/order', component: HomeOrder, layout: Order,},
-        {path: '/order/card', component: OrderCard, layout: Order ,},
-        {path: '/order/billorder', component: BillMobileOrder, layout: Order ,},
 ]
 export { publicRoutes, mobileRoutes }

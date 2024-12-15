@@ -20,11 +20,11 @@ function App() {
     //   // Gửi dữ liệu lên API Update
   async function updateUser(user) {  
     try {
-      const response = await axios.put('http://localhost:8080/api/v12/updateinfo',user)
+      const response = await axios.put('https://severgogi.onrender.com/api/v12/updateinfo',user)
         if(response.data.massege === 'Thanh cong') {
             const useNew = {
                 ...JSON.parse(localStorage.getItem('Account')),
-                Name: user.UserName,
+                UserName: user.UserName,
                 Sdt: user.PhoneNumber,
                 Birthday: user.Birthday,
                 Email: user.Email,
@@ -40,6 +40,14 @@ function App() {
             timer: 1500
             });
         }
+        else {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Email đã tồn tại !",
+                footer: '<a href="#">Why do I have this issue?</a>'
+              });
+        }
     } catch (error) {
         alert('Có lõi xảy ra vui lòng thử lại !')
     }
@@ -49,7 +57,7 @@ function App() {
     try {
         const formData = new FormData();
         formData.append('file', file.file, `${file.file.name}_avt`)
-        const response = await axios.post('http://localhost:8080/api/v12/updateavt', formData, {
+        const response = await axios.post('https://severgogi.onrender.com/api/v12/updateavt', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'Authorization': cookies.get('AccessToken')
@@ -125,7 +133,7 @@ function App() {
                                     </div>
                                     <div className={cx('input-box')}>
                                         <label>Email</label>
-                                        <input onChange={checkEdit ? (e) => setMail(e.target.value) : () => setMail(Mail)} required="" value={`${Mail}`} type="email"/>
+                                        <input onChange={checkEdit ? (e) => setMail(e.target.value) : () => setMail(Mail)} required="" value={Mail !== null ? `${Mail}` : ''} type="email"/>
                                     </div>
                                     <div className={cx('gender-box')}>
                                         <label>Gender</label>
@@ -172,7 +180,7 @@ function App() {
                         <div className={cx('info_user_body_avt_containt')}>
                         <div className={cx('card')}>
                             <div className={cx('card__img')}></div>
-                            <div className={cx('card__avatar')}><img src={JSON.parse(localStorage.getItem('Account')).Classify === 'user' ? `http://localhost:8080/api/v12/avtuser/${Avt}`: `${Avt}` }/></div>
+                            <div className={cx('card__avatar')}><img src={JSON.parse(localStorage.getItem('Account')).Classify === 'user' ? `https://severgogi.onrender.com/api/v12/avtuser/${Avt}`: `${Avt}` }/></div>
                             <div className={cx('card__title')}>{userName}</div>
                             <div className={cx('card__subtitle')}>Thành viên bạc</div>
                             {JSON.parse(localStorage.getItem('Account')).Classify === 'user' ? (

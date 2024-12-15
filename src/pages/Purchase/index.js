@@ -1,11 +1,9 @@
 import axios from 'axios';
 import { Cookies } from 'react-cookie'
-import Swal from 'sweetalert2/dist/sweetalert2.js'
-import 'sweetalert2/src/sweetalert2.scss'
-import { Link, useNavigate } from 'react-router-dom'
-import React, { useState ,useEffect, useRef , useContext } from 'react';
+import { Link } from 'react-router-dom'
+import React, { useState ,useEffect , useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTruckFast,faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { ContextPurchase } from "../../components/Layout/Purchase"
 import BillNull from '../../Asset/images/5fafbb923393b712b964.png'
 import classNames from "classnames/bind"
@@ -14,8 +12,7 @@ const cx = classNames.bind(styles)
 
 function Purchase() {
     const cookie = new Cookies()
-    const navigate = useNavigate()
-    const { bills, setBills, setIdBill, setComment, setModalCmt, setProduct } = useContext(ContextPurchase)
+    const { bills, setBills, handleClickShowComment } = useContext(ContextPurchase)
     // State
     const [Active,setActive] = useState(0)
     const [AmountStatus, setAmountStatus] = useState([
@@ -24,46 +21,12 @@ function Purchase() {
         {danggiao: 0},
         {dagiao: 0},
     ])
-    async function showComment(User) {
-        try {
-           const response = await axios.post('http://localhost:8080/api/v12/showcommentuser', User)
-           if(response.data.massege === 'Thanh cong') {
-                setComment(response.data.data)
-                setModalCmt(true)
-            }
-        } catch (error) {
-            console.error('Lỗi khi thêm sản phẩm:', error);
-            // Xử lý lỗi tại đây.
-        }
-    }
-    const handleClickOpenCmt = (IdBill,data) => {
-        if(IdBill !== null && data !== null) {
-            setIdBill(IdBill)
-            setProduct(JSON.parse(data))
-            setModalCmt(true)
-        }
-    }
-    const handleClickShowComment = (IdBill,data) => {
-        if(IdBill !== null) {
-            const product = JSON.parse(data).reduce((acc,curr) => {
-                return [...acc,curr.Id]
-            },[])
-            setIdBill(IdBill)
-            const user = {
-                IdBill: IdBill,
-                IdProduct: product,
-                token: cookie.get('AccessToken')
-            }
-            setProduct(JSON.parse(data))
-            showComment(user)
-        }
-    }
     // API
     useEffect(() => {
         if(cookie.get('AccessToken') !== undefined) {
             if(Active === 0) {
                 axios.all([
-                   axios.post('http://localhost:8080/api/v12/showbill',{token: cookie.get('AccessToken')}),
+                   axios.post('https://severgogi.onrender.com/api/v12/showbill',{token: cookie.get('AccessToken')}),
                   ])
                     .then(axios.spread((Bill, ) => {
                         setBills(Bill.data.data)
@@ -98,7 +61,7 @@ function Purchase() {
                     })
             }else if (Active === 1) {
                 axios.all([
-                    axios.post('http://localhost:8080/api/v12/showbilluser',{
+                    axios.post('https://severgogi.onrender.com/api/v12/showbilluser',{
                         token: cookie.get('AccessToken'),
                         Status: 0
                     }),
@@ -111,7 +74,7 @@ function Purchase() {
                     })
             }else if(Active === 2) {
                 axios.all([
-                    axios.post('http://localhost:8080/api/v12/showbilluser',{
+                    axios.post('https://severgogi.onrender.com/api/v12/showbilluser',{
                         token: cookie.get('AccessToken'),
                         Status: 1
                     }),
@@ -124,7 +87,7 @@ function Purchase() {
                     })
             }else if(Active === 3) {
                 axios.all([
-                    axios.post('http://localhost:8080/api/v12/showbilluser',{
+                    axios.post('https://severgogi.onrender.com/api/v12/showbilluser',{
                         token: cookie.get('AccessToken'),
                         Status: 2
                     }),
@@ -137,7 +100,7 @@ function Purchase() {
                     })
             }else if(Active === 4) {
                 axios.all([
-                    axios.post('http://localhost:8080/api/v12/showbilluser',{
+                    axios.post('https://severgogi.onrender.com/api/v12/showbilluser',{
                         token: cookie.get('AccessToken'),
                         Status: 3
                     }),
@@ -150,7 +113,7 @@ function Purchase() {
                     })
             }else {
                 axios.all([
-                    axios.post('http://localhost:8080/api/v12/showbilluser',{
+                    axios.post('https://severgogi.onrender.com/api/v12/showbilluser',{
                         token: cookie.get('AccessToken'),
                         Status: 4
                     }),
@@ -262,8 +225,8 @@ function Purchase() {
                                                         </>
                                                     ) : (
                                                         <>
-                                                        <FontAwesomeIcon style={{marginRight:'8px'}} icon={faTruckFast} />
-                                                        <span>Đã hủy</span> 
+                                                        <FontAwesomeIcon style={{marginRight:'8px',color:'rgb(188 0 0)'}} icon={faTruckFast} />
+                                                        <span style={{color:'rgb(188 0 0)'}}>Đã hủy</span> 
                                                         </>
                                                     )
                                                 )
@@ -282,11 +245,11 @@ function Purchase() {
                                         <div key={i} className={cx('Purchase_content_body_container_body')}>
                                             <div className={cx('Purchase_content_body_container_body-left')}>
                                                 <div className={cx('Purchase_content_body_container_body-left-img')}>
-                                                    <img style={{width:'100%',objectFit:'cover'}} src={`http://localhost:8080/api/v12/showimgproduct/${product.Img}`}/>
+                                                    <img style={{width:'100%',objectFit:'cover'}} src={`https://severgogi.onrender.com/api/v12/showimgproduct/${product.Img}`}/>
                                                 </div>
                                                 <div className={cx('Purchase_content_body_container_body-left-content')}>
                                                     <h3>{product.Name}</h3>
-                                                    <h3 style={{color: 'rgba(0, 0, 0, .54)',fontSize:'12px'}}>Phân loại: Thịt bò</h3>
+                                                    <h3 style={{color: 'rgba(0, 0, 0, .54)',fontSize:'12px'}}>Phân loại: {product.NameCate}</h3>
                                                     <h3 style={{fontSize:'14px', marginBottom:'0'}}>x{product.sl}</h3>
                                                 </div>
                                             </div>
@@ -307,13 +270,6 @@ function Purchase() {
                                                 <h2>{bill.TotalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '₫'}</h2>
                                             </div>
                                         </div>
-                                        <div className={cx('Purchase_content_body_footer-totalpay_status')}>
-                                            {bill.StatusPay === 0 ? (
-                                                <span>Thanh toán khi nhận hàng</span>
-                                            ) : (
-                                                bill.StatusPay === 1 ? (<span>Đã thanh toán</span>) : (<span>Chờ thanh toán</span>)
-                                            )}
-                                        </div>
                                     </div>
                                     <div className={cx('Purchase_content_body_footer-button')}>
                                         <div className={cx('Purchase_content_body_footer-button-left')}>
@@ -321,7 +277,7 @@ function Purchase() {
                                         </div>
                                         <div className={cx('Purchase_content_body_footer-button-right')}>
                                             {bill.Status === 3 ? (
-                                                    <button onClick={() => handleClickOpenCmt(bill.Id,bill.Data)} className={cx('active')}>Đánh giá</button>
+                                                    <button onClick={() => handleClickShowComment(bill.Id,bill.Data)} className={cx('active')}>Đánh giá</button>
                                             ) : (
                                                 (bill.Status === 4 ? (
                                                     <>
@@ -341,98 +297,6 @@ function Purchase() {
                         )))
                     )}
                 </div>
-                {/* <div onClick={() => handleClickRemoveCmt()} style={modalCmt ? {display:'flex'} : {display:'none'}} className={cx('modal_comment')}>
-                    <div onClick={(e) => e.stopPropagation()} className={cx('comment_container')}>
-                        <div className={cx('comment_container_header')}>
-                             <FontAwesomeIcon style={{height:'15px'}} icon={faArrowLeft} />
-                             <h2 style={{marginBottom:'0'}}>Trở về</h2>
-                        </div>
-                        <div className={cx('comment_container_item')}>
-                            {product.map((product,i) => (
-                                            <div key={i}>
-                                            <div className={cx('Purchase_content_body_container_body')} style={{padding:'2px 10px'}}>
-                                                <div className={cx('Purchase_content_body_container_body-left')}>
-                                                    <div className={cx('Purchase_content_body_container_body-left-img')}>
-                                                        <img style={{width:'90%',objectFit:'cover'}} src={`http://localhost:8080/api/v12/showimgproduct/${product.Img}`}/>
-                                                    </div>
-                                                    <div className={cx('Purchase_content_body_container_body-left-content')}>
-                                                        <h3>{product.Name}</h3>
-                                                        <h3 style={{color: 'rgba(0, 0, 0, .54)'}}>Phân loại: Thịt bò</h3>
-                                                        <h3 style={{fontSize:'14px'}}>x{product.sl}</h3>
-                                                    </div>
-                                                </div>
-                                                <div className={cx('Purchase_content_body_container_body-right')}>
-                                                    <h3>{product.Price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '₫'}</h3>
-                                                </div>
-                                            </div>
-                                            <h2>Đánh giá sản phẩm</h2>
-                                            {comment[i] !== undefined ? (
-                                                <div className={cx('comment_container_star')}>
-                                                        <div  className={cx('rating')}>
-                                                            <span></span>
-                                                                <input ref={null} type="radio" id={`star-1${0+(i*5)}`} name={`star-1radio-${i}`} defaultChecked = {comment[i].Star === 5 ? true : false} disabled  />
-                                                                <label htmlFor={`star-1${0+(i*5)}`}>
-                                                                    <svg style={{cursor:'default'}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
-                                                                </label>
-                                                                <input ref={null} type="radio" id={`star-1${1+(i*5)}`} name={`star-1radio-${i}`} defaultChecked = {comment[i].Star === 4 ? true : false} disabled  />
-                                                                <label htmlFor={`star-1${1+(i*5)}`}>
-                                                                    <svg style={{cursor:'default'}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
-                                                                </label>
-                                                                <input ref={null} type="radio" id={`star-1${2+(i*5)}`} name={`star-1radio-${i}`} defaultChecked = {comment[i].Star === 3 ? true : false} disabled   />
-                                                                <label htmlFor={`star-1${2+(i*5)}`}>
-                                                                    <svg style={{cursor:'default'}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
-                                                                </label>
-                                                                <input ref={null} type="radio" id={`star-1${3+(i*5)}`} name={`star-1radio-${i}`} defaultChecked = {comment[i].Star === 2 ? true : false} disabled   />
-                                                                <label htmlFor={`star-1${3+(i*5)}`}>
-                                                                    <svg style={{cursor:'default'}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
-                                                                </label>
-                                                                <input ref={null} type="radio" id={`star-1${4+(i*5)}`} name={`star-1radio-${i}`} defaultChecked = {comment[i].Star === 1 ? true : false} disabled   />
-                                                                <label htmlFor={`star-1${4+(i*5)}`}>
-                                                                    <svg style={{cursor:'default'}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
-                                                                </label>
-                                                    </div>
-                                                        <div className={cx('text_comment')}>
-                                                        <p style={{color:'#333',border:'1px solid #333'}} ref={e => containtCmt.current[i] = e} className={cx('comment-input')}>{comment[i].Containt}</p>
-                                                    </div>
-                                                    </div>                                   
-                                                ) : (
-                                                    <div className={cx('comment_container_star')}>
-                                                       <div className={cx('rating')}>
-                                                            <input ref={e => checked.current[1+(i*5)] = e} onChange={() => starCmt.current[i] = 5} type="radio" id={`star${0+(i*5)}`} />
-                                                            <label htmlFor={`star${0+(i*5)}`}>
-                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
-                                                            </label>
-                                                            <input ref={e => checked.current[2 + (i*5)] = e} onChange={() => starCmt.current[i] = 4} type="radio" id={`star${1+(i*5)}`} />
-                                                            <label htmlFor={`star${1+(i*5)}`}>
-                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
-                                                            </label>
-                                                            <input ref={e => checked.current[3 + (i*5)] = e} onChange={() => starCmt.current[i] = 3} type="radio" id={`star${2+(i*5)}`} />
-                                                            <label htmlFor={`star${2+(i*5)}`}>
-                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
-                                                            </label>
-                                                            <input ref={e => checked.current[4 + (i*5)] = e} onChange={() => starCmt.current[i] = 2} type="radio" id={`star${3+(i*5)}`} />
-                                                            <label htmlFor={`star${3+(i*5)}`}>
-                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
-                                                            </label>
-                                                            <input ref={e => checked.current[5 + (i*5)] = e} onChange={() => starCmt.current[i] = 1} type="radio" id={`star${4+(i*5)}`} />
-                                                            <label htmlFor={`star-${4+(i*5)}`}>
-                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
-                                                            </label>
-                                                         </div>
-                                                        <div className={cx('text_comment')}>
-                                                            <textarea ref={e => containtCmt.current[i] = e} className={cx('comment-input')} spellCheck={false} placeholder="Nhập bình luận và đánh giá của bạn..."></textarea>
-                                                        </div>
-                                                        <div onClick={() => handleClickComment(product.Id,i)} className={cx('button_submit-comment')}>
-                                                            <button className={cx('comic-button')}>Đánh Giá</button>
-                                                         </div>
-                                                    </div>
-                                                )}
-                                            
-                                            </div>
-                                ))}
-                        </div>
-                    </div>
-                </div> */}
             </>
          );
 }

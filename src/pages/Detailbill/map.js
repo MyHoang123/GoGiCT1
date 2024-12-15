@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 // Cấu hình Mapbox
 mapboxgl.accessToken = 'pk.eyJ1IjoibXlob2FuZzEyMyIsImEiOiJjbTFlZzF2d2cydWR0MmtvajFwYnB5OW42In0.-CeNZom6cnNBEsAWVumPuQ'
-
 const MapComponent = ( {Destination} ) => {
     const mapContainer = useRef(null)
     const start = [105.780017, 10.045260]
@@ -42,8 +41,6 @@ const moveMarker = (startLng, startLat, endLng, endLat, duration) => {
         // Tính toán vị trí mới
         const lng = startLng + (endLng - startLng) * progress;
         const lat = startLat + (endLat - startLat) * progress;
-        // markerRef.current.setLngLat([lng,lat])
-        // Cập nhật vị trí của marker
         calculateDirection(startLat, startLng, endLat, endLng)
         markerRef.current.setLngLat([lng, lat]);
         // Nếu chưa hoàn thành, tiếp tục
@@ -63,9 +60,6 @@ async function getRoute(end) {
   const json = await query.json();
   const data = json.routes[0];
   const route = data.geometry.coordinates;
-  // console.log("🚀 ~ getRoute ~ route:", route)
-  // const line = turf.lineString(route)
-  // markerRef.current = new mapboxgl.Marker().setLngLat(route[0]).addTo(mapRef.current)
   let step = 0
  timeout.current = setInterval(() => {
     if(step === route.length - 1) {
@@ -77,7 +71,6 @@ async function getRoute(end) {
       step += 1
     }
   },5000)
-  // StartLine(route)
   const geojson = {
     type: 'Feature',
     properties: {},
@@ -86,11 +79,9 @@ async function getRoute(end) {
       coordinates: route
     }
   };
-  // if the route already exists on the map, we'll reset it using setData
   if (mapRef.current.getSource('route')) {
       mapRef.current.getSource('route').setData(geojson);
   }
-  // otherwise, we'll make a new request
   else {
       mapRef.current.addLayer({
       id: 'route',
@@ -173,7 +164,7 @@ async function getRoute(end) {
        markerElement.style.position = 'relative'// Để có thể thêm vị trí cho hình ảnh
        // Tạo phần tử img
         imgRef.current = document.createElement('img')
-        imgRef.current.src = 'http://localhost:8080/api/v12/header/reparto-removebg-preview.png'
+        imgRef.current.src = 'https://severgogi.onrender.com/api/v12/header/reparto-removebg-preview.png'
         imgRef.current.style.width = '100%'
         imgRef.current.style.height = '100%'
         imgRef.current.style.transform = ''

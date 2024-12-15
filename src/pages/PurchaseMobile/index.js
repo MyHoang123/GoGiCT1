@@ -5,7 +5,7 @@
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { faSliders,faHouse,faUser,faBasketShopping,faBell,faStar,faPlus, faClipboard,faAnglesRight, } from '@fortawesome/free-solid-svg-icons';
+import { faHouse,faUser,faBasketShopping, faClipboard, } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { MobileContext } from '../../components/Layout/MobileLayout1'
 
@@ -20,7 +20,7 @@ function App() {
     const {Amount,bills, setBills, setIdBill, setComment, setModalCmt, setProduct, cookies} = useContext(MobileContext)
     async function showComment(User) {
         try {
-           const response = await axios.post('http://localhost:8080/api/v12/showcommentuser', User)
+           const response = await axios.post('https://severgogi.onrender.com/api/v12/showcommentuser', User)
            if(response.data.massege === 'Thanh cong') {
                 setComment(response.data.data)
                 setModalCmt(true)
@@ -56,7 +56,7 @@ function App() {
         if(cookies.get('AccessToken') !== undefined) {
             if(checkNav === 3) {
                 axios.all([
-                    axios.post('http://localhost:8080/api/v12/showbill',{token: cookies.get('AccessToken')}),
+                    axios.post('https://severgogi.onrender.com/api/v12/showbill',{token: cookies.get('AccessToken')}),
                 ])
                 .then(axios.spread((Bill, ) => {
                         setBills(Bill.data.data)
@@ -66,7 +66,7 @@ function App() {
                     })
             }else if (checkNav === 0) {
                 axios.all([
-                    axios.post('http://localhost:8080/api/v12/showbilluser',{
+                    axios.post('https://severgogi.onrender.com/api/v12/showbilluser',{
                         token: cookies.get('AccessToken'),
                         Status: 0
                     }),
@@ -79,7 +79,7 @@ function App() {
                     })
             }else if(checkNav === 1) {
                 axios.all([
-                    axios.post('http://localhost:8080/api/v12/showbilluser',{
+                    axios.post('https://severgogi.onrender.com/api/v12/showbilluser',{
                         token: cookies.get('AccessToken'),
                         Status: 1
                     }),
@@ -92,7 +92,7 @@ function App() {
                     })
             }else if(checkNav === 2) {
                 axios.all([
-                    axios.post('http://localhost:8080/api/v12/showbilluser',{
+                    axios.post('https://severgogi.onrender.com/api/v12/showbilluser',{
                         token: cookies.get('AccessToken'),
                         Status: 2
                     }),
@@ -140,11 +140,11 @@ function App() {
                              <div key={i} className={cx('Purchase_product_body_product')}>
                                  <div className={cx('Purchase_product_body_product-info')}>
                                      <div className={cx('Purchase_product_body_product-img')}>
-                                         <img src={`http://localhost:8080/api/v12/showimgproduct/${product.Img}`}/>
+                                         <img src={`https://severgogi.onrender.com/api/v12/showimgproduct/${product.Img}`}/>
                                      </div>
                                      <div className={cx('Purchase_product_body_product-name')}>
                                          <h3>{product.Name}</h3>
-                                         <h4>Phân loại: Thịt bò</h4>
+                                         <h4>Phân loại: {product.NameCate}</h4>
                                          <h5>x{product.sl}</h5>
                                      </div>
                                  </div>

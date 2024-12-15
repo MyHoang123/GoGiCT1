@@ -1,12 +1,11 @@
 
 
 import axios from 'axios'
-
 import { useCallback, useEffect, useRef, useState, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLocationCrosshairs, faChevronLeft, faPhoneVolume } from '@fortawesome/free-solid-svg-icons';
 import { faClipboard as faClipboardRegular , faStar as faStarRerular} from '@fortawesome/free-regular-svg-icons'; 
-import test from '../../Asset/images/avtmale.png'
+import test from '../../Asset/images/avt.jpg'
 import classNames from "classnames/bind"
 import { MobileContext } from '../../components/Layout/MobileLayout1'
 import {Link, useParams} from 'react-router-dom';
@@ -25,7 +24,7 @@ function App() {
     const {cookies, billUpdate, handleClickOpenCmtDetai} = useContext(MobileContext)
     async function CheckPayStatus(IdPay) {
         try {
-        const response =  await axios.post('http://localhost:8080/api/v12/CheckPayOrder', {app_trans_id:IdPay});
+        const response =  await axios.post('https://severgogi.onrender.com/api/v12/CheckPayOrder', {app_trans_id:IdPay});
         if(response.data.result.return_code === 1) {
             const newArr = [...bill]
             newArr.StatusPay = 1
@@ -66,7 +65,7 @@ function App() {
     useEffect(() => {
         if(cookies.get('AccessToken') !== undefined) {
             axios.all([
-              axios.post('http://localhost:8080/api/v12/getbill',{
+              axios.post('https://severgogi.onrender.com/api/v12/getbill',{
                 IdBill: IdBill,
                 token: cookies.get('AccessToken')
               }),

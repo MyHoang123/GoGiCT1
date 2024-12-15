@@ -25,7 +25,7 @@ function DraggableItem({ id, children }) {
                 <span style={{color:'#333'}}>{children.Star}</span>
               </div>
                 <div className="card-img">
-                    <img src={`http://localhost:8080/api/v12/showimgproduct/${children.Img}`}/>
+                    <img src={`https://severgogi.onrender.com/api/v12/showimgproduct/${children.Img}`}/>
                 </div>
                 <div className="card-info">
                   <p style={{height:'40px'}} className="text-title">{children.Name}</p>
