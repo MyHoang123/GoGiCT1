@@ -1,4 +1,4 @@
-import BodySlice from '~/components/Layout/DefaultLayout/Body/BodySlice'
+import BodySlice from '../components/Layout/DefaultLayout/Body/BodySlice'
 import CardProductSlice from '../components/Layout/CardLayout/CardSlice'
 import { configureStore } from "@reduxjs/toolkit";
 

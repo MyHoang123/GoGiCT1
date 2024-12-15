@@ -4,7 +4,7 @@ import 'sweetalert2/src/sweetalert2.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowTurnDown } from '@fortawesome/free-solid-svg-icons';
 import { Cookies } from 'react-cookie';
-import { RenderStar } from '~/hooks'
+import { RenderStar } from '../../hooks'
 
 import classNames from "classnames/bind"
 import styles from './comment.module.scss'

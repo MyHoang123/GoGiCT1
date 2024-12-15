@@ -2,7 +2,7 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faHeart,faCartShopping} from '@fortawesome/free-solid-svg-icons';
 import { useRef, useState, memo } from 'react';
-import { RenderStar } from '~/hooks'
+import { RenderStar } from '../../../../hooks'
 import { Cookies } from 'react-cookie';
 
 function DetailProduct( {productDetail, modalDetail, handleClickRemoveDetailProduct} ) {

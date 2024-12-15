@@ -1,11 +1,11 @@
 
 
-import Hihi from "~/Asset/Vidoe/gogi.mp4"
+import Hihi from "../../../../Asset/Vidoe/gogi.mp4"
 import { useContext } from "react"
 import { IdElementContext } from '../IdElementContext'
 import { faHeart,faCartShopping } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { RenderStar } from '~/hooks'
+import { RenderStar } from '../../../../hooks'
 function Betseller({cx, products}) {
     const {modalVideoBest, videoBest, listProductBest, imgBestSeller, indexSlide } = useContext(IdElementContext)
     return ( 

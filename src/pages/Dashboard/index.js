@@ -2,9 +2,8 @@ import * as Icon from 'react-feather';
 import axios from 'axios';
 import  { useContext, useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js';
-import Map from './map'
 import 'flatpickr';
-import  {ElementContextAdmin} from '~/components/Layout/AdminLayout'
+import  {ElementContextAdmin} from '../../components/Layout/AdminLayout'
 function Dashboard() {
 	const [PriceDate,setPriceDate] = useState([])
 	const [products,setProducts] = useState([])

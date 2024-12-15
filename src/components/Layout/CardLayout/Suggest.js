@@ -3,7 +3,7 @@ import classNames from "classnames/bind"
 import { memo, useRef } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
-import {RenderStar } from '~/hooks'
+import {RenderStar } from '../../../hooks'
 import { useSelector } from 'react-redux';
 import {listProductSuggest} from './CardSelector'
 const cx = classNames.bind(styles)

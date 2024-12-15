@@ -1,5 +1,5 @@
 import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import {publicRoutes,mobileRoutes} from '~/Routes';
+import {publicRoutes,mobileRoutes} from './Routes';
 import { isBrowser } from 'react-device-detect';
 function App() {
   if (isBrowser) {

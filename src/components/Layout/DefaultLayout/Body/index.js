@@ -19,7 +19,7 @@ import { getProduct } from './BodySlice';
 import { useContext, useEffect, useRef, useState,memo, useCallback } from 'react';
 import { Cookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom'
-import { RenderStar } from '~/hooks'
+import { RenderStar } from '../../../../hooks'
 import { listProductSelectorAll } from './BodySelector';
 function Body() {
     const productAll = useSelector(listProductSelectorAll)

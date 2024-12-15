@@ -1,44 +1,44 @@
 // Layout
-import DefaultLayout from "~/components/Layout/DefaultLayout";
-import AdminLayout from "~/components/Layout/AdminLayout";
-import MobileLayout from "~/components/Layout/MobileLayout1";
-import CardLayout from "~/components/Layout/CardLayout";
-import Purchase from "~/components/Layout/Purchase";
-import LogInAdmin from "~/components/Layout/LoginAdmin";
-import LogInUser from "~/components/Layout/LoginUser";
+import DefaultLayout from "../components/Layout/DefaultLayout";
+import AdminLayout from "../components/Layout/AdminLayout";
+import MobileLayout from "../components/Layout/MobileLayout1";
+import CardLayout from "../components/Layout/CardLayout";
+import Purchase from "../components/Layout/Purchase";
+import LogInAdmin from "../components/Layout/LoginAdmin";
+import LogInUser from "../components/Layout/LoginUser";
 // Page
-import Dashboard from "~/pages/Dashboard";
-import Home from "~/pages/Home";
-import PurchasePage from "~/pages/Purchase";
-import Detailbill from "~/pages/Detailbill";
-import ModalAuthen from "~/pages/ModalAuthen";
-import ModalAuthenOTP from "~/pages/ModalAuthen/OTPAuthen";
+import Dashboard from "../pages/Dashboard";
+import Home from "../pages/Home";
+import PurchasePage from "../pages/Purchase";
+import Detailbill from "../pages/Detailbill";
+import ModalAuthen from "../pages/ModalAuthen";
+import ModalAuthenOTP from "../pages/ModalAuthen/OTPAuthen";
 // Product
-import showProduct from "~/pages/Product/showProduct";
-import showSlider from "~/pages/Slider/showSlider";
-import Open from "~/pages/Open/index.js";
-import showDetailProduct from "~/pages/DetailProduct/showDetailProduct";
-import showVoucher from "~/pages/Voucher/index";
+import showProduct from "../pages/Product/showProduct";
+import showSlider from "../pages/Slider/showSlider";
+import Open from "../pages/Open/index.js";
+import showDetailProduct from "../pages/DetailProduct/showDetailProduct";
+import showVoucher from "../pages/Voucher/index";
 // Acc
-import showBill from "~/pages/Bill/index";
-import showComment from "~/pages/Comment/index";
-import User from "~/pages/User/index";
+import showBill from "../pages/Bill/index";
+import showComment from "../pages/Comment/index";
+import User from "../pages/User/index";
 // Categori
-import showCategori from "~/pages/Categoris/showCategoris";
-import showMenu from "~/pages/Menu/showMenu";
-import createQr from "~/pages/CreateQR";
+import showCategori from "../pages/Categoris/showCategoris";
+import showMenu from "../pages/Menu/showMenu";
+import createQr from "../pages/CreateQR";
 // Type
-import showType from "~/pages/Type/showTypes";
-import detailType from "~/pages/DetailType/showDetailType";
-import showTable from "~/pages/Table";
+import showType from "../pages/Type/showTypes";
+import detailType from "../pages/DetailType/showDetailType";
+import showTable from "../pages/Table";
 // Mobile
-import HomeMobile from "~/pages/HomeMobile2";
-import LoginUser from "~/pages/LoginUserMobile";
-import CardMobile from "~/pages/CardMobile2";
-import InfoUser from "~/pages/InfoUser";
-import PurchaseMobile from "~/pages/PurchaseMobile";
-import DetailBillMobile from "~/pages/DetaiBillMobile";
-import ModalAuthenOTPMobile from "~/pages/LoginUserMobile/AuthenOTP";
+import HomeMobile from "../pages/HomeMobile2";
+import LoginUser from "../pages/LoginUserMobile";
+import CardMobile from "../pages/CardMobile2";
+import InfoUser from "../pages/InfoUser";
+import PurchaseMobile from "../pages/PurchaseMobile";
+import DetailBillMobile from "../pages/DetaiBillMobile";
+import ModalAuthenOTPMobile from "../pages/LoginUserMobile/AuthenOTP";
 const publicRoutes = [
     // Product
     {path: '/showproduct', component: showProduct, layout: AdminLayout ,},

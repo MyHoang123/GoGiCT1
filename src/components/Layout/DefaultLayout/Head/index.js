@@ -3,10 +3,10 @@ import styles from './Card.module.scss'
 import classNames from "classnames/bind"
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 import Betseller from './Bestseller'
-import WoodBase from "~/Asset/images/0622-angle-2-removebg-preview.png"
-import Tomato1 from "~/Asset/images/lovepik-little-tomato-png-image_400974636_wh860-removebg-preview.png"
-import Salad from "~/Asset/images/Romaine-removebg-preview.png"
-import Slogan from "~/Asset/images/shipper-co-giao-hang-khi-gian-cach_2707111247.jpg"
+import WoodBase from "../../../../Asset/images/0622-angle-2-removebg-preview.png"
+import Tomato1 from "../../../../Asset/images/lovepik-little-tomato-png-image_400974636_wh860-removebg-preview.png"
+import Salad from "../../../../Asset/images/Romaine-removebg-preview.png"
+import Slogan from "../../../../Asset/images/shipper-co-giao-hang-khi-gian-cach_2707111247.jpg"
 import 'sweetalert2/src/sweetalert2.scss'
 import { IdElementContext } from '../IdElementContext'
 import { faPause,faPlay } from '@fortawesome/free-solid-svg-icons'

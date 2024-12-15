@@ -13,7 +13,7 @@ import Suggests from './Suggest';
 import Youcard from './YourCard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass, faSpinner} from '@fortawesome/free-solid-svg-icons'
-import { useDebounce } from '~/hooks'
+import { useDebounce } from '../../../hooks'
 import { useEffect, useRef, useState,useMemo, memo } from 'react'
 import { resetData } from '../DefaultLayout/Body/BodySlice';
 import { useDispatch, useSelector } from 'react-redux';
