@@ -65,5 +65,8 @@
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^6.0.0",
     "babel-plugin-module-resolver": "^5.0.0"
+  },
+  "engines": {
+    "node": "20.12.1"
   }
 }
