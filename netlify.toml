@@ -1,0 +1,10 @@
+
+[build]
+    command = "npm run build"
+    commandOrigin = "ui"
+    publish = "/opt/build/repo"
+    publishOrigin = "default"
+[[redirects]]
+    from = "/*"
+    to = "/index.html"
+    status = 200
