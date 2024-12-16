@@ -28,6 +28,80 @@
     overflow: auto;
     animation: openModalComment .5s linear;
   }
+  .Modal_hellogogi {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100vh;
+    background-image: url('../../../Asset/images/386336077_6856603861045045_7715654662263044486_n.jpg');
+    background-repeat: no-repeat;
+    // background-position: center;
+    background-size: cover;
+    z-index: 1001;
+}
+.Modale_content {
+  position: absolute;
+  color: #fff;
+  bottom: 10px;
+  text-align: center;
+  padding: 24px;
+  z-index: 1003;
+}
+.Modale_content h1 {
+  width: 100%;
+  font-family: "Poppins", sans-serif;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+.button_pay_mobile {
+  margin: 0;
+  margin-top: 16px;
+  padding: 16px 22px;
+  background-color: rgb(199, 125, 77);
+  width: 100%;
+  font-size: 24px;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  border-radius: 20px;
+}
+.button_pay_mobile button {
+  color: #fff;
+  font-weight: 500;
+}
+/* Định nghĩa hiệu ứng cuộn */
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0); /* Bắt đầu từ bên phải hoàn toàn */
+  }
+  100% {
+    transform: translateX(-100%); /* Cuộn sang trái hoàn toàn */
+  }
+}
+.Modale_content p {
+  padding: 0 30px;
+  color: #afafaf;
+  font-size: 14px;
+}
+.Modal_hellogogi.open{
+    transform:  translateX(-100%);
+    transition: transform 2s ease-in-out;
+    // display: none;
+}
+.Modal_hellogogi::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100dvh;
+    background-color: rgba(0, 0, 0, 0.5); /* Màu đen với độ mờ 50% */
+    z-index: 1002;
+  }
   .comment_container::-webkit-scrollbar {
     width: 6px; /* Chiều rộng của thanh cuộn dọc */
     height: 6px; /* Chiều cao của thanh cuộn ngang */

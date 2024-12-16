@@ -62,7 +62,7 @@ function AppMobile( {Children} ) {
         }
     }
     const handleClickStart = () => {
-        modalHello.current.classList.add('open')
+        modalHello.current.classList.add(cx('open'))
     }
     const handleClickRemoveCmt = () => {
         if(containtCmt.current.length > 0) {
@@ -124,12 +124,12 @@ function AppMobile( {Children} ) {
     },[socket,bills])
     return ( 
         <MobileContext.Provider value={{billUpdate,socket,cookies,Amount,handleClickOpenCmtDetai,setAmount,setCheckRegister,checkRegister,setComment, setProduct,bills,setBills, setIdBill, setProduct, setModalCmt}}>
-        <div className="mobile">
-            <div ref={modalHello} className='Modal_hellogogi'>
-            <div className='Modale_content'>
+        <div className={cx('mobile')}>
+            <div ref={modalHello} className={cx('Modal_hellogogi')}>
+            <div className={cx('Modale_content')}>
             <h1>Gogi sizzling delight, igniting tradition masterfully.</h1>
             <p>The best grain, the finest roast, the powerful flavor.</p>
-            <button onClick={handleClickStart} className='button_pay_mobile'>Get Started</button>
+            <button onClick={handleClickStart} className={cx('button_pay_mobile')}>Get Started</button>
             </div>
             </div>
             </div>

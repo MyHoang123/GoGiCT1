@@ -3,11 +3,10 @@ import Swal from 'sweetalert2/dist/sweetalert2.js'
 import 'sweetalert2/src/sweetalert2.scss'
 import { useEffect, useState,useMemo, useRef, useCallback, useContext } from "react";
 import { MobileContext } from '../../components/Layout/MobileLayout1'
-import * as Icon from 'react-feather';
 import axios from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSliders,faHouse,faUser,faBasketShopping,faBell,faStar,faPlus, faClipboard,faAnglesRight, } from '@fortawesome/free-solid-svg-icons';
-import { Link, useParams, useSearchParams,useNavigate, json   } from 'react-router-dom';
+import { faSliders,faHouse,faUser,faBasketShopping,faStar,faPlus, faClipboard, } from '@fortawesome/free-solid-svg-icons';
+import { Link} from 'react-router-dom';
 import classNames from "classnames/bind"
 import styles from './HomeMobile.module.scss'
 const cx = classNames.bind(styles)
@@ -207,7 +206,7 @@ function AppMobile() {
             </header>
             <div className={cx('header_search')}>
                 <div className={cx('icon-search')}>
-                    <Icon.Search style={{width: '15%',marginRight: '4px'}} />
+                    {/* <Icon.Search style={{width: '15%',marginRight: '4px'}} /> */}
                     <input  onChange={(e) => handleSearchChangeInput(e.target.value)} className={cx('header_search_input')} placeholder='Tìm kiếm sản phẩm' />
                 </div>
                 <div className={cx('header_search-listIcon')}>
@@ -296,7 +295,7 @@ function AppMobile() {
                     <Link className={cx('navbar_footer-content_card')} datacount = {Amount} to='/card' ref={e => cartProduct.current[2] = e}>
                         <FontAwesomeIcon icon={faBasketShopping} /> 
                     </Link>
-                    <Link to='/user' ref={e => cartProduct.current[3] = e}>
+                    <Link to={JSON.parse(localStorage.getItem('Account')) === null ? 'loginuser' : '/user'} ref={e => cartProduct.current[3] = e}>
                         <FontAwesomeIcon icon={faUser} />
                     </Link>
                 </div>
