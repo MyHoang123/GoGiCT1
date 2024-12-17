@@ -9,19 +9,6 @@ function Categoris() {
     const dispatch = useDispatch()
     const categoris = useSelector(listCategoris)
     const iconMenuArrow = useRef([])
-    const handleClickShowMenu = (e,index) => {
-        for(let i = 0; i < iconMenuArrow.current.length; i++ ) {
-            if(iconMenuArrow.current[i] !== index || e.target.ariaExpanded === 'false') {
-                iconMenuArrow.current[i].style.transform = 'rotate(0)'
-            }
-            }
-            if(e.target.ariaExpanded === 'true') {
-                iconMenuArrow.current[index].style.transform = 'rotate(0)'
-            }
-            else if(e.target.ariaExpanded === 'false') {
-                iconMenuArrow.current[index].style.transform = 'rotate(-90deg)'
-            }
-    }
     const handleClickFilterCategori = (Id) => {
         const Filter = {
             IdType: null,
@@ -52,8 +39,8 @@ function Categoris() {
         <ul className={'category-list'}>
                  <Accordion>
                 {categoris.Menu.map((value,index)=>(
-                <Accordion.Item style={{width: '100%',position:'relative'}} onClick={(e) => handleClickShowMenu(e,index)} key={index} eventKey={index}>
-                    <Accordion.Header style={{position: 'relative'}}  className={'category-item__link'}> <span style={{fontWeight: '500',zIndex: '10'}}>{value.Name} <span ref={e => iconMenuArrow.current[index] = e} className='arrow_menu'><FontAwesomeIcon icon={faArrowLeft} /></span></span> </Accordion.Header>
+                <Accordion.Item style={{width: '100%',position:'relative', border:'none'}} key={index} eventKey={index}>
+                    <Accordion.Header style={{position: 'relative'}}  className={'category-item__link'}> <span style={{fontWeight: '500',zIndex: '10'}}>{value.Name}</span> </Accordion.Header>
                         <Accordion.Body>
                             <ul key={index} className={'category-list-item'}>
                                 <Accordion  key={value.Id}>
@@ -70,7 +57,7 @@ function Categoris() {
                                         }
                                         else {
                                        return (
-                                                    <Accordion.Item key={indexType} eventKey={indexType}>
+                                                    <Accordion.Item key={indexType} eventKey={indexType} style={{border:'none'}}>
                                                         <Accordion.Header className={'category-item__link'}><span style={{fontSize: '12px',fontWeight: '600'}} key={indexType}>{valueType.Name}</span></Accordion.Header>
                                                             <Accordion.Body>
                                                             <ul key={indexType} className={'category-list-item'}>

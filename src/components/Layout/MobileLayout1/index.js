@@ -62,6 +62,7 @@ function AppMobile( {Children} ) {
         }
     }
     const handleClickStart = () => {
+        document.body.style.overflow = 'auto'
         modalHello.current.classList.add(cx('open'))
     }
     const handleClickRemoveCmt = () => {

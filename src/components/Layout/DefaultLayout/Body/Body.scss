@@ -434,6 +434,7 @@
     display: flex;
     justify-content: left;
     padding-left: 0;
+    font-size: 12px;
 }
 .category-item--active .category-item__link::before{
     content: "";
@@ -1106,17 +1107,6 @@ i.home-product-item_like-icon-fill{
     font-style: normal !important;
     text-transform: capitalize !important;
 }
-.arrow_menu {
-  position: absolute;
-  top: 2px;
-  right: 0;
-  font-size: 12px;
-  transition: transform 0.5s;
-  z-index: 1;
-}
-.arrow_menu.open {
-  transform: rotate(-90deg);
-}
 /* model_detail */
 .model_detail-of{
     display: none;
@@ -1597,16 +1587,19 @@ i.home-product-item_like-icon-fill{
     position: absolute;
 }
 .card {
-    --accent-color: #990000;
-    position: relative;
-    width: 233px;
-    background: white;
-    border-radius: 1rem !important;
-    padding: 0.3rem;
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 50px 30px -20px;
-    transition: all 0.5s ease-in-out;
-    margin: 7.5px;
-    z-index: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      --accent-color: #990000;
+      position: relative;
+      width: 233px;
+      background: white;
+      border-radius: 1rem !important;
+      padding: 0.3rem;
+      box-shadow: rgba(100, 100, 111, 0.2) 0px 50px 30px -20px;
+      transition: all 0.5s ease-in-out;
+      margin: 7.5px;
+      z-index: 1;
   }
   
   .card .image-container {
@@ -1681,6 +1674,7 @@ i.home-product-item_like-icon-fill{
   }
   
   .card .content .brand {
+    font-size: 14px;
     font-weight: 900;
     color: #707070;
     height: 50px;

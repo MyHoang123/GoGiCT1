@@ -63,7 +63,7 @@ function App() {
     const handleClickSendOTP = useCallback( async (phone) => {
         if(phone.length === 10) {
             try {
-                axios.post('http://localhost:5000/api/v12/sendotp', {Phone: phone});
+                axios.post('https://severgogi.onrender.com/api/v12/sendotp', {Phone: phone});
                 navigate('/loginuser/authenotp')
               } catch (error) {
                 Swal.fire({
@@ -86,7 +86,7 @@ function App() {
     const handleClickSendOTPRegister = useCallback( async (phone) => {
         if(phone.length === 10) {
             try {
-                axios.post('http://localhost:5000/api/v12/sendotpregister', {Phone: phone});
+                axios.post('https://severgogi.onrender.com/api/v12/sendotpregister', {Phone: phone});
                 navigate('/loginuser/authenotp')
               } catch (error) {
                 Swal.fire({
@@ -109,7 +109,7 @@ function App() {
     const handleClickLogin = useCallback( async (Phone,Pass) => {
         if(Phone.length > 0 && Pass.length > 0) {
             try {
-               const response = await axios.post('http://localhost:5000/api/v12/login', {Phone: Phone,Pass:Pass});
+               const response = await axios.post('https://severgogi.onrender.com/api/v12/login', {Phone: Phone,Pass:Pass});
                if(response.data.massege === 'Thanh cong') {
                 localStorage.setItem('Account',JSON.stringify(response.data.data))
                 cookies.set('AccessToken', response.data.token, { path: '/', maxAge: 604800 }); // 604800 giây = 7 ngày
