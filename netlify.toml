@@ -5,7 +5,7 @@
   functions = "netlify/functions"
 
 [build.environment]
-  CI = false
+  CI = "false"
   NODE_OPTIONS = "--max-old-space-size=4096"
 
 [[redirects]]
