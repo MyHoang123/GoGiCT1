@@ -5,15 +5,10 @@
   functions = "netlify/functions"
 
 [build.environment]
+  CI = false
   NODE_OPTIONS = "--max-old-space-size=4096"
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-
-[build.environment]
-  CI = false
-```[_{{{CITATION{{{_1{Netlify not building - Command failed with exit code 1: npm run build](https://answers.netlify.com/t/netlify-not-building-command-failed-with-exit-code-1-npm-run-build/16999)
-
-
