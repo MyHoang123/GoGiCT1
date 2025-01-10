@@ -83,7 +83,7 @@ function App() {
               });
         }
     },[])
-    const handleClickSendOTPRegister = useCallback( async (phone) => {
+    const handleClickSendOTPRegister = async (phone) => {
         if(phone.length === 10) {
             try {
                 axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/sendotpregister`, {Phone: phone});
@@ -105,8 +105,9 @@ function App() {
                 footer: '<a href="#">Why do I have this issue?</a>'
               });
         }
-    },[])
-    const handleClickLogin = useCallback( async (Phone,Pass) => {
+    }
+    const handleClickLogin = async (Phone,Pass,e) => {
+        e.preventDefault()
         if(Phone.length > 0 && Pass.length > 0) {
             try {
                const response = await axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/login`, {Phone: Phone,Pass:Pass});
@@ -132,7 +133,7 @@ function App() {
                   });
               }
         }
-    },[])
+    }
     return ( 
         <div className={cx('Body_loginuser')}>
         <div className={cx('body_loginuser_left')}>
@@ -170,7 +171,7 @@ function App() {
                                             </div>              
                                     </div>
                                     ) : (
-                                        <div className={cx('Modal_login_container')}>
+                                        <form onSubmit={(e) => handleClickLogin(phone,pass,e)} className={cx('Modal_login_container')}>
                                         <h1>Đăng nhập</h1>
                                         <div className={cx('Modal_login_input_list')}>
                                             <input value={phone} onChange={(e) => setPhone(e.target.value)} type='number' placeholder='Số điện thoại'/>
@@ -180,7 +181,7 @@ function App() {
                                             {checkOTP ? (
                                                 <button onClick={() => handleClickSendOTP(phone)} style={checkBtnSuccess ? {cursor:'pointer',backgroundColor:'#990000'} : {cursor:'not-allowed',backgroundColor:'#ae5050'}}>Kế tiếp</button>
                                                 ) : (
-                                                <button onClick={() => handleClickLogin(phone,pass)} style={checkBtnSuccess ? {cursor:'pointer',backgroundColor:'#990000'} : {cursor:'not-allowed',backgroundColor:'#ae5050'}}>Đăng nhập</button>
+                                                <button type='submit' style={checkBtnSuccess ? {cursor:'pointer',backgroundColor:'#990000'} : {cursor:'not-allowed',backgroundColor:'#ae5050'}}>Đăng nhập</button>
                                             )}
                                         </div>
                                         <div className={cx('Modal_login_help')}>
@@ -233,7 +234,7 @@ function App() {
                                             <div className={cx('Modal_login_btn_register')}>
                                                 Bạn mới biết đến GOGI? <span onClick={() => setCheckRegister(true)}>Đăng ký</span> 
                                             </div>
-                               </div>
+                               </form>
             )}
 
 
