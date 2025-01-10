@@ -23,7 +23,7 @@ function App() {
     // Gửi dữ liệu lên API
     async function chekcLogin(Account) {
         try {
-         const response = await axios.post('https://severgogi.onrender.com/api/v12/checkuser', Account);
+         const response = await axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/checkuser`, Account);
          if(response.data.massege === 'Thanh cong') {
             localStorage.setItem('Account',JSON.stringify(response.data.data))
             cookies.set('AccessToken', response.data.token, { path: '/', maxAge: 604800 }); // 604800 giây = 7 ngày
@@ -63,7 +63,7 @@ function App() {
     const handleClickSendOTP = useCallback( async (phone) => {
         if(phone.length === 10) {
             try {
-                axios.post('https://severgogi.onrender.com/api/v12/sendotp', {Phone: phone});
+                axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/sendotp`, {Phone: phone});
                 navigate('/loginuser/authenotp')
               } catch (error) {
                 Swal.fire({
@@ -86,7 +86,7 @@ function App() {
     const handleClickSendOTPRegister = useCallback( async (phone) => {
         if(phone.length === 10) {
             try {
-                axios.post('https://severgogi.onrender.com/api/v12/sendotpregister', {Phone: phone});
+                axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/sendotpregister`, {Phone: phone});
                 navigate('/loginuser/authenotp')
               } catch (error) {
                 Swal.fire({
@@ -109,7 +109,7 @@ function App() {
     const handleClickLogin = useCallback( async (Phone,Pass) => {
         if(Phone.length > 0 && Pass.length > 0) {
             try {
-               const response = await axios.post('https://severgogi.onrender.com/api/v12/login', {Phone: Phone,Pass:Pass});
+               const response = await axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/login`, {Phone: Phone,Pass:Pass});
                if(response.data.massege === 'Thanh cong') {
                 localStorage.setItem('Account',JSON.stringify(response.data.data))
                 cookies.set('AccessToken', response.data.token, { path: '/', maxAge: 604800 }); // 604800 giây = 7 ngày
@@ -211,7 +211,6 @@ function App() {
                                                     >
                                                  <img src={FacebookLogin}/>
                                                  <span>Đăng nhập với facebook</span>
-                                                        {/* <FacebookLoginButton  style={{fontSize: '12px'}} className={cx('auth-form_socials-span')} /> */}
                                                     </LoginSocialFacebook>
                                             <GoogleLogin
                                             className={cx('Modal_login_socials_right')}
@@ -229,8 +228,6 @@ function App() {
                                                             }}
                                                         
                                                         >
-                                                    {/* <img src={GoogleLogin1}/>
-                                                    <span>Google</span> */}
                                                         </GoogleLogin>
                                         </div>
                                             <div className={cx('Modal_login_btn_register')}>

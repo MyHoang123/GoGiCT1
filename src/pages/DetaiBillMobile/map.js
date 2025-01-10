@@ -175,7 +175,7 @@ async function getRoute(end) {
        markerElement.style.zIndex = '10000'
        // Tạo phần tử img
         imgRef.current = document.createElement('img')
-        imgRef.current.src = 'https://severgogi.onrender.com/api/v12/bodyimg/reparto-removebg-preview.png'
+        imgRef.current.src = `${process.env.REACT_APP_CALL_API}/api/v12/bodyimg/reparto-removebg-preview.png`
         imgRef.current.style.width = '100%'
         imgRef.current.style.height = '100%'
         imgRef.current.style.transform = ''

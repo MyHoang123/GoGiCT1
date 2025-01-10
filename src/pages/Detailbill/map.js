@@ -164,7 +164,7 @@ async function getRoute(end) {
        markerElement.style.position = 'relative'// Để có thể thêm vị trí cho hình ảnh
        // Tạo phần tử img
         imgRef.current = document.createElement('img')
-        imgRef.current.src = 'https://severgogi.onrender.com/api/v12/header/reparto-removebg-preview.png'
+        imgRef.current.src = `${process.env.REACT_APP_CALL_API}/api/v12/header/reparto-removebg-preview.png`
         imgRef.current.style.width = '100%'
         imgRef.current.style.height = '100%'
         imgRef.current.style.transform = ''

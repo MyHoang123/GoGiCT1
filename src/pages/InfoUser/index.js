@@ -25,7 +25,7 @@ function App() {
             <div className={cx('Modal_info-user_img')}>
                 <div className={cx('card')}>
                                 <div className={cx('card__img')}></div>
-                                <div className={cx('card__avatar')}><img src={JSON.parse(localStorage.getItem('Account')).Classify === 'user' ? `https://severgogi.onrender.com/api/v12/avtuser/${Avt}`: `${Avt}` }/></div>
+                                <div className={cx('card__avatar')}><img src={JSON.parse(localStorage.getItem('Account')).Classify === 'user' ? `${process.env.REACT_APP_CALL_API}/api/v12/avtuser/${Avt}`: `${Avt}` }/></div>
                                 <div className={cx('card__subtitle')}>Thành viên bạc</div>
                                 {JSON.parse(localStorage.getItem('Account')).Classify === 'user' ? (
                                     <div className={cx('card__wrapper')}>

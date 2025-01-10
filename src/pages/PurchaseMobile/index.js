@@ -20,7 +20,7 @@ function App() {
     const {Amount,bills, setBills, setIdBill, setComment, setModalCmt, setProduct, cookies} = useContext(MobileContext)
     async function showComment(User) {
         try {
-           const response = await axios.post('https://severgogi.onrender.com/api/v12/showcommentuser', User)
+           const response = await axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/showcommentuser`, User)
            if(response.data.massege === 'Thanh cong') {
                 setComment(response.data.data)
                 setModalCmt(true)
@@ -56,7 +56,7 @@ function App() {
         if(cookies.get('AccessToken') !== undefined) {
             if(checkNav === 3) {
                 axios.all([
-                    axios.post('https://severgogi.onrender.com/api/v12/showbill',{token: cookies.get('AccessToken')}),
+                    axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/showbill`,{token: cookies.get('AccessToken')}),
                 ])
                 .then(axios.spread((Bill, ) => {
                         setBills(Bill.data.data)
@@ -66,7 +66,7 @@ function App() {
                     })
             }else if (checkNav === 0) {
                 axios.all([
-                    axios.post('https://severgogi.onrender.com/api/v12/showbilluser',{
+                    axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/showbilluser`,{
                         token: cookies.get('AccessToken'),
                         Status: 0
                     }),
@@ -79,7 +79,7 @@ function App() {
                     })
             }else if(checkNav === 1) {
                 axios.all([
-                    axios.post('https://severgogi.onrender.com/api/v12/showbilluser',{
+                    axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/showbilluser`,{
                         token: cookies.get('AccessToken'),
                         Status: 1
                     }),
@@ -92,13 +92,12 @@ function App() {
                     })
             }else if(checkNav === 2) {
                 axios.all([
-                    axios.post('https://severgogi.onrender.com/api/v12/showbilluser',{
+                    axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/showbilluser`,{
                         token: cookies.get('AccessToken'),
                         Status: 2
                     }),
                     ])
                     .then(axios.spread((Bill, ) => {
-                        console.log("🚀 ~ .then ~ Bill:", Bill)
                         setBills(Bill.data.data)
                     }))
                     .catch (err => {
@@ -140,7 +139,7 @@ function App() {
                              <div key={i} className={cx('Purchase_product_body_product')}>
                                  <div className={cx('Purchase_product_body_product-info')}>
                                      <div className={cx('Purchase_product_body_product-img')}>
-                                         <img src={`https://severgogi.onrender.com/api/v12/showimgproduct/${product.Img}`}/>
+                                         <img src={`${process.env.REACT_APP_CALL_API}/api/v12/showimgproduct/${product.Img}`}/>
                                      </div>
                                      <div className={cx('Purchase_product_body_product-name')}>
                                          <h3>{product.Name}</h3>

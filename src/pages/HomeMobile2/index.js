@@ -33,7 +33,7 @@ function AppMobile() {
             setActiveCate(Id)
         }
         try {
-            const response = await axios.post('https://severgogi.onrender.com/api/v12/filtercategori', {IdType:IdType,IdCate:Id});
+            const response = await axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/filtercategori`, {IdType:IdType,IdCate:Id});
             if(response.data.massege === 'Thanh cong') {
                 setPage(1)
                 setProducts(response.data.data)
@@ -45,7 +45,7 @@ function AppMobile() {
     async function addCard(IdProduct,button) {
         try {
             cardButton.current[button].style.pointerEvents = 'none'
-           const response = await axios.post('https://severgogi.onrender.com/api/v12/addcard', {IdProduct: IdProduct,token: cookies.get('AccessToken')});
+           const response = await axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/addcard`, {IdProduct: IdProduct,token: cookies.get('AccessToken')});
            if(response.data.massege === 'Thanh cong') {
             cardButton.current[button].style.pointerEvents = 'auto'
             buttonFakeAddCard.current[button].style.display = 'block'
@@ -156,8 +156,8 @@ function AppMobile() {
     },[])
     useEffect(() => {
         axios.all([
-            axios.get('https://severgogi.onrender.com/api/v12/showproduct'),
-            axios.get('https://severgogi.onrender.com/api/v12/showcategori'),
+            axios.get(`${process.env.REACT_APP_CALL_API}/api/v12/showproduct`),
+            axios.get(`${process.env.REACT_APP_CALL_API}/api/v12/showcategori`),
           ])
             .then(axios.spread((Product, Categori, ) => { 
               setProducts(Product.data.data)
@@ -166,7 +166,6 @@ function AppMobile() {
             .catch (err => {
                 console.error()
             })
-            // bntvideoRef.current.click()
         },[])
           // Phân trang
       const productPage = useMemo(() => {
@@ -217,7 +216,7 @@ function AppMobile() {
         <div className={cx('slider')}>
             {/* <Slider children={SliderImg} /> */}
             <video ref={videoRef} className={cx('video_mobile')} style={{width:'100%',height:'100%',pointerEvents:'none'}} muted autoPlay loop>
-                <source src={'https://severgogi.onrender.com/api/v12/video/gogi.mp4'} type="video/mp4" />
+                <source src={`${process.env.REACT_APP_CALL_API}/api/v12/video/gogi.mp4`} type="video/mp4" />
                 <source src="/video.webm" type="video/webm" />
                 Trình duyệt của bạn không hỗ trợ thẻ video.
             </video>
@@ -241,7 +240,7 @@ function AppMobile() {
                                  <span style={{fontWeight:'700',color:'#333'}}>{product.Star}</span>
                             </span>
                             <div className={cx('product_content_mobile-img-item')}>
-                                 <img src={`https://severgogi.onrender.com/api/v12/showimgproduct/${product.Img}`} style={{width: '100%', height: '100%',objectFit: 'cover', zIndex: '100'}} />
+                                 <img src={`${process.env.REACT_APP_CALL_API}/api/v12/showimgproduct/${product.Img}`} style={{width: '100%', height: '100%',objectFit: 'cover', zIndex: '100'}} />
                             </div>
                         </div>
                         </Link>
@@ -263,7 +262,7 @@ function AppMobile() {
                                 <button ref = {e => cardButton.current[index] = e} onClick={() => addCard(product.Id,index)} className={cx('button_addcard')}><FontAwesomeIcon icon={faPlus} />
                                 </button>
                                 <div ref={el => buttonFakeAddCard.current[index] = el} className={cx('button_img-fake')}>
-                                    <img src={`https://severgogi.onrender.com/api/v12/showimgproduct/${product.Img}`} style={{width: '100%', height: '100%',objectFit: 'cover', zIndex: '100'}} />
+                                    <img src={`${process.env.REACT_APP_CALL_API}/api/v12/showimgproduct/${product.Img}`} style={{width: '100%', height: '100%',objectFit: 'cover', zIndex: '100'}} />
                                 </div>
                             </div>
                         </div>

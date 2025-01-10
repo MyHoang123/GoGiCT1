@@ -60,7 +60,7 @@ function App() {
                     OTP: OTPsend
                 }
                 try {
-                    const response = await axios.post('https://severgogi.onrender.com/api/v12/verifyotp', OTPverify);
+                    const response = await axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/verifyotp`, OTPverify);
                     if(response.data.massege === 'Thanh cong') {
                      localStorage.setItem('Account',JSON.stringify(response.data.data))
                      cookies.set('AccessToken', response.data.token, { path: '/', maxAge: 604800 }); // 604800 giây = 7 ngày
@@ -85,7 +85,7 @@ function App() {
                     OTP: OTPsend
                 }
                 try {
-                    const response = await axios.post('https://severgogi.onrender.com/api/v12/verifyregister', OTPverify);
+                    const response = await axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/verifyregister`, OTPverify);
                     console.log(response)
                     if(response.data.massege === 'Thanh cong') {
                         setPhone(response.data.token)
@@ -178,7 +178,7 @@ function App() {
             const isValidUpper = regexUpper.test(Pass);
             if(isValid && isValidUpper && Gender !== null) {
                 try {
-                    const response = await axios.post('https://severgogi.onrender.com/api/v12/updatepassregister', {token: Phone,Pass: Pass, Gender:Gender});
+                    const response = await axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/updatepassregister`, {token: Phone,Pass: Pass, Gender:Gender});
                     if(response.data.massege === 'Thanh cong') {
                         setStepRegister(3)
                         lineStatus.current.style.width = '300px'
@@ -476,7 +476,7 @@ function App() {
                     </div>
                 <div style={{marginBottom:'10px',padding:'0 80px',textAlign:'center'}} className={cx('Modal_login_input_list')}>
                     <div className={cx('Info_user_container')}>
-                      <img style={{borderRadius:'50%'}} src={user.Classify === 'user' ? `https://severgogi.onrender.com/api/v12/avtuser/${user.Avt}`: `${user.Avt}` } className={cx('Img_user_login')}/>
+                      <img style={{borderRadius:'50%'}} src={user.Classify === 'user' ? `${process.env.REACT_APP_CALL_API}/api/v12/avtuser/${user.Avt}`: `${user.Avt}` } className={cx('Img_user_login')}/>
                         <h2 className={cx('Info_user_container_name')}>{user.UserName}</h2>
                         <h3 className={cx('Info_user_container_phone')}>(84+) {user.Sdt}</h3>
                         <button onClick={() => handleClickLoginUser(user,token)}>Đăng nhập</button>

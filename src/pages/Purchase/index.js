@@ -26,9 +26,10 @@ function Purchase() {
         if(cookie.get('AccessToken') !== undefined) {
             if(Active === 0) {
                 axios.all([
-                   axios.post('https://severgogi.onrender.com/api/v12/showbill',{token: cookie.get('AccessToken')}),
+                   axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/showbill`,{token: cookie.get('AccessToken')}),
                   ])
                     .then(axios.spread((Bill, ) => {
+                        console.log("🚀 ~ .then ~ Bill:", Bill)
                         setBills(Bill.data.data)
                         let dadat = 0
                         let chogiao = 0
@@ -61,7 +62,7 @@ function Purchase() {
                     })
             }else if (Active === 1) {
                 axios.all([
-                    axios.post('https://severgogi.onrender.com/api/v12/showbilluser',{
+                    axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/showbilluser`,{
                         token: cookie.get('AccessToken'),
                         Status: 0
                     }),
@@ -74,7 +75,7 @@ function Purchase() {
                     })
             }else if(Active === 2) {
                 axios.all([
-                    axios.post('https://severgogi.onrender.com/api/v12/showbilluser',{
+                    axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/showbilluser`,{
                         token: cookie.get('AccessToken'),
                         Status: 1
                     }),
@@ -87,7 +88,7 @@ function Purchase() {
                     })
             }else if(Active === 3) {
                 axios.all([
-                    axios.post('https://severgogi.onrender.com/api/v12/showbilluser',{
+                    axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/showbilluser`,{
                         token: cookie.get('AccessToken'),
                         Status: 2
                     }),
@@ -100,7 +101,7 @@ function Purchase() {
                     })
             }else if(Active === 4) {
                 axios.all([
-                    axios.post('https://severgogi.onrender.com/api/v12/showbilluser',{
+                    axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/showbilluser`,{
                         token: cookie.get('AccessToken'),
                         Status: 3
                     }),
@@ -113,7 +114,7 @@ function Purchase() {
                     })
             }else {
                 axios.all([
-                    axios.post('https://severgogi.onrender.com/api/v12/showbilluser',{
+                    axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/showbilluser`,{
                         token: cookie.get('AccessToken'),
                         Status: 4
                     }),
@@ -245,7 +246,7 @@ function Purchase() {
                                         <div key={i} className={cx('Purchase_content_body_container_body')}>
                                             <div className={cx('Purchase_content_body_container_body-left')}>
                                                 <div className={cx('Purchase_content_body_container_body-left-img')}>
-                                                    <img style={{width:'100%',objectFit:'cover'}} src={`https://severgogi.onrender.com/api/v12/showimgproduct/${product.Img}`}/>
+                                                    <img style={{width:'100%',objectFit:'cover'}} src={`${process.env.REACT_APP_CALL_API}/api/v12/showimgproduct/${product.Img}`}/>
                                                 </div>
                                                 <div className={cx('Purchase_content_body_container_body-left-content')}>
                                                     <h3>{product.Name}</h3>

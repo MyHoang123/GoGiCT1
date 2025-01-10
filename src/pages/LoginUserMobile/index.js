@@ -23,7 +23,7 @@ function App() {
         e.preventDefault()
         if(PhoneNumber.current.value.length > 0 && Password.current.value.length > 0) {
             try {
-               const response = await axios.post('https://severgogi.onrender.com/api/v12/login', {Phone: PhoneNumber.current.value,Pass:Password.current.value});
+               const response = await axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/login`, {Phone: PhoneNumber.current.value,Pass:Password.current.value});
                if(response.data.massege === 'Thanh cong') {
                 localStorage.setItem('Account',JSON.stringify(response.data.data))
                 cookies.set('AccessToken', response.data.token, { path: '/', maxAge: 604800 }); // 604800 giây = 7 ngày

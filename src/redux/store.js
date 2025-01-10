@@ -1,11 +1,9 @@
-import BodySlice from '../components/Layout/DefaultLayout/Body/BodySlice'
-import CardProductSlice from '../components/Layout/CardLayout/CardSlice'
+import { ReduxSlice } from './ReduxSlice'
 import { configureStore } from "@reduxjs/toolkit";
 
 const store = configureStore({
     reducer: {
-        products: BodySlice.reducer,
-        productCards: CardProductSlice.reducer
+        products: ReduxSlice.reducer,
     }
 })
 export default store

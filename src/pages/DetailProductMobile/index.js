@@ -27,8 +27,8 @@ function App() {
             IdProduct: IdProduct
         }
         axios.all([
-            axios.post('https://severgogi.onrender.com/api/v12/showproductid', Id),
-            axios.post('https://severgogi.onrender.com/api/v12/showcommentorder', Id),
+            axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/showproductid`, Id),
+            axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/showcommentorder`, Id),
         ])
         .then(axios.spread((Product,Comment) => {
             setProductsMobile(Product.data.data)
@@ -57,7 +57,7 @@ function App() {
                             (product.Id === parseInt(IdProduct) ? (
                                 <div key={i}>
                                     <div className='Detail_mobile-img'>
-                                            <img src={`https://severgogi.onrender.com/api/v12/showimgproduct/${product.Img}`} style={{width: '100%', height: '100%',objectFit: 'cover',borderRadius:'50%'}} />
+                                            <img src={`${process.env.REACT_APP_CALL_API}/api/v12/showimgproduct/${product.Img}`} style={{width: '100%', height: '100%',objectFit: 'cover',borderRadius:'50%'}} />
                                     </div>
                                     <div className='Detail_mobile-noti'>
                                         <h2>{product.Name}</h2>
@@ -141,7 +141,6 @@ function App() {
                         </>
                     ) : null)}
                     </div>
-                    {/* Coupon */}
             </div>
         
         </>

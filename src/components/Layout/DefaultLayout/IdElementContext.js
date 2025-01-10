@@ -3,18 +3,18 @@ import io from 'socket.io-client';
 import { Cookies } from 'react-cookie'
 
 const IdElementContext = createContext()
-function IdElementProvider( {children} ) {
+function IdElementProvider({ children }) {
     const cookies = new Cookies()
     // State global defaultlayout
-    const [IdProduct,setIdProduct] = useState('id_product')
-    const [modelProfile,setModelProfile] = useState(false)
+    const [IdProduct, setIdProduct] = useState('id_product')
+    const [modelProfile, setModelProfile] = useState(false)
     const [socket, setSocket] = useState(null)
     const [checkUser, setCheckUser] = useState(false)
     const [darkMode, setDarkMode] = useState(false)
     const [checkAutoNext, setCheckAutoNext] = useState(0)
-    const [Amount,setAmount] = useState(0)
-    const [modelLogin,setModelLogin] = useState(false)
-    const [indexSlide, setIndexSlide] = useState([0,1,2,3,4,5])
+    const [Amount, setAmount] = useState(0)
+    const [modelLogin, setModelLogin] = useState(false)
+    const [indexSlide, setIndexSlide] = useState([0, 1, 2, 3, 4, 5])
     // const [playSlideMini, setPlaySlideMini] = useState(false)
     let autoNext = useRef()
     const navbar = useRef()
@@ -40,7 +40,7 @@ function IdElementProvider( {children} ) {
     const desProduct = useRef([])
     // Ref global defaultlayout
     const handleClickDarkMode = (e) => {
-        if(e.target.checked === true) {
+        if (e.target.checked === true) {
             setDarkMode(true)
         }
         else {
@@ -51,7 +51,7 @@ function IdElementProvider( {children} ) {
         modelBody.current[1].style.display = 'none'
         modelBody.current[0].style.display = 'block'
         setModelLogin(true)
-        },[])
+    }, [])
     const data = {
         AnimateAddCard,
         listProductBest,
@@ -99,10 +99,10 @@ function IdElementProvider( {children} ) {
         const handleScroll = () => {
             const top = Math.abs(btn.current.getBoundingClientRect().top)
             try {
-                if(top < 620 && top > 1) {
+                if (top < 620 && top > 1) {
                     clearInterval(autoNext.current)
                     btn.current.style.pointerEvents = 'none'
-                    sloganProduct.current.src = imgLogan 
+                    sloganProduct.current.src = imgLogan
                     sloganProduct.current.style.transform = 'scale(1)'
                     sloganProduct.current.style.opacity = '1'
                     imgProductSlide.current[indexSlide[0]].style.top = '710px'
@@ -124,7 +124,7 @@ function IdElementProvider( {children} ) {
                     imgBestSeller.current[0].style.opacity = '1'
                     imgBestSeller.current[1].style.opacity = '1'
                 }
-                else if(top > 1000 && top < 1300) {
+                else if (top > 1000 && top < 1300) {
                     modalVideoBest.current.style.transform = 'scale(0)'
                     videoBest.current.style.width = '600px'
                     listProductBest.current[0].style.transform = 'translateY(0) rotate(360deg)'
@@ -134,30 +134,27 @@ function IdElementProvider( {children} ) {
                     listProductBest.current[1].style.opacity = '1'
                     listProductBest.current[2].style.opacity = '1'
                 }
-                else if(top > 1300 && top < 1600) {
-                    // gogiBackround.current.style.width = '100%'
-                }
-                else if(top > 1600 && top < 1700) {
+                else if (top > 1600 && top < 1700) {
                     headerBodyContent.current.style.transform = 'translateX(0)'
                     headerBodyContent.current.style.opacity = '1'
                 }
-                else if(top > 1700 && top < 2900) {
-                    for(let i in itemHeaderBody.current) {
+                else if (top > 1700 && top < 2900) {
+                    for (let i in itemHeaderBody.current) {
                         itemHeaderBody.current[i].style.transform = 'translateY(0)'
                         itemHeaderBody.current[i].style.opacity = '1'
                     }
                 }
-                else if(top > 2900 && top < 3300) {
+                else if (top > 2900 && top < 3300) {
                     youtubeRef.current[0].style.transform = ''
                     youtubeRef.current[0].style.opacity = '1'
                     youtubeRef.current[1].style.transform = 'translateX(0)'
                     youtubeRef.current[1].style.opacity = '1'
                 }
-                else if(top > 3300 && top < 3700) {
+                else if (top > 3300 && top < 3700) {
                     youtubeRef.current[2].style.transform = 'translateY(0)'
                 }
-                 else if(top > 3700 ) {  
-                  }
+                else if (top > 3700) {
+                }
                 else if (top < 10) {
                     headerBodyContent.current.style.transform = ''
                     youtubeRef.current[0].style.transform = 'translateX(-114px)'
@@ -166,7 +163,7 @@ function IdElementProvider( {children} ) {
                     youtubeRef.current[1].style.opacity = '0'
                     youtubeRef.current[2].style.transform = 'translateY(150px)'
                     videoBest.current.style.width = '500px'
-                     for(let i in itemHeaderBody.current) {
+                    for (let i in itemHeaderBody.current) {
                         itemHeaderBody.current[i].style.transform = ''
                         itemHeaderBody.current[i].style.opacity = ''
                     }
@@ -194,36 +191,33 @@ function IdElementProvider( {children} ) {
                     setCheckAutoNext(prev => prev + 1)
                 }
             } catch (error) {
-                
             }
-        //     if (navbar.current) {
-          
-          }
+        }
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
-      }, [indexSlide]);
-      useEffect(() => {
-        if(cookies.get('AccessToken') !== undefined) {
-           const newSocket = io('https://severgogi.onrender.com',{
-            auth: {
-                token: cookies.get('AccessToken')
-            }
-           });
-           setSocket(newSocket)
-           return () => {
-            newSocket.disconnect()
-            AnimateAddCard.current.forEach(element => {
-                cancelAnimationFrame(element)
+    }, [indexSlide]);
+    useEffect(() => {
+        if (cookies.get('AccessToken') !== undefined) {
+            const newSocket = io(`${process.env.REACT_APP_CALL_API}`, {
+                auth: {
+                    token: cookies.get('AccessToken')
+                }
             });
+            setSocket(newSocket)
+            return () => {
+                newSocket.disconnect()
+                AnimateAddCard.current.forEach(element => {
+                    cancelAnimationFrame(element)
+                });
+            }
         }
-        }
-    },[])
+    }, [])
 
-    return ( 
+    return (
         <IdElementContext.Provider value={data}>
-                {children}
+            {children}
         </IdElementContext.Provider>
-     );
+    );
 }
 
-export {IdElementContext, IdElementProvider} ;
+export { IdElementContext, IdElementProvider };

@@ -20,7 +20,7 @@ function App() {
     //   // Gửi dữ liệu lên API Update
   async function updateUser(user) {  
     try {
-      const response = await axios.put('https://severgogi.onrender.com/api/v12/updateinfo',user)
+      const response = await axios.put(`${process.env.REACT_APP_CALL_API}/api/v12/updateinfo`,user)
         if(response.data.massege === 'Thanh cong') {
             const useNew = {
                 ...JSON.parse(localStorage.getItem('Account')),
@@ -57,7 +57,7 @@ function App() {
     try {
         const formData = new FormData();
         formData.append('file', file.file, `${file.file.name}_avt`)
-        const response = await axios.post('https://severgogi.onrender.com/api/v12/updateavt', formData, {
+        const response = await axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/updateavt`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'Authorization': cookies.get('AccessToken')
@@ -109,8 +109,8 @@ function App() {
         <div className={cx('info_user')}>
             <div className={cx('info_user_container')}>
                 <div className={cx('info_user_header')}>
-                    <h2>Hồ sơ của tôi</h2>
-                    <h3>Quản lý thông tin để bảo mật tài khoản</h3>
+                    <h3>Hồ sơ của tôi</h3>
+                    <h4>Quản lý thông tin để bảo mật tài khoản</h4>
                 </div>
                 <div className={cx('info_user_body')}>
                     <div className={cx('info_user_body_containt')}>
@@ -157,30 +157,12 @@ function App() {
                                     ) : null}
                                 </form>
                                 </section>
-                        {/* <div className={cx('info_user_body_containt_container')}>
-                            <div className={cx('info_user_body_containt-title')}>
-                                <h3>Tên: </h3>
-                                <h2>Mỹ Hoàng</h2>
-                            </div>
-                            <div className={cx('info_user_body_containt-title')}>
-                                <h3>Số điện thoại: </h3>
-                                <h2>0832047271</h2>
-                            </div>
-                            <div className={cx('info_user_body_containt-title')}>
-                                <h3>Giới tính: </h3>
-                                <h2>0832047271</h2>
-                            </div>
-                            <div className={cx('info_user_body_containt-title')}>
-                                <h3>Ngày sinh</h3>
-                                <h2>0832047271</h2>
-                            </div>
-                        </div> */}
                     </div>
                     <div className={cx('info_user_body_avt')}>
                         <div className={cx('info_user_body_avt_containt')}>
                         <div className={cx('card')}>
                             <div className={cx('card__img')}></div>
-                            <div className={cx('card__avatar')}><img src={JSON.parse(localStorage.getItem('Account')).Classify === 'user' ? `https://severgogi.onrender.com/api/v12/avtuser/${Avt}`: `${Avt}` }/></div>
+                            <div className={cx('card__avatar')}><img src={JSON.parse(localStorage.getItem('Account')).Classify === 'user' ? `${process.env.REACT_APP_CALL_API}/api/v12/avtuser/${Avt}`: `${Avt}` }/></div>
                             <div className={cx('card__title')}>{userName}</div>
                             <div className={cx('card__subtitle')}>Thành viên bạc</div>
                             {JSON.parse(localStorage.getItem('Account')).Classify === 'user' ? (

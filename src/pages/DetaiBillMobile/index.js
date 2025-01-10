@@ -24,7 +24,7 @@ function App() {
     const {cookies, billUpdate, handleClickOpenCmtDetai} = useContext(MobileContext)
     async function CheckPayStatus(IdPay) {
         try {
-        const response =  await axios.post('https://severgogi.onrender.com/api/v12/CheckPayOrder', {app_trans_id:IdPay});
+        const response =  await axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/CheckPayOrder`, {app_trans_id:IdPay});
         if(response.data.result.return_code === 1) {
             const newArr = [...bill]
             newArr.StatusPay = 1
@@ -65,7 +65,7 @@ function App() {
     useEffect(() => {
         if(cookies.get('AccessToken') !== undefined) {
             axios.all([
-              axios.post('https://severgogi.onrender.com/api/v12/getbill',{
+              axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/getbill`,{
                 IdBill: IdBill,
                 token: cookies.get('AccessToken')
               }),

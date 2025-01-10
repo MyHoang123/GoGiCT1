@@ -1,6 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit";
-const cardSelector = (state) => state.productCards.data
-const suggestSelector = (state) => state.productCards.suggest
+const cardSelector = (state) => state.products.productCards.product
+const suggestSelector = (state) => state.products.productCards.Suggest
 export const listProductCard = createSelector(cardSelector, (listProductCard) => {
     return listProductCard
 })

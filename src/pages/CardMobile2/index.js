@@ -23,7 +23,6 @@ function App() {
 // State
     const [cardProduct, setCardProduct] = useState([])
     const [address, setAddress] = useState(null)
-
     const [payMethod, setPaymethod] = useState(null)
     const [voucher, setVoucher] = useState(0)
     const [checkNote, setCheckNote] = useState(false)
@@ -39,7 +38,7 @@ const noteRef = useRef([])
 
 async function CreateBill(Bill) {
     try {
-        const response = await axios.post('https://severgogi.onrender.com/api/v12/createbill', Bill)
+        const response = await axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/createbill`, Bill)
         if(response.data.massege === 'Thanh cong') {
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
@@ -110,7 +109,7 @@ const handleClickPrev = async (Id,i,Price,CheckCard) => {
     let quantity = parseInt(qualityRef.current[i].innerText)
     if(quantity <= 1) {
         try {
-            const response = await axios.post('https://severgogi.onrender.com/api/v12/deletecard', {IdProduct: Id,token: cookies.get('AccessToken')})   
+            const response = await axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/deletecard`, {IdProduct: Id,token: cookies.get('AccessToken')})   
             if(response.data.massege === 'Thanh cong') {
                 setCardProduct(prev => prev.filter(product => product.Id !== Id))
             }
@@ -288,7 +287,7 @@ const handleClickCheckVoucher = async () => {
           }
           else {
             try {
-                const response =  await axios.post('https://severgogi.onrender.com/api/v12/checkvoucher', {voucher: value,token: cookies.get('AccessToken')})
+                const response =  await axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/checkvoucher`, {voucher: value,token: cookies.get('AccessToken')})
                 if(response.data.massege === "voucher khong ton tai") {
                   setVoucher(0)
                   return `Voucher không hợp lệ !`
@@ -311,7 +310,7 @@ const handleClickCheckVoucher = async () => {
 useEffect(() => {
     if(cookies.get('AccessToken') !== undefined) {
         axios.all([
-            axios.get(`https://severgogi.onrender.com/api/v12/showcard?token=${cookies.get('AccessToken')}`),
+            axios.get(`${process.env.REACT_APP_CALL_API}/api/v12/showcard?token=${cookies.get('AccessToken')}`),
           ])
             .then(axios.spread((Card,) => {
                 if(Card.data.massege === 'Thanh Cong') {
@@ -390,7 +389,7 @@ const totalPay = useMemo(() => {
                         <label htmlFor={`CheckBox_Product_card_${index}`} className={cx('Product_card-item')}>
                             <div onClick={() => handleClickChangCard(product.Id,product.Price,checkCard)} className={cx('product_card-item_left')}>
                                 <div className={cx('Product_card-item_img')}>
-                                     <img src={`https://severgogi.onrender.com/api/v12/showimgproduct/${product.Img}`}  style={{width: '100%', height: '100%',objectFit: 'cover'}} />
+                                     <img src={`${process.env.REACT_APP_CALL_API}/api/v12/showimgproduct/${product.Img}`}  style={{width: '100%', height: '100%',objectFit: 'cover'}} />
                                 </div>
                                 <div className={cx('Product_card-item_name')}>
                                     <span style={{fontSize: '14px',color:'#333'}}>{product.Name}</span>

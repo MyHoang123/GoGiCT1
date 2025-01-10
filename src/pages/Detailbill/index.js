@@ -24,7 +24,7 @@ function App() {
     // Gửi dữ liệu lên API
     async function CheckPayStatus(IdPay) {
         try {
-        const response =  await axios.post('https://severgogi.onrender.com/api/v12/CheckPayOrder', {app_trans_id:IdPay});
+        const response =  await axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/CheckPayOrder`, {app_trans_id:IdPay});
         console.log(response)
         if(response.data.result.return_code === 1) {
             const newArr = [...bill]
@@ -60,7 +60,7 @@ useEffect(() => {
 useEffect(() => {
     if(cookie.get('AccessToken') !== undefined) {
         axios.all([
-          axios.post('https://severgogi.onrender.com/api/v12/getbill',{
+          axios.post(`${process.env.REACT_APP_CALL_API}/api/v12/getbill`,{
             IdBill: IdBill,
             token: cookie.get('AccessToken')
           }),
@@ -105,7 +105,7 @@ useEffect(() => {
                 </Link>
                 <div className={cx('show_detail_bill_header-right')}>
                     <div className={cx('show_detail_bill_header-right_idbill')}>
-                        <h2 style={{marginBottom:'0'}}>Mã Đơn Hàng: </h2>
+                        <h3 style={{marginBottom:'0'}}>Mã Đơn Hàng: </h3>
                         {bill.length > 0 ? (
                             <strong style={{marginBottom:'0'}}>{bill[0].Id}KTPM0120</strong>
                         ) : null}
@@ -113,16 +113,16 @@ useEffect(() => {
                     {bill.length > 0 ? (
                         <div className={cx('show_detail_bill_header-right_status')}>
                             {bill[0].Status === 0 ? (
-                                <h3 style={{marginBottom:'0', color:'#990000'}}>Chờ xác nhận</h3>
+                                <h4 style={{marginBottom:'0', color:'#990000'}}>Chờ xác nhận</h4>
                             ) : (
                                 bill[0].Status === 1 ? (
-                                    <h3 style={{marginBottom:'0', color:'#990000'}}>Chờ giao hàng</h3>
+                                    <h4 style={{marginBottom:'0', color:'#990000'}}>Chờ giao hàng</h4>
                                 ) : (
                                     bill[0].Status === 2 ? (
-                                    <h3 style={{marginBottom:'0', color:'#990000'}}>Đang giao</h3>
+                                    <h4 style={{marginBottom:'0', color:'#990000'}}>Đang giao</h4>
                                     ) : (
                                         bill[0].Status === 3 ? (
-                                               <h3 style={{marginBottom:'0', color:'#990000'}}>Đã Nhận</h3>
+                                               <h4 style={{marginBottom:'0', color:'#990000'}}>Đã Nhận</h4>
                                         ) : (
                                             bill[0].Status === 4 ? (<h3 style={{marginBottom:'0', color:'#990000'}}>Đánh giá</h3>) : (<h3 style={{marginBottom:'0', color:'#990000'}}>Đã hủy</h3>)
                                         )
@@ -140,8 +140,8 @@ useEffect(() => {
                             <FontAwesomeIcon style={{width:'30px',height:'26px',color:'#2dc258'}} icon={faClipboardRegular} />
                         </div>
                         <div className={cx('show_detail_bill_body_status-item_title')}>
-                            <h2 style={{marginBottom:'0'}}>Đơn Hàng Đã Đặt</h2>
-                            <h3 style={{textAlign:'center',color: 'rgba(0, 0, 0, .26)',marginBottom:'0'}}>{bill.length > 0 ? bill[0].DateOnly : null}</h3>
+                            <h4 style={{marginBottom:'0'}}>Đơn Hàng Đã Đặt</h4>
+                            <h4 style={{textAlign:'center',color: 'rgba(0, 0, 0, .26)',marginBottom:'0'}}>{bill.length > 0 ? bill[0].DateOnly : null}</h4>
                         </div>
                     </div>
                     <div className={cx('show_detail_bill_body_status-item')}>
@@ -157,8 +157,8 @@ useEffect(() => {
                             </div>
                         </div>
                         <div className={cx('show_detail_bill_body_status-item_title')}>
-                            <h2>Chờ Chế Biến</h2>
-                            <h3 style={{textAlign:'center',color: 'rgba(0, 0, 0, .26)'}}>{bill.length > 0 ? bill[0].DateOnly : null}</h3>
+                            <h4>Chờ Chế Biến</h4>
+                            <h4 style={{textAlign:'center',color: 'rgba(0, 0, 0, .26)'}}>{bill.length > 0 ? bill[0].DateOnly : null}</h4>
                         </div>
                     </div>
                     <div className={cx('show_detail_bill_body_status-item')}>
@@ -271,8 +271,8 @@ useEffect(() => {
                             </div>
                         </div>
                         <div className={cx('show_detail_bill_body_status-item_title')}>
-                            <h2>Đang Giao</h2>
-                            <h3 style={{textAlign:'center',color: 'rgba(0, 0, 0, .26)'}}>{bill.length > 0 ? bill[0].DateOnly : null}</h3>
+                            <h4>Đang Giao</h4>
+                            <h4 style={{textAlign:'center',color: 'rgba(0, 0, 0, .26)'}}>{bill.length > 0 ? bill[0].DateOnly : null}</h4>
                         </div>
                         
                     </div>
@@ -283,8 +283,8 @@ useEffect(() => {
                             </div>
                         </div>
                         <div className={cx('show_detail_bill_body_status-item_title')}>
-                            <h2>Đã Nhận Hàng</h2>
-                            <h3 style={{textAlign:'center',color: 'rgba(0, 0, 0, .26)'}}>{bill.length > 0 ? bill[0].DateOnly : null}</h3>
+                            <h4>Đã Nhận Hàng</h4>
+                            <h4 style={{textAlign:'center',color: 'rgba(0, 0, 0, .26)'}}>{bill.length > 0 ? bill[0].DateOnly : null}</h4>
                         </div>
                     </div>
                     <div onClick={bill.length > 0 ? bill[0].Status === 3 ? () => handleClickShowComment(bill[0].Id,bill[0].Data) : null : null} className={cx('show_detail_bill_body_status-item')}>
@@ -292,8 +292,8 @@ useEffect(() => {
                             <FontAwesomeIcon style={{width:'30px',height:'30px'}} icon={faStarRerular} />
                         </div>
                         <div className={cx('show_detail_bill_body_status-item_title')}>
-                            <h2>Đánh giá</h2>
-                            <h3 style={{textAlign:'center',color: 'rgba(0, 0, 0, .26)'}}>{bill.length > 0 ? bill[0].DateOnly : null}</h3>
+                            <h4>Đánh giá</h4>
+                            <h4 style={{textAlign:'center',color: 'rgba(0, 0, 0, .26)'}}>{bill.length > 0 ? bill[0].DateOnly : null}</h4>
                         </div>
                     </div>
                 </div>
@@ -309,9 +309,9 @@ useEffect(() => {
                 {bill.length > 0 ? (
                     <>
                         <div className={cx('show_detail_bill_footer_container-left')}>
-                            <h2>{bill[0].Name}</h2>
-                            <h3 style={{color:'#555',margin:'10px 0'}}>(+84) {bill[0].Sdt}</h3>
-                            <h3 style={{color:'#555'}}>{bill[0].Address}</h3>
+                            <h3>{bill[0].Name}</h3>
+                            <h4 style={{color:'#555',margin:'10px 0'}}>(+84) {bill[0].Sdt}</h4>
+                            <h4 style={{color:'#555'}}>{bill[0].Address}</h4>
                             {bill[0].StatusPay === 0 ? (
                                                <h4 style={{marginTop:'20px'}}>Thanh toán khi nhận hàng</h4>
                                             ) : (
