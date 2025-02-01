@@ -1,0 +1,71 @@
+.Footer_Container {
+    width: 100%;
+}
+
+.Footer_Container_list {
+    display: flex;
+    padding: 1.8vw 5.5vw;
+    justify-content: space-between;
+    border-top: .3vw solid var(--primary-color);
+    border-bottom: .3vw solid var(--primary-color);
+}
+
+.Footer_Container_list-item {
+    list-style-type: none;
+    text-align: center;
+    font-size: 1vw;
+    font-family: 'Times New Roman', Times, serif;
+    padding: 0;
+    li {
+        color: #666;
+        font-weight: 500;
+    }
+}
+
+.Footer_Container_list-item--title {
+    font-weight: 600 !important;
+    text-transform: uppercase;
+    font-size: 1vw;
+    color: #333 !important;
+    margin-bottom: .5vw;
+}
+
+.Footer_Container_list-item--img {
+    display: grid;
+    grid-template-columns: repeat(2, 7vw);
+    grid-template-rows: repeat(2, 3vw);
+    grid-template-areas:
+        "QR AppStore"
+        "QR CHPlay"
+    ;
+}
+
+.Footer_Container_list-item--img_QR {
+    grid-area: QR;
+    object-fit: cover;
+    width: 6vw;
+}
+.Footer_Container_list-item--img_AppStore {
+    margin-top: .4vw;
+    width: 7vw;
+    grid-area: AppStore;
+}
+.Footer_Container_list-item--img_ChPlay {
+    margin-top: .4vw;
+    width: 7vw;
+    grid-area: CHPlay;
+
+}
+.Footer_Container_info {
+    padding: 1.8vw 5.5vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f5f5f5;
+}
+.footer_text {
+    margin: 0;
+    font-size: .8vw;
+    font-family: 'Times New Roman', Times, serif;
+}

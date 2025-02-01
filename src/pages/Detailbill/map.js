@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { memo, useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 // Cấu hình Mapbox
 mapboxgl.accessToken = 'pk.eyJ1IjoibXlob2FuZzEyMyIsImEiOiJjbTFlZzF2d2cydWR0MmtvajFwYnB5OW42In0.-CeNZom6cnNBEsAWVumPuQ'
@@ -109,8 +109,8 @@ async function getRoute(end) {
             const mapInstance = new mapboxgl.Map({
                 container: mapContainer.current,
                 style: 'mapbox://styles/mapbox/streets-v11',
-                center: [105.7852, 10.0307], // Kinh độ, Vĩ độ
-                zoom: 12,
+                center: [105.7800, 10.0440], // Kinh độ, Vĩ độ
+                zoom: 14,
             });
             mapRef.current = mapInstance
   mapInstance.on('load', () => {
@@ -159,8 +159,8 @@ async function getRoute(end) {
      getRoute(Destination);
        // Tạo phần tử DOM cho marker
        const markerElement = document.createElement('div')
-       markerElement.style.width = '40px'
-       markerElement.style.height = '40px'
+       markerElement.style.width = '2.5vw'
+       markerElement.style.height = '2.5vw'
        markerElement.style.position = 'relative'// Để có thể thêm vị trí cho hình ảnh
        // Tạo phần tử img
         imgRef.current = document.createElement('img')
@@ -183,7 +183,7 @@ async function getRoute(end) {
             mapRef.current && mapRef.current.remove()
         } 
     }, []);
-    return <div ref={mapContainer} style={{ width: '100%', height: '100%' }} />;
+    return <div ref={mapContainer} style={{height: '100%'}}/>;
 };
 
-export default MapComponent;
+export default memo(MapComponent);

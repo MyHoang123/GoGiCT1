@@ -1,1 +1,316 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
+    // overflow: hidden;
+
+}
+
+html {
+    font-size: 200.5% !important;
+}
+
+.container {
+    width: var(--default-layout-width);
+    display: flex;
+}
+
+.content {
+    flex: 1;
+
+}
+
+.Logo_Menu {
+    width: 100%;
+}
+
+@keyframes bounceIn {
+    20% {
+        transform: scale3d(1.1, 1.1, 1.1);
+    }
+
+    40% {
+        transform: scale3d(.9, .9, .9);
+    }
+
+    60% {
+        transform: scale3d(1.03, 1.03, 1.03);
+    }
+
+    80% {
+        transform: scale3d(.97, .97, .97);
+    }
+
+    100% {
+        transform: scale3d(1, 1, 1);
+    }
+}
+
+.cart_product-container {
+    position: fixed;
+    bottom: 3vw;
+    right: 4vw;
+    width: 4.5vw;
+    height: 4.5vw;
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: #ffd426;
+    z-index: 120;
+    animation: bounceIn 3s ease-in infinite;
+
+    a {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.cart_product-container::after {
+    content: attr(datacount);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    position: absolute;
+    top: 1vw;
+    right: 0.7vw;
+    font-size: .6vw;
+    background-color: #fb0000;
+    width: 1.1vw;
+    height: 1.1vw;
+    border-radius: 50%;
+}
+
+.cart_product-icon {
+    font-size: 1.5vw;
+    color: #fff;
+}
+
+.massage_content {
+    position: fixed;
+    display: flex;
+    bottom: -20px;
+    right: 120px;
+    z-index: 1002;
+    transform: scale(0);
+    transform-origin: bottom right;
+    transition: transform .3s ease-in-out, opacity .3s ease-in-out;
+    will-change: opacity, transform;
+
+    /* From Uiverse.io by ahmed150up */
+    .card_chat {
+        width: 360px;
+        margin-bottom: 24px;
+        height: 430px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .chat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #333;
+        color: #fff;
+        padding: 10px;
+        font-size: 18px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    .chat-window {
+        display: flex;
+        flex-direction: column-reverse;
+        background-color: #f3f3f3;
+        height: 320px;
+        overflow-y: scroll;
+    }
+
+    .chat-window::-webkit-scrollbar {
+        width: 6px;
+        /* Chiều rộng của thanh cuộn dọc */
+        height: 6px;
+        /* Chiều cao của thanh cuộn ngang */
+    }
+
+    .chat-window::-webkit-scrollbar-thumb {
+        background-color: #c1c1c1;
+        /* Màu của phần tay cầm thanh cuộn */
+        border-radius: 10px;
+        /* Bo tròn các góc của thanh cuộn */
+    }
+
+    .message-list-rep {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        list-style: none;
+        margin: 0;
+        padding: 0 14px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .message-list-rep li {
+        padding: 2px 4px;
+        font-size: 14px;
+        margin-bottom: 0;
+        line-height: 20px;
+        word-wrap: break-word;
+        white-space: pre-wrap;
+        color: #212121;
+        border-radius: 8px;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+        direction: ltr;
+        margin-top: 4px;
+    }
+
+    .massage_list-icon {
+        height: 40px;
+        position: absolute;
+        z-index: -1;
+        left: 1px;
+        top: -11px;
+        color: #fff;
+        padding: 0px 2px;
+        filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.1));
+    }
+
+    .message-list-rep p {
+        margin-bottom: 0;
+        font-size: 14px;
+        line-height: 20px;
+        color: #212121;
+        padding: 6px 8px 8px;
+    }
+
+    .message-list-user {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        list-style: none;
+        margin: 0;
+        padding: 0px 14px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .message-list-user li {
+        display: block;
+        padding: 2px 4px;
+        font-size: 14px;
+        margin-bottom: 0;
+        line-height: 20px;
+        word-wrap: break-word;
+        white-space: pre-wrap;
+        color: #212121;
+        border-radius: 8px;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+        background-color: #d7f7ef;
+        direction: ltr;
+        margin-top: 4px;
+    }
+
+    .massage_list-time {
+        font-size: 11px;
+        color: #888;
+        position: relative;
+        bottom: -10px;
+        right: -6px;
+    }
+
+    .massage_list-icon-user {
+        height: 40px;
+        position: absolute;
+        z-index: -1;
+        right: 1px;
+        top: -10px;
+        color: #d7f7ef;
+        filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.1));
+    }
+
+    .message-list-user p {
+        margin-bottom: 0;
+        font-size: 14px;
+        line-height: 20px;
+        color: #212121;
+        padding: 6px 8px 8px;
+    }
+
+    .chat-input {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-top: 1px solid #ccc;
+    }
+
+    .message-input {
+        flex: 1;
+        border: none;
+        outline: none;
+        padding: 5px;
+        font-size: 14px;
+        color: #000;
+    }
+
+    .send-button {
+        border: none;
+        outline: none;
+        background-color: #333;
+        color: #fff;
+        font-size: 14px;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+
+    .send-button:hover {
+        background-color: rgb(255, 255, 255);
+        color: rgb(0, 0, 0);
+        box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.25);
+    }
+}
+
+.chat_container {
+    position: fixed;
+    opacity: 0;
+    cursor: pointer;
+    display: flex;
+    padding: 1vw;
+    font-size: 1.2vw;
+    color: #990000;
+    justify-content: space-evenly;
+    align-items: center;
+    bottom: 0;
+    right: 8vw;
+    z-index: 1001;
+    width: 6vw;
+    height: 3vw;
+    background-color: #fef6f5;
+    border-radius: 4px 4px 0 0;
+    box-shadow: 0 4px 20px 0 rgba(28, 28, 51, 0.16);
+    border-radius: .5vw .4vw 0 0;
+}
+.massage_content_body-content_status {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: .3vw;
+  }
+.massage_content_body-content_status span {
+    display: flex;
+    color: #fff;
+    padding: 0vw .5vw;
+    border-radius: 1vw;
+    font-size: 0.55vw;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 21%;
+    background-color: rgba(0, 0, 0, 0.3);
+}

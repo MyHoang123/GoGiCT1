@@ -1,106 +1,57 @@
-import './Footer.scss'
-import Qrdowload from '../../../../Asset/images/d91264e165ed6facc6178994d5afae79.png'
-import CHPlay from '../../../../Asset/images/chplay.png'
-import AppStore from '../../../../Asset/images/appstore.png'
-
-
+import ImgQR from "../../../../Asset/images/d91264e165ed6facc6178994d5afae79.png"
+import AppStore from "../../../../Asset/images/appstore.png"
+import ChPlat from "../../../../Asset/images/chplay.png"
+import classNames from "classnames/bind";
+import styles from "./Footer.module.scss";
+import { memo } from "react";
+const cx = classNames.bind(styles);
 
 function Footer() {
     return (
-        <>
-            <div className='footer_container'>
-                <div className='footer_container_item'>
-                    <div className='footer_content'>
-                        <h3 className='footer_heading'>Chăm sóc khách hàng</h3>
-                        <ul className='footer_list'>
-                            <li className='footer_item'>
-                                <a href="" className='footer_item-link'>Điều khoảng sử dụng</a>
-                            </li>
-                            <li className='footer_item'>
-                                <a href="" className='footer_item-link'>Chính sách đổi trả</a>
-                            </li>
-                            <li className='footer_item'>
-                                <a href="" className='footer_item-link'>Chính sách thành viên</a>
-                            </li>
-                            <li className='footer_item'>
-                                <a href="" className='footer_item-link'>Chính sách bảo mật</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div className='footer_content'>
-                        <h3 className='footer_heading'>Giới thiệu</h3>
-                        <ul className='footer_list'>
-                            <li className='footer_item'>
-                                <a href="" className='footer_item-link'>Giới thiệu</a>
-                            </li>
-                            <li className='footer_item'>
-                                <a href="" className='footer_item-link'>Tuyển dụng</a>
-                            </li>
-                            <li className='footer_item'>
-                                <a href="" className='footer_item-link'>Điều khoản</a>
-                            </li>
-                        </ul>
-
-                    </div>
-                    <div className='footer_content'>
-                        <h3 className='footer_heading'>Danh mục</h3>
-                        <ul className='footer_list'>
-                            <li className='footer_item'>
-                                <a href="" className='footer_item-link'>Bán lẽ</a>
-                            </li>
-                            <li className='footer_item'>
-                                <a href="" className='footer_item-link'>Buffer</a>
-                            </li>
-                            <li className='footer_item'>
-                                <a href="" className='footer_item-link'>Combo</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div className='footer_content'>
-                        <h3 className='footer_heading'>Theo dỗi chúng tôi trên</h3>
-                        <ul className='footer_list'>
-                            <li className='footer_item'>
-                                <a href="" className='footer_item-link'>
-                                    <i className="footer_item-icon fa-brands fa-facebook"></i>
-                                    Facebook
-                                </a>
-                            </li>
-                            <li className='footer_item'>
-                                <a href="" className='footer_item-link'>
-                                    <i className="footer_item-icon fa-brands fa-instagram"></i>
-                                    Instagram
-                                </a>
-                            </li>
-                            <li className='footer_item'>
-                                <a href="" className='footer_item-link'>
-                                    <i className="footer_item-icon fa-brands fa-youtube"></i>
-                                    Youtube
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div className="footer_content">
-                        <h3 className='footer_heading'>Vào cửa hàng trên ứng dụng</h3>
-                        <div className="footer_download">
-                            <img src={Qrdowload} alt="DownloadQR" className="footer_dowload-qr" />
-                            <div className="footer_download-apps">
-                                <img src={AppStore} alt="AppStore" className="footer_download-apps-img" />
-                                <img src={CHPlay} alt="GooglePlay" className="footer_download-apps-img" />
-                            </div>
-                        </div>
+        <div className={cx('Footer_Container')}>
+            <div className={cx('Footer_Container_list')}>
+                <ul className={cx('Footer_Container_list-item')}>
+                    <li className={cx('Footer_Container_list-item--title')}>Chăm sóc khách hàng</li>
+                    <li>Điều khoảng sử dụng</li>
+                    <li>Chính sách đổi trả</li>
+                    <li>Chính sách thành viên</li>
+                    <li>Chính sách bảo mật</li>
+                </ul>
+                <ul className={cx('Footer_Container_list-item')}>
+                    <li className={cx('Footer_Container_list-item--title')}>Giới thiệu</li>
+                    <li>Giới thiệu</li>
+                    <li>Tuyển dụng</li>
+                    <li>Điều khoản</li>
+                </ul>
+                <ul className={cx('Footer_Container_list-item')}>
+                    <li className={cx('Footer_Container_list-item--title')}>Danh mục</li>
+                    <li>Bán lẽ</li>
+                    <li>Buffer</li>
+                    <li>Combo</li>
+                </ul>
+                <ul className={cx('Footer_Container_list-item')}>
+                    <li className={cx('Footer_Container_list-item--title')}>Theo dỗi chúng tôi trên</li>
+                    <li>Facebook</li>
+                    <li>Instagram</li>
+                    <li>Youtube</li>
+                </ul>
+                <div className={cx('Footer_Container_list-item')}>
+                    <h4 className={cx('Footer_Container_list-item--title')}>Vào cửa hàng trên ứng dung</h4>
+                    <div className={cx('Footer_Container_list-item--img')}>
+                        <img className={cx('Footer_Container_list-item--img_QR')} src={ImgQR} />
+                        <img className={cx('Footer_Container_list-item--img_AppStore')} src={AppStore} />
+                        <img className={cx('Footer_Container_list-item--img_ChPlay')} src={ChPlat} />
                     </div>
                 </div>
             </div>
-            <div className="footer_bottom">
-                <div className="grid wide">
-                    <p className="footer_text">Địa chỉ: Tầng 4-5-6, Tòa nhà Capital Place, số 29 đường Liễu Giai, Phường Ngọc Khánh, Quận Ba Đình, Thành phố Hà Nội, Việt Nam. Tổng đài hỗ trợ: 19001221 - Email:  support.hn@ggg.com.vn</p>
-                    <p className="footer_text">Chịu Trách Nhiệm Quản Lý Nội Dung: Nguyễn Đức Trí - Điện thoại liên hệ: 024 73081221 (ext 4678)</p>
-                    <p className="footer_text">Mã số doanh nghiệp: 0106773786 do Sở Kế hoạch & Đầu tư TP Hà Nội cấp lần đầu ngày 10/02/2015</p>
-                    <p className="footer_text">© 2022 - Bản quyền thuộc về CÔNG TY CỔ PHẦN TẬP ĐOÀN GOLDEN GATE</p>
-                </div>
+            <div className={cx('Footer_Container_info')}>
+                <p className={cx('footer_text')}>Địa chỉ: Tầng 4-5-6, Tòa nhà Capital Place, số 29 đường Liễu Giai, Phường Ngọc Khánh, Quận Ba Đình, Thành phố Hà Nội, Việt Nam. Tổng đài hỗ trợ: 19001221 - Email:  support.hn@ggg.com.vn</p>
+                <p className={cx('footer_text')}>Chịu Trách Nhiệm Quản Lý Nội Dung: Nguyễn Đức Trí - Điện thoại liên hệ: 024 73081221 (ext 4678)</p>
+                <p className={cx('footer_text')}>Mã số doanh nghiệp: 0106773786 do Sở Kế hoạch & Đầu tư TP Hà Nội cấp lần đầu ngày 10/02/2015</p>
+                <p className={cx('footer_text')}>© 2022 - Bản quyền thuộc về CÔNG TY CỔ PHẦN TẬP ĐOÀN GOLDEN GATE</p>
             </div>
-        </>
+        </div>
     );
 }
 
-export default Footer;
+export default memo(Footer);

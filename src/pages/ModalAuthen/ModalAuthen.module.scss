@@ -2,11 +2,14 @@
     position: relative;
     display: flex;
     width: 100%;
-    height: 600px;
+    height: 45vw;
     background-image: linear-gradient(to right, #2B2F3A, #0D0E12);
     margin-bottom: 40px;
+    justify-content: space-between;
+    margin-bottom: 3vw;
 }
-.Body_loginuser::before{
+
+.Body_loginuser::before {
     position: absolute;
     width: 50%;
     height: 100%;
@@ -15,139 +18,163 @@
     left: 0;
     background-color: #990000;
 }
+
 .body_loginuser_left {
-    width: 50%;
+    display: flex;
+    justify-content: center;
 }
-.title{
-    position: absolute;
-    top: 14%;
-    right: 62%;
-    text-align: right;
+
+.title {
+    /* position: absolute; */
+    // top: 14%;
+    /* right: 62%; */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     color: #fff;
-    font-size: 150px;
-    font-family: 'Pacifico', cursive;
-    text-shadow: 3px 5px 0px #478860;
-    line-height: .9em;
+    font-size: 10vw;
+    font-family: "Pacifico", cursive;
+    text-shadow: .3vw .5vw 0px #478860;
+    line-height: 0.9em;
     transform: rotate(-5deg);
 }
+
 .title p:nth-child(1) {
     opacity: 1;
     animation: showTitle .6s ease-in-out 1 forwards;
 }
+
 .title p:nth-child(2) {
     opacity: 1;
     animation: showTitle .6s .3s ease-in-out 1 forwards;
 }
+
 .title p:nth-child(3) {
     opacity: 1;
     animation: showTitle .6s .6s ease-in-out 1 forwards;
 }
+
 .Modal_login {
     width: 50%;
-    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
 .Modal_login_container {
-    width: 400px;
-    padding: 22px 30px;
+    width: 26vw;
+    padding: 1vw 1.5vw;
     background-color: #fff;
-    border-radius: 4px;
-    box-shadow: 0 3px 10px 0 rgba(0, 0, 0, .14);
+    border-radius: .4vw;
+    box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.14);
     box-sizing: border-box;
     overflow: hidden;
+
     h1 {
-        height: 70px;
+        font-size: 1.7vw;
+        font-weight: 400;
+        margin-bottom: 3vw;
     }
 }
+
 .Modal_login_input_list {
     width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
     input {
-        height: 40px;
-        padding: 12px;
-        font-size: 14px;
-        border: 1px solid #dcdcdc;
-        margin-bottom: 28px;
+        height: 2.5vw;
+        padding: .5vw;
+        font-size: .77vw;
+        border: .1vw solid #dcdcdc;
+        margin-bottom: 1vw;
     }
+
     button {
-        height: 40px;
-        padding: 12px;
-        font-size: 14px;
+        height: 2.5vw;
+        padding: .5vw;
+        font-size: .77vw;
         color: #fff;
         display: flex;
         align-items: center;
         justify-content: center;
+        background-color: #990000;
+        border: none;
+        cursor: pointer;
     }
 }
+
 .Line_OR {
-    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+
     span:nth-child(1) {
-        border: 1px solid #cccccc;
+        border: .1vw solid #cccccc;
         width: 40%;
     }
+
     span:nth-child(2) {
         text-align: center;
         width: 20%;
-        font-size: 13px;
+        font-size: .9vw;
         color: #cccccc;
     }
+
     span:nth-child(3) {
-        border: 1px solid #cccccc;
+        border: .1vw solid #cccccc;
         width: 40%;
     }
 }
+
 .Modal_login_socials {
-    height: 72px;
-    margin-top: 10px;
-    width: 100%;
     display: flex;
-    flex-direction: column;
     justify-content: space-between;
-    align-items: flex-start;
+    height: 2.4vw;
+
     .Modal_login_socials_left {
         cursor: pointer;
         display: flex;
-        justify-content: flex-start;
+        justify-content: center;
         align-items: center;
-        width: 80%;
-        font-size: 14px;
-        height: 43px;
-        border: 1px solid #4267B2;
-        margin-bottom: 10px;
+        width: 48%;
+        font-size: 0.7vw;
+        height: 100%;
+        border: .1vw solid #4267B2;
+
         img {
-            width: 26px;
-            margin-right: 10px;
+            width: 15%;
+            margin-right: .1vw;
         }
     }
+
     .Modal_login_socials_right {
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 49%;
-        max-width: 29%;
-        font-size: 14px;
+        width: 48%;
+        font-size: 0.7vw;
         height: 100%;
-        font-size: 10px;
-        border: 1px solid #8f8f8f;
+        border: .1vw solid #8f8f8f;
+
         img {
-            width: 28px;
+            width: 15%;
+            margin-right: .1vw;
         }
     }
 }
+
 .Modal_login_help {
     width: 100%;
-    margin: 10px 0;
+    margin: .5vw 0;
     display: flex;
-    font-size: 12px;
+    font-size: .75vw;
     color: #0055AA;
-    justify-content: space-between;
+    justify-content: flex-end;
+
     span {
         cursor: pointer;
     }
@@ -157,101 +184,130 @@
 .Modal_login_btn_register {
     width: 100%;
     display: flex;
-    font-size: 14px;
+    font-size: .9vw;
     justify-content: center;
-    margin-top: 28px;
+    margin-top: 2vw;
+
     span {
         color: #990000;
-        margin-left: 4px;
+        margin-left: 1vw;
         cursor: pointer;
     }
 }
+
 .Modal_authen_OTP {
     width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 600px;
+    padding: 2vw 0;
 }
+
 .Modal_authen_OTP_container {
-    width: 500px;
-    height: 480px;
-    box-shadow: 0 3px 10px 0 rgba(0, 0, 0, .14);
+    width: 30vw;
+    height: 28vw;
+    padding: 0 3vw;
+    box-shadow: 0 0.3vw 0.7vw 0 rgba(0, 0, 0, 0.14);
     text-align: center;
+
     .Modal_authen_OTP_header {
         width: 70%;
-        height: 80px;
-        padding: 0 20px;
+        height: 3vw;
+        padding: 0 1vw;
         display: flex;
         justify-content: space-between;
         align-items: center;
+
         h1 {
-            font-size: 20px;
+            font-size: 1vw;
+            margin-bottom: .2vw;
+        }
+
+        svg {
+            font-size: 1vw;
+            margin-bottom: .2vw;
+            color: rgb(153, 0, 0);
         }
     }
+
     button {
-        width: 340px;
-        height: 40px;
-        padding: 0 60px;
-        font-size: 14px;
+        width: 24vw;
+        height: 3vw;
+        padding: 0 6vw;
+        font-size: 1vw;
         color: #fff;
         background-color: #990000;
+        border: none;
+        cursor: pointer;
     }
 }
+
 .fake_pass {
     display: block;
-    height: 4px;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
+    height: 0.3vw;
+    transform: translateY(-1vw);
+    border-bottom-left-radius: 1vw;
+    border-bottom-right-radius: 1vw;
     width: 0%;
-    transition: width .5s ease-in-out;
+    transition: width 0.5s ease-in-out;
     will-change: width;
-    margin-bottom: 10px;
-  }
-  .noti_password {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.noti_password {
     display: flex;
     width: 50%;
+    font-size: 1vw;
     justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  .noti_password li {
-    list-style-type: disc;
+    margin-bottom: 2vw;
+}
+
+.noti_password li {
+    list-style-type: none;
     color: red;
-  }
+}
+
 .Modal_authen_OTP_header_step {
-    width: 500px;
+    width: 37vw;
     position: relative;
-    height: 50px;
+    height: 3vw;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 1vw;
+    margin-bottom: 2vw;
 }
+
 .Modal_authen_OTP_header_step-item {
     width: 25%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+
     .Modal_authen_OTP_header_step-item_radius {
         display: flex;
         justify-content: center;
-        font-size: 12px;
+        font-size: 1vw;
         align-items: center;
-        width: 40px;
-        height: 40px;
+        width: 3vw;
+        height: 3vw;
         background-color: #fff;
         border-radius: 50%;
         color: #969696;
-        border: 1px solid #c8c8c8;
-        transition: background-color .6s .5s ease-in-out, color .6s .5s ease-in-out;
+        border: .1vw solid #c8c8c8;
+        transition: background-color 0.6s 0.5s ease-in-out, color 0.6s 0.5s ease-in-out;
     }
+
     .Modal_authen_OTP_header_step-item_title {
-        font-size: 12px;
-        margin-top: 6px;
+        font-size: 0.8vw;
+        margin-top: 0.6vw;
     }
 }
+
 .Modal_authen_OTP_container_success {
     width: 100%;
     height: 100%;
@@ -259,213 +315,247 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    h1 {
+        font-size: 1.2vw;
+    }
     button {
-        margin-top: 20px;
+        margin-top: 1vw;
         a {
             color: #fff;
             text-decoration: none;
         }
     }
 }
-.Modal_gender_container{
-    height: 90px;
+
+.Modal_gender_container {
+    height: 8vw;
     width: 100%;
-    margin-bottom: 20px;
-.gender-card {
-    height: 100%;
-    width: 100%;
-    background-color: rgb(255, 255, 255);
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: flex-start;
-    padding: 10px 30px;
-    font-family: Arial, Helvetica, sans-serif;
-    gap: 10px;
-  }
-  .large-svg-container {
-    width: auto;
-    height: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transform: rotate(45deg);
-  }
-  .largemalesvg {
-    transform: rotate(180deg);
-  }
-  .heading {
-    color: #1d1d1d;
-    font-weight: 550;
-    font-size: 14px;
-    text-align: center;
-    margin-bottom: 0 !important;
-  }
-  .gender-radio-buttons {
-    display: none;
-  }
-  .smallsvg {
-    width: 10px;
-  }
-  .other-gender {
-    width: 15px;
-  }
-  .malesmallsvg {
-    transform: rotate(225deg);
-    width: 10px;
-  }
-  .genderlabel {
-    display: flex;
-    font-size: 12px;
-    align-items: center;
-    justify-content: center;
-    width: fit-content;
-    height: fit-content;
-    background-color: rgb(46, 46, 46);
-    border-radius: 5px;
-    padding: 8px 16px;
-    gap: 8px;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s ease-out;
-  }
-  
-  .radio-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-  }
-  .femalebutton:hover {
-    background-color: rgb(245, 185, 195);
-  }
-  .malebutton:hover {
-    background-color: #569fcf;
-  }
-  .otherbutton:hover {
-    background-color: #4d227a;
-  }
-  #female:checked + .femalebutton {
-    background-color: rgb(245, 185, 195);
-    transform: scale(1.1);
-  }
-  #male:checked + .malebutton {
-    background-color: #569fcf;
-    transform: scale(1.1);
-  }
-  #other:checked + .otherbutton {
-    background-color: #4d227a;
-    transform: scale(1.2);
-  }
-  
+    margin-bottom: 1vw;
+
+    .gender-card {
+        height: 100%;
+        width: 100%;
+        background-color: rgb(255, 255, 255);
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: flex-start;
+        font-family: Arial, Helvetica, sans-serif;
+        gap: .6vw;
+    }
+
+    .large-svg-container {
+        width: auto;
+        height: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: rotate(45deg);
+    }
+
+    .largemalesvg {
+        transform: rotate(180deg);
+    }
+
+    .heading {
+        color: #1d1d1d;
+        font-weight: 550;
+        font-size: 1vw;
+        text-align: center;
+        margin-bottom: 0 !important;
+    }
+
+    .gender-radio-buttons {
+        display: none;
+    }
+
+    .smallsvg {
+        width: .6vw;
+    }
+
+    .other-gender {
+        width: .7vw;
+    }
+
+    .malesmallsvg {
+        transform: rotate(225deg);
+        width: .7vw;
+    }
+
+    .genderlabel {
+        display: flex;
+        font-size: .8vw;
+        align-items: center;
+        justify-content: center;
+        width: -moz-fit-content;
+        width: fit-content;
+        height: -moz-fit-content;
+        height: fit-content;
+        background-color: rgb(46, 46, 46);
+        border-radius: .3vw;
+        padding: .5vw 1vw;
+        gap: 1vw;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease-out;
+    }
+
+    .radio-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5vw;
+    }
+
+    .femalebutton:hover {
+        background-color: rgb(245, 185, 195);
+    }
+
+    .malebutton:hover {
+        background-color: #569fcf;
+    }
+
+    .otherbutton:hover {
+        background-color: #4d227a;
+    }
+
+    #female:checked+.femalebutton {
+        background-color: rgb(245, 185, 195);
+        transform: scale(1.1);
+    }
+
+    #male:checked+.malebutton {
+        background-color: #569fcf;
+        transform: scale(1.1);
+    }
+
+    #other:checked+.otherbutton {
+        background-color: #4d227a;
+        transform: scale(1.2);
+    }
+
 }
-.Modal_authen_OTP_header_step_line_box{
+
+.Modal_authen_OTP_header_step_line_box {
     width: 100%;
-    top: 12px;
-    left: 90px;
+    top: 0.45vw;
+    left: 6vw;
     position: absolute;
 }
+
 .Img_user_login {
-    width: 50px;
-    height: 50px;
+    width: 3vw;
+    height: 3vw;
     object-fit: cover;
-    border-radius: 50%;
 }
+
 .Info_user_container {
-    margin-top: 80px;
+    margin-top: 2vw;
     width: 100%;
-    height: 300px;
+    /* height: 300px; */
     display: flex;
     align-items: center;
     flex-direction: column;
 }
+
 .Info_user_container_name {
-    margin-top: 15px;
+    margin-top: 1vw;
+    font-size: 1.2vw;
 }
+
 .Info_user_container_phone {
-    margin-bottom: 10px;
+    margin-bottom: 10vw;
+    font-size: 1vw;
     color: #990000;
 }
+
 .Modal_authen_OTP_header_step_line {
     position: absolute;
     z-index: -1;
     background-color: #2dc258;
-    height: 4px;
-    width: 0px;
+    height: .25vw;
+    width: 0vw;
     will-change: width;
-    transition: width 1s ease-in-out;
+    transition: width 1.5s ease-in-out;
 }
+
 .Modal_authen_OTP_header_step_line1 {
     position: absolute;
     z-index: -2;
     background-color: #c8c8c8;
-    height: 4px;
-    width: 300px;
+    height: .25vw;
+    width: 23vw;
 }
+
 .Modal_authen_OTP_body {
-    padding: 0 80px;
+    padding: 0 3vw;
     width: 100%;
     h2 {
+        font-size: 1vw;
         text-align: center;
-        margin-bottom: 10px;
-        margin-left: 12px;
+        margin-bottom: .4vw;
     }
+
     h3 {
         text-align: center;
-        font-size: 16px;
+        font-size: .8vw;
         margin: 0;
+
         span {
-            margin-left: 10px;
+            margin-left: .3vw;
         }
     }
+
     .Modal_authen_OTP_body_phone {
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 10px;
+        gap: 1vw;
+
         img {
-            width: 20px;
-            height: 20px;
+            width: 1vw;
+            height: 1vw;
         }
     }
 }
+
 .box_OTP {
     width: 100%;
     display: flex;
-    padding: 0 80px;
     justify-content: space-between;
-    margin-top: 70px;
+    margin-top: 5vw;
+
     .input_OTP {
         width: 3em;
         height: 3em;
-        font-size: 14px;
-        border-radius: 5px;
+        font-size: 1vw;
+        border-radius: 0.7vw;
         border: none;
         outline: none;
         background-color: rgb(235, 235, 235);
-        box-shadow: inset 3px 3px 6px #d1d1d1,
-                  inset -3px -3px 6px #ffffff;
-        padding-left: 15px;
-        transition: .4s ease-in-out;
+        box-shadow: inset .3vw .3vw .6vw #d1d1d1, inset -.3vw -.3vw .6vw #ffffff;
+        padding-left: 1vw;
+        transition: 0.4s ease-in-out;
     }
+
     .input_OTP:hover {
-    box-shadow: inset 0px 0px 0px #d1d1d1,
-                inset 0px 0px 0px #ffffff;
-    background-color: lightgrey;
+        box-shadow: inset 0px 0px 0px #d1d1d1,
+            inset 0px 0px 0px #ffffff;
+        background-color: lightgrey;
     }
-          
+
     .input_OTP:focus {
-    box-shadow: inset 0px 0px 0px #d1d1d1,
-                inset 0px 0px 0px #ffffff;
-    background-color: lightgrey;
-    }   
+        box-shadow: inset 0px 0px 0px #d1d1d1,
+            inset 0px 0px 0px #ffffff;
+        background-color: lightgrey;
+    }
 }
+
 .OTP_time {
     width: 100%;
-    padding: 0 80px;
-    margin-top: 70px;
-    font-size: 14px;
+    margin-top: 5vw;
+    font-size: 1vw;
     color: #8f8f8f;
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 3vw;
 }

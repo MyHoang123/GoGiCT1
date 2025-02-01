@@ -1,39 +1,49 @@
-.info_user {
-    width: 100%;
-    background-color: #fff;
-}
+
 .info_user_header {
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.09);
+    padding: .5vw 0;
+    border-bottom: .1vw solid rgba(0, 0, 0, 0.09);
+    h2 {
+      font-size: 1vw;
+      font-weight: 100;
+      color: #333;
+      margin-bottom: 1vw;
+    }
+    h3 {
+      font-size: 1vw;
+      color: #333;
+      font-weight: 100;
+      margin-bottom: 0;
+    }
 }
 .info_user_container {
-    padding: 0 40px;
+    padding: 0 4vw;
 }
 .info_user_body {
-    margin-top: 20px;
+    margin-top: .4vw;
     display: flex;
     width: 100%;
-    height: 450px;
+    // height: 450px;
 }
 .info_user_body_containt {
-    width: 65%;
+    width: 64%;
     display: flex;
     justify-content: center;
 .container {
-    font-size: 13px;
-    font-family: sans-serif;
-    position: relative;
-    max-width: 500px;
-    width: 100%;
-    padding: 25px;
+  font-size: .8vw;
+  font-family: sans-serif;
+  position: relative;
+
+  width: 100%;
+  padding: 1.2vw;
   }
   .container .form {
-    margin-top: 15px;
+    margin-top: 1vw;
   }
   
   .form .input-box {
     width: 100%;
-    margin-top: 10px;
+    margin-top: 1vw;
+    font-size: .8vw;
   }
   
   .input-box label {
@@ -42,44 +52,48 @@
   
   .form :where(.input-box input, .select-box) {
     position: relative;
-    height: 35px;
+    height: 2.3vw;
     width: 100%;
     outline: none;
-    font-size: 1.2rem;
+    font-size: .8vw;
     color: #333;
-    margin-top: 5px;
-    border: 1px solid #990000;   
-    border-radius: 6px;
-    padding: 0 15px;
+    margin-top: 1vw;
+    border-radius: .4vw;
+    padding: 0 .8vw;
+    border: .1vw solid #990000;   
   }
   
   .input-box input:focus {
-    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 .1vw 0 rgba(0, 0, 0, 0.1);
   }
   
   .form .column {
     display: flex;
-    column-gap: 15px;
+    column-gap: 2vw;
   }
   
   .form .gender-box {
-    margin-top: 10px;
+    margin-top: 1vw;
   }
   
   .form :where(.gender-option, .gender) {
-    display: flex;
+    display: flex
+;
     align-items: center;
-    column-gap: 50px;
+    column-gap: 1vw;
     flex-wrap: wrap;
-    margin: 5px 0;
+    margin: .5vw 0;
   }
   
   .form .gender {
-    column-gap: 5px;
+    column-gap: 1vw;
   }
   
   .gender input {
     accent-color: #EE4E34;
+    height: 1vw;
+    width: 1vw;
+    border: 0.1vw solid #333;
   }
   
   .form :where(.gender input, .gender label) {
@@ -105,14 +119,14 @@
   }
   
   .form button {
-    height: 40px;
+    height: 2.4vw;
     width: 100%;
     color: #000;
-    font-size: 1rem;
+    font-size: 1vw;
     font-weight: 400;
-    margin-top: 15px;
+    margin-top: 1vw;
     border: none;
-    border-radius: 6px;
+    border-radius: .5vw;
     cursor: pointer;
     transition: all 0.2s ease;
     background: #EE4E34;
@@ -123,12 +137,12 @@
   }
 }
 .info_user_body_avt {
-    border-left: 1px solid rgba(0, 0, 0, 0.09);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 35%;
-    height: 77%;
+  border-left: .1vw solid rgba(0, 0, 0, 0.09);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 37%;
+  height: 77%;
 }
 .info_user_body_containt-title {
     width: 100%;
@@ -156,62 +170,16 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-radius: 20px;
     background: var(--bg-color);
   }
   
   .card__img {
-    border-radius: 20px 20px 0 0 ;
+    border-radius: 1vw 1vw 0 0;
     width: 90%;
     height: 100%;
-    background: radial-gradient(
-          circle farthest-side at 0% 50%,
-          #282828 23.5%,
-          rgba(255, 170, 0, 0) 0
-        )
-        21px 30px,
-      radial-gradient(
-          circle farthest-side at 0% 50%,
-          #a1000e 24%,
-          rgba(240, 166, 17, 0) 0
-        )
-        19px 30px,
-      linear-gradient(
-          #282828 14%,
-          rgba(240, 166, 17, 0) 0,
-          rgba(240, 166, 17, 0) 85%,
-          #282828 0
-        )
-        0 0,
-      linear-gradient(
-          150deg,
-          #282828 24%,
-          #a1000e 0,
-          #a1000e 26%,
-          rgba(240, 166, 17, 0) 0,
-          rgba(240, 166, 17, 0) 74%,
-          #a1000e 0,
-          #a1000e 76%,
-          #282828 0
-        )
-        0 0,
-      linear-gradient(
-          30deg,
-          #282828 24%,
-          #a1000e 0,
-          #a1000e 26%,
-          rgba(240, 166, 17, 0) 0,
-          rgba(240, 166, 17, 0) 74%,
-          #a1000e 0,
-          #a1000e 76%,
-          #282828 0
-        )
-        0 0,
-      linear-gradient(90deg, #a1000e 2%, #282828 0, #282828 98%, #a1000e 0%) 0 0
-        #282828;
-    background-size: 40px 60px;
-  
-    height: 192px;
+    background: radial-gradient(circle farthest-side at 0% 50%, #282828 23.5%, rgba(255, 170, 0, 0) 0) 21px 30px, radial-gradient(circle farthest-side at 0% 50%, #a1000e 24%, rgba(240, 166, 17, 0) 0) 19px 30px, linear-gradient(#282828 14%, rgba(240, 166, 17, 0) 0, rgba(240, 166, 17, 0) 85%, #282828 0) 0 0, linear-gradient(150deg, #282828 24%, #a1000e 0, #a1000e 26%, rgba(240, 166, 17, 0) 0, rgba(240, 166, 17, 0) 74%, #a1000e 0, #a1000e 76%, #282828 0) 0 0, linear-gradient(30deg, #282828 24%, #a1000e 0, #a1000e 26%, rgba(240, 166, 17, 0) 0, rgba(240, 166, 17, 0) 74%, #a1000e 0, #a1000e 76%, #282828 0) 0 0, linear-gradient(90deg, #a1000e 2%, #282828 0, #282828 98%, #a1000e 0%) 0 0 #282828;
+    background-size: 1.2vw 1.8vw;
+    height: 12vw;
     width: 100%;
   }
   
@@ -223,13 +191,13 @@
   .card__avatar {
     border-radius: 100%;
     position: absolute;
-    width: 114px;
-    height: 114px;
+    width: 7vw;
+    height: 7vw;
     background: var(--bg-color);
     display: flex;
     justify-content: center;
     align-items: center;
-    top: calc(50% - 57px);
+    top: calc(50% - 3vw);
   }
   .card__avatar img {
     border-radius: 50%;
@@ -243,27 +211,27 @@
   }
   
   .card__title {
-    margin-top: 60px;
+    margin-top: 4vw;
     font-weight: 500;
-    font-size: 18px;
+    font-size: 1vw;
     color: var(--main-color);
   }
   
   .card__subtitle {
-    margin-top: 10px;
+    margin-top: 1vw;
     font-weight: 400;
-    font-size: 15px;
+    font-size: 1vw;
     color: var(--submain-color);
   }
   
   .card__btn {
-    margin-top: 15px;
-    width: 76px;
-    height: 31px;
-    border: 2px solid var(--main-color);
-    border-radius: 4px;
+    margin-top: 1vw;
+    width: 6vw;
+    height: 2vw;
+    border: 0.15vw solid var(--main-color);
+    border-radius: .4vw;
     font-weight: 700;
-    font-size: 11px;
+    font-size: .7vw;
     color: var(--main-color);
     background: var(--bg-color);
     text-transform: uppercase;
